@@ -1,0 +1,46 @@
+Contents of this package
+
+   CONTENTS             This file.
+   LICENSE              The license for this package.
+   README.md            A readme file describing this package and its use.
+
+   OGC_12-063r2_WKT_CRS.doc
+                        The specification that this package implements.
+
+   makefile             A GNU makefile to build the OGC WKT library and
+                        sample programs.
+
+   ogc_2008.sln         A Microsoft Visual Studio 2008 solution file
+                        to build the OGC WKT library and sample programs.
+
+   ogc_2012.sln         A Microsoft Visual Studio 2012 solution file
+                        to build the OGC WKT library and sample programs.
+
+   include/
+      makefile          A GNU makefile for this directory.
+      libogc.h          Public header for this library.
+
+   build/
+      makefile          A GNU makefile for this directory.
+
+      make_includes/
+         make*.i        GNU make include files.
+
+      vs_projects/
+         *.vcproj       Microsoft Visual Studio 2008 project files
+                        for the library and sample programs.
+
+         *.vcxproj*     Microsoft Visual Studio 2012 project files
+                        for the library and sample programs.
+
+   src/
+      makefile          A GNU makefile for the OGC library.
+      *.h               Internal header files.
+      *.cpp             Library source files.
+      *.rc              Windoze resource files.
+
+   etc/
+      makefile          A GNU makefile for the sample programs.
+      parse.cpp         A sample program to test WKT token parsing.
+      datetime.cpp      A sample program to test date/time parsing.
+      wkt.cpp           A sample program to read and write WKT strings.
