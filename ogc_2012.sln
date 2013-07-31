@@ -5,17 +5,33 @@ EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "libogc", "build\vs_projects\libogc_2012.vcxproj", "{060E331A-499F-4033-AC49-C129C2FFF5D4}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "wkt", "build\vs_projects\wkt_2012.vcxproj", "{A7CE7E64-3E41-4938-B44C-8206347A5530}"
+	ProjectSection(ProjectDependencies) = postProject
+		{C1EB5009-D49B-47D9-8761-D9F16E3F2145} = {C1EB5009-D49B-47D9-8761-D9F16E3F2145}
+	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "parse", "build\vs_projects\parse_2012.vcxproj", "{A5AE38A2-6AAF-4CC2-AA19-416CA525FC12}"
+	ProjectSection(ProjectDependencies) = postProject
+		{7138ECB9-2F85-4EEE-992A-6B668E46A927} = {7138ECB9-2F85-4EEE-992A-6B668E46A927}
+	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "parse_s", "build\vs_projects\parse_s_2012.vcxproj", "{7138ECB9-2F85-4EEE-992A-6B668E46A927}"
+	ProjectSection(ProjectDependencies) = postProject
+		{060E331A-499F-4033-AC49-C129C2FFF5D4} = {060E331A-499F-4033-AC49-C129C2FFF5D4}
+	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "wkt_s", "build\vs_projects\wkt_s_2012.vcxproj", "{C1EB5009-D49B-47D9-8761-D9F16E3F2145}"
+	ProjectSection(ProjectDependencies) = postProject
+		{060E331A-499F-4033-AC49-C129C2FFF5D4} = {060E331A-499F-4033-AC49-C129C2FFF5D4}
+	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "datetime", "build\vs_projects\datetime_2012.vcxproj", "{15820E9D-992D-48D0-9186-F1B28E93DA94}"
+	ProjectSection(ProjectDependencies) = postProject
+		{657B4D6A-DFA7-4C2C-AFF3-6CC0303B1D1F} = {657B4D6A-DFA7-4C2C-AFF3-6CC0303B1D1F}
+	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "datetime_s", "build\vs_projects\datetime_s_2012.vcxproj", "{657B4D6A-DFA7-4C2C-AFF3-6CC0303B1D1F}"
 	ProjectSection(ProjectDependencies) = postProject
+		{060E331A-499F-4033-AC49-C129C2FFF5D4} = {060E331A-499F-4033-AC49-C129C2FFF5D4}
 		{AD62888B-E0DA-40BA-8BA6-8367E33F2E3F} = {AD62888B-E0DA-40BA-8BA6-8367E33F2E3F}
 	EndProjectSection
 EndProject
