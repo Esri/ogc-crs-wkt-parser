@@ -31,27 +31,15 @@ endif
 
 ifeq ($(BUILD_MODE), debug)
    LINK_LIB  := $(LINK_LIB)d
-   CDEFS     += -D_DEBUG $(DEBUG_OPTS)
-   CPPDEFS   += -D_DEBUG $(DEBUG_OPTS)
-   CLIDEFS   += -D_DEBUG
+   CDEFS     += $(DEBUG_OPTS) -D_DEBUG
+   CPPDEFS   += $(DEBUG_OPTS) -D_DEBUG
    RCDEFS    += -D_DEBUG
    DLLDEFS   += -nodefaultlib:msvcrt
    EXEDEFS   += -nodefaultlib:msvcrt
 else
-ifeq ($(BUILD_MODE), profile)
-   LINK_LIB  := $(LINK_LIB)d
-   CDEFS     += -D_DEBUG $(DEBUG_OPTS)
-   CPPDEFS   += -D_DEBUG $(DEBUG_OPTS)
-   CLIDEFS   += -D_DEBUG
-   RCDEFS    += -D_DEBUG
-   DLLDEFS   += -nodefaultlib:msvcrt
-   EXEDEFS   += -nodefaultlib:msvcrt
-else
-   CDEFS     += -DNDEBUG $(OPTIMIZE_OPTS)
-   CPPDEFS   += -DNDEBUG $(OPTIMIZE_OPTS)
-   CLIDEFS   += -DNDEBUG $(OPTIMIZE_OPTS)
+   CDEFS     += $(OPTIMIZE_OPTS) -DNDEBUG
+   CPPDEFS   += $(OPTIMIZE_OPTS) -DNDEBUG
    RCDEFS    += -DNDEBUG
-endif
 endif
 
 # ------------------------------------------------------------------------
@@ -295,11 +283,6 @@ endif
 # ------------------------------------------------------------------------
 # Rules to build resource files
 #
-BUILDNUM_FILE := $(strip $(wildcard $(PE_DIR)/src/resources/buildnum.h))
-ifeq ("$(BUILDNUM_FILE)", "")
-  BUILDNUM_FILE := $(strip $(wildcard $(SHARED_DIR)/include/buildnum.h))
-endif
-
 $(INT_DIR)/%.res : %.rc
 	@ [ -d $(INT_DIR) ] || \
 	    { mkdir $(INT_DIR) 2>$(DEV_NULL); [ -d $(INT_DIR) ]; }
@@ -309,14 +292,6 @@ ifndef VERBOSE_MAKE
 	@ "$(VRC)" $(RCFLAGS) -fo$@ $<
 else
 	  "$(VRC)" $(RCFLAGS) -fo$@ $<
-endif
-
-%.res : %.rc
-ifndef VERBOSE_MAKE
-	@ echo $(strip rc $<)
-	@ "$(VRC)" $(RCFLAGS) $<
-else
-	  "$(VRC)" $(RCFLAGS) $<
 endif
 
 # ------------------------------------------------------------------------
@@ -360,7 +335,6 @@ devenv :
       case "$(OS_ARCH)" in \
 	      32)  PLATFORM="Win32";; \
 	      64)  PLATFORM="x64";; \
-        any) PLATFORM="AnyCPU";; \
       esac; \
 	    if [ "$${PROJECT:-all}" = "all" ]; \
 	    then \

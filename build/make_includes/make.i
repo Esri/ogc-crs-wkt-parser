@@ -29,9 +29,8 @@
 #     in the various makefiles.
 #
 # 2.  The build mode is set by the environment variable $BUILD_MODE.
-#     This variable, if defined, is expected to have the values of
-#     "debug", "release", or "profile".  If it is not defined, "debug"
-#     is assumed.
+#     This variable, if defined, is expected to have the value of
+#     "debug" or "release".  If it is not defined, "debug" is assumed.
 #
 # 3.  If doing a "debug" build, the macro _DEBUG is asserted.
 #
@@ -39,9 +38,7 @@
 #
 #     1.  All modules, regardless of the BUILD_MODE, are built with the
 #         option to create a PDB (program database) file, which contains
-#         all the debugging information for the module.  Note that we
-#         build a full PDB file for our debugging purposes, and a
-#         stripped PDB file for the SDK packages.
+#         all the debugging information for the module.
 #
 #     2.  All libraries and executables are NOT incrementally linked.
 #
@@ -50,10 +47,7 @@
 # When linking executables, the following options are available:
 #
 #    LIB_TYPE       dynamic    Use dynamic libraries (default)
-#                   static     Use static  libraries (default if profile mode)
-#
-#    LIB_MODE       separate   Use separate libs
-#                   combined   Use combined PE libs  (default)
+#                   static     Use static  libraries
 #
 #    VERBOSE_MAKE              If set, we get the full compile/link line.
 #                              Otherwise, we get an abbreviated line.
@@ -63,11 +57,6 @@
 #                              merged into the DLL or EXE.
 #
 # ------------------------------------------------------------------------
-#
-# IMPORTANT - Before using these files, be sure to make the sign of the
-#             Berghaus Star...
-#
-# ------------------------------------------------------------------------
 
 MAKEFLAGS += --no-print-directory
 
@@ -75,12 +64,20 @@ MAKEFLAGS += --no-print-directory
 # Determine our architecture.  Our only source for this info is
 # the OS_ARCH environment variable.
 #
-# Choices are:
-#    32   32-bit (Default)
-#    64   64-bit
+ifneq ("$(OS_ARCH)", "32")
+ifneq ("$(OS_ARCH)", "64")
+   override OS_ARCH := 32
+endif
+endif
+
+# ------------------------------------------------------------------------
+# Determine our build mode.  Our only source for this info is
+# the BUILD_MODE environment variable.
 #
-ifndef OS_ARCH
-   OS_ARCH   := 32
+ifneq ("$(BUILD_MODE)", "debug")
+ifneq ("$(BUILD_MODE)", "release")
+   override BUILD_MODE := debug
+endif
 endif
 
 # ------------------------------------------------------------------------
@@ -125,13 +122,6 @@ RM  := rm -f
 RD  := rm -fr
 
 # ------------------------------------------------------------------------
-# Determine our build mode
-#
-ifndef BUILD_MODE
-   BUILD_MODE := debug
-endif
-
-# ------------------------------------------------------------------------
 # C/C++ directories (The DLL directory is OS-dependent.)
 #
 INT_DIR := $(BUILD_MODE)$(OS_ARCH)
@@ -148,7 +138,6 @@ endif
 BIN_DIR = $(TGT_DIR)/bin
 LIB_DIR = $(TGT_DIR)/lib
 PDB_DIR = $(TGT_DIR)/pdb
-PBS_DIR = $(TGT_DIR)/pbs
 DLL_DIR = $(TGT_DIR)/$(DLL_DIR_NAME)
 
 # ------------------------------------------------------------------------
@@ -177,10 +166,6 @@ ifneq ($(LIB_TYPE), static)
 endif
 endif
 
-ifeq ($(BUILD_MODE), profile)
-   override LIB_TYPE := static
-endif
-
 STATIC_LIB_SUFFIX   := _s
 
 ifeq ($(LIB_TYPE), dynamic)
@@ -194,47 +179,14 @@ else
 endif
 
 # ------------------------------------------------------------------------
-# Determine our library mode and
-# get the link command to use for programs
-#
-ifneq ($(LIB_MODE), separate)
-  ifneq ($(LIB_MODE), combined)
-   override LIB_MODE := combined
-  endif
-endif
-
-ifeq ($(LIB_MODE), separate)
-   LINK_CMD   = MK_EXE_SEP
-   LINKPP_CMD = MK_EXEPP_SEP
-endif
-
-ifeq ($(LIB_MODE), combined)
-   LINK_CMD   = MK_EXE_CMB
-   LINKPP_CMD = MK_EXEPP_CMB
-endif
-
-# ------------------------------------------------------------------------
 # List of suffixes we are interested in.
 #
 .SUFFIXES :
 .SUFFIXES : .c .cpp .$(OBJ_EXT) $(EXE_EXT)
 
 # ------------------------------------------------------------------------
-# Rules to build C/C++ object files in the current directory.
-#
-%.$(OBJ_EXT) : %.cpp
-ifndef VERBOSE_MAKE
-	@ echo $(strip $(VCCPP_NAME) -c $(COPTS) $(OPTS) $<)
-	@ "$(VCCPP)" -c $(CPPFLAGS) $<
-else
-	  "$(VCCPP)" -c $(CPPFLAGS) $<
-endif
-
-# ------------------------------------------------------------------------
 # By telling make that these targets are "phony", it means that the
 # targets are not real files. This speeds up processing a bit and prevents
 # problems where somebody creates an actual file with one of these names.
 #
-# This lists all our "common" targets.
-#
-.PHONY : all compile link clean
+.PHONY : all compile link clean srclist src.list flist file.list

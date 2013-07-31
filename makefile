@@ -38,6 +38,7 @@ DIRS := \
 # source files
 #
 OTHER  := \
+  .gitignore   \
   CONTENTS     \
   LICENSE      \
   README.md    \
@@ -61,7 +62,7 @@ all compile link :
 # ------------------------------------------------------------------------
 # List all source files
 #
-# (The crazy sed/sort/sed part of the command sorts all filenames
+# (The crazy sed/sort/sed part of the commands sorts all filenames
 # in a directory ahead of any sub-directories.)
 #
 srclist :
@@ -81,6 +82,22 @@ srclist :
 	    -e '/\/[^/]*$$/s//\/.&/' | \
 	  sort | \
 	  sed -e 's/\/\.\//\//'
+
+src.list :
+	@ $(MAKE) srclist >$@
+
+flist :
+	@ find . -type f -print | \
+	  grep -v .git/ | \
+	  sed \
+	    -e '/^\.\/.*\//s/\.\///' \
+	    -e '/^[^/]*$$/s/^/.\//'  \
+	    -e '/\/[^/]*$$/s//\/.&/' | \
+	  sort | \
+	  sed -e 's/\/\.\//\//'
+
+file.list :
+	@ $(MAKE) flist >$@
 
 # ------------------------------------------------------------------------
 # Clean all files

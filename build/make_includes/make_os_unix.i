@@ -35,19 +35,10 @@ ifeq ($(BUILD_MODE), debug)
    CDEFS     += $(DEBUG_OPTS) -D_DEBUG
    CPPDEFS   += $(DEBUG_OPTS) -D_DEBUG
    EXEDEFS   += $(DEBUG_OPTS)
-   EXEPPDEFS += $(DEBUG_OPTS)
    DLLDEFS   += $(DEBUG_OPTS)
 else
-ifeq ($(BUILD_MODE), profile)
-   CDEFS     += -p $(DEBUG_OPTS) -D_DEBUG -Dstatic=
-   CPPDEFS   += -p $(DEBUG_OPTS) -D_DEBUG
-   EXEDEFS   += -p $(DEBUG_OPTS)
-   EXEPPDEFS += -p $(DEBUG_OPTS)
-   DLLDEFS   += -p $(DEBUG_OPTS)
-else
-   CDEFS     += -DNDEBUG $(OPTIMIZE_OPTS)
-   CPPDEFS   += -DNDEBUG $(OPTIMIZE_OPTS)
-endif
+   CDEFS     += $(OPTIMIZE_OPTS) -DNDEBUG
+   CPPDEFS   += $(OPTIMIZE_OPTS) -DNDEBUG
 endif
 
 VCC_NAME   := $(notdir $(VCC))
