@@ -15,6 +15,11 @@ This package is not an official offering from the OGC, but is provided
 by Esri as a proof-of-concept implementation of the WKT-SPEC, with
 the intent of highlighting issues with the WKT-SPEC.
 
+Included in this package is the document OGC_12-063r2_WKT_CRS.doc,
+which documents this proposed standard and which was approved by the OGC
+Standards Working Group for inclusion in this package during the
+meeting of July 25, 2013.
+
 ### Contents
 
 This package consists of a library and sample programs using the library.
