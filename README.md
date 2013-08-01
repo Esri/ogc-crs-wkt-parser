@@ -1,4 +1,4 @@
-## Description of this OGC WKT library package.
+## ogc-crs-wkt-parser
 
 ### Introduction
 
@@ -220,3 +220,9 @@ distributed under the License is distributed on an "AS IS" BASIS,
 WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
+
+A copy of the license is available in the repository's
+[license.txt](https://github.com/Esri/ogc-crs-wkt-parser/license.txt) file.
+
+[](Esri Tags: OGC WKT)
+[](Esri Language: C-plus-plus)
