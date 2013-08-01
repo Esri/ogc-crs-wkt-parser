@@ -2,7 +2,7 @@
 
 ### Introduction
 
-This package contains sample code for a library that implements the
+This package contains sample code for a library that implements the DRAFT
 OGC WKT specification titled "Geographic information - Well known text
 for coordinate reference systems" (referred to as the WKT-SPEC).
 This specification is for defining a Well-Known-Text (WKT) syntax
@@ -12,13 +12,15 @@ by Coordinates". This package also contains some sample programs
 that use this library.
 
 This package is not an official offering from the OGC, but is provided
-by Esri as a proof-of-concept implementation of the WKT-SPEC, with
-the intent of highlighting issues with the WKT-SPEC.
+by Esri as a proof-of-concept implementation of the DRAFT WKT-SPEC, with
+the intent of testing the proposed specification and highlighting potential
+issues with the WKT-SPEC.
 
-Included in this package is the document OGC_12-063r2_WKT_CRS.doc,
+Included in this package is the DRAFT document OGC_12-063r2_WKT_CRS.doc,
 which documents this proposed standard and which was approved by the OGC
 Standards Working Group for inclusion in this package during the
-meeting of July 25, 2013.
+meeting of July 25, 2013.  This DRAFT document is being released in parallel
+by ISO and OGC for general public comment.
 
 ### Contents
 
@@ -34,8 +36,9 @@ determine the usability of the WKT spec.
 
 ### Usability
 
-This code is not intended to be usable in any production environment.
-This library only provides the following functions:
+This code is provided to help evaluate the DRAFT specification, and is 
+not intended to be used in any production environment at this time.
+This library provides the following functions only:
 
 *  Convert WKT strings to internal objects.
 *  Convert internal objects to WKT strings.
@@ -189,7 +192,14 @@ sample API:
 
 ### Issues
 
-Find a bug or want to request a new feature?  Please let us know by submitting an issue.
+Find a bug or want to request a new feature?  Please let us know by submitting
+an issue.
+
+Comments and issues logged through this Github project will be available to
+the ISO and OGC Standards Working Group.  However, this Github project is not
+an official repository of public comment for the DRAFT standard - you may want
+to submit comments through the formal ISO and OGC channels to ensure that they
+are logged and responded to.
 
 ### Contributing
 
