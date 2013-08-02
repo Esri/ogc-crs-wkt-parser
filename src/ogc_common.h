@@ -28,8 +28,7 @@
 #include <ctype.h>
 #include <new>
 
-/* deal with Microsoft BS */
-#if defined(_WIN32)
+#ifdef _WIN32
 #  pragma warning (disable: 4996) /* same as "-D _CRT_SECURE_NO_WARNINGS" */
 #  define OGC_EXPORTING  1
 #endif

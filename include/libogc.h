@@ -26,7 +26,7 @@
 
 /* ------------------------------------------------------------------------- */
 
-/* Deal with stoopid Windoze linkage stuff. */
+/* Deal with Windows linkage stuff. */
 
 #if defined(_WIN32) && !defined(OGC_USE_STATIC_LIBS)
 #  ifdef OGC_EXPORTING
@@ -38,7 +38,7 @@
 #  define   OGC_EXPORT
 #endif
 
-#if defined(_WIN32)
+#ifdef _WIN32
 #  define   _CDECL       __cdecl
 #else
 #  define   _CDECL
