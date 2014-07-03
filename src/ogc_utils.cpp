@@ -276,7 +276,7 @@ bool ogc_utils :: validate_cs(
    */
    switch (obj_type)
    {
-      case OGC_OBJ_TYPE_GEOCENTRIC_CRS:
+      case OGC_OBJ_TYPE_GEOD_CRS:
          switch (cs_type)
          {
             case OGC_CS_TYPE_CARTESIAN:
@@ -294,42 +294,7 @@ bool ogc_utils :: validate_cs(
          }
          break;
 
-      case OGC_OBJ_TYPE_GEOG2D_CRS:
-         switch (cs_type)
-         {
-            case OGC_CS_TYPE_ELLIPSOIDAL:
-               if ( dim != 2 )
-               {
-                  ogc_error::set(err, OGC_ERR_INVALID_DIMENSION, obj_kwd, dim);
-                  return false;
-               }
-               break;
-
-            default:
-               ogc_error::set(err, OGC_ERR_INVALID_CS_TYPE, obj_kwd, cs_kwd);
-               return false;
-         }
-        break;
-
-      case OGC_OBJ_TYPE_GEOG3D_CRS:
-         switch (cs_type)
-         {
-            case OGC_CS_TYPE_ELLIPSOIDAL:
-            case OGC_CS_TYPE_SPHERICAL:
-               if ( dim != 3 )
-               {
-                  ogc_error::set(err, OGC_ERR_INVALID_DIMENSION, obj_kwd, dim);
-                  return false;
-               }
-               break;
-
-            default:
-               ogc_error::set(err, OGC_ERR_INVALID_CS_TYPE, obj_kwd, cs_kwd);
-               return false;
-         }
-        break;
-
-      case OGC_OBJ_TYPE_PROJECTED_CRS:
+      case OGC_OBJ_TYPE_PROJ_CRS:
          switch (cs_type)
          {
             case OGC_CS_TYPE_CARTESIAN:
@@ -346,7 +311,7 @@ bool ogc_utils :: validate_cs(
          }
         break;
 
-      case OGC_OBJ_TYPE_VERTICAL_CRS:
+      case OGC_OBJ_TYPE_VERT_CRS:
          switch (cs_type)
          {
             case OGC_CS_TYPE_VERTICAL:
@@ -363,7 +328,7 @@ bool ogc_utils :: validate_cs(
          }
         break;
 
-      case OGC_OBJ_TYPE_ENGINEERING_CRS:
+      case OGC_OBJ_TYPE_ENGR_CRS:
          switch (cs_type)
          {
             case OGC_CS_TYPE_AFFINE:
@@ -424,7 +389,7 @@ bool ogc_utils :: validate_cs(
          }
         break;
 
-      case OGC_OBJ_TYPE_TEMPORAL_CRS:
+      case OGC_OBJ_TYPE_TIME_CRS:
          switch (cs_type)
          {
             case OGC_CS_TYPE_TEMPORAL:
@@ -441,7 +406,7 @@ bool ogc_utils :: validate_cs(
          }
         break;
 
-      case OGC_OBJ_TYPE_PARAMETRIC_CRS:
+      case OGC_OBJ_TYPE_PARAM_CRS:
          switch (cs_type)
          {
             case OGC_CS_TYPE_PARAMETRIC:
@@ -501,31 +466,25 @@ bool ogc_utils :: validate_cs(
 
    switch (obj_type)
    {
-      case OGC_OBJ_TYPE_GEOCENTRIC_CRS:
+      case OGC_OBJ_TYPE_GEOD_CRS:
          break;
 
-      case OGC_OBJ_TYPE_GEOG2D_CRS:
+      case OGC_OBJ_TYPE_PROJ_CRS:
         break;
 
-      case OGC_OBJ_TYPE_GEOG3D_CRS:
+      case OGC_OBJ_TYPE_VERT_CRS:
         break;
 
-      case OGC_OBJ_TYPE_PROJECTED_CRS:
-        break;
-
-      case OGC_OBJ_TYPE_VERTICAL_CRS:
-        break;
-
-      case OGC_OBJ_TYPE_ENGINEERING_CRS:
+      case OGC_OBJ_TYPE_ENGR_CRS:
         break;
 
       case OGC_OBJ_TYPE_IMAGE_CRS:
         break;
 
-      case OGC_OBJ_TYPE_TEMPORAL_CRS:
+      case OGC_OBJ_TYPE_TIME_CRS:
         break;
 
-      case OGC_OBJ_TYPE_PARAMETRIC_CRS:
+      case OGC_OBJ_TYPE_PARAM_CRS:
         break;
 
       default:

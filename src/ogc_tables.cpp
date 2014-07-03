@@ -53,8 +53,14 @@ const ogc_tables::obj_tbl ogc_tables::ogc_obj_types[] =
    { OGC_OBJ_TYPE_ELLIPSOID,              OGC_OBJ_KWD_ELLIPSOID        },
 
    { OGC_OBJ_TYPE_ANCHOR,                 OGC_OBJ_KWD_ANCHOR           },
-   { OGC_OBJ_TYPE_GEODETIC_DATUM,         OGC_OBJ_KWD_GEODETIC_DATUM   },
-   { OGC_OBJ_TYPE_GENERIC_DATUM,          OGC_OBJ_KWD_GENERIC_DATUM    },
+   { OGC_OBJ_TYPE_TIME_ORIGIN,            OGC_OBJ_KWD_TIME_ORIGIN      },
+
+   { OGC_OBJ_TYPE_ENGR_DATUM,             OGC_OBJ_KWD_ENGR_DATUM       },
+   { OGC_OBJ_TYPE_GEOD_DATUM,             OGC_OBJ_KWD_GEOD_DATUM       },
+   { OGC_OBJ_TYPE_IMAGE_DATUM,            OGC_OBJ_KWD_IMAGE_DATUM      },
+   { OGC_OBJ_TYPE_PARAM_DATUM,            OGC_OBJ_KWD_PARAM_DATUM      },
+   { OGC_OBJ_TYPE_TIME_DATUM,             OGC_OBJ_KWD_TIME_DATUM       },
+   { OGC_OBJ_TYPE_VERT_DATUM,             OGC_OBJ_KWD_VERT_DATUM       },
 
    { OGC_OBJ_TYPE_PRIMEM,                 OGC_OBJ_KWD_PRIMEM           },
 
@@ -68,19 +74,17 @@ const ogc_tables::obj_tbl ogc_tables::ogc_obj_types[] =
    { OGC_OBJ_TYPE_CONVERSION,             OGC_OBJ_KWD_CONVERSION       },
    { OGC_OBJ_TYPE_METHOD,                 OGC_OBJ_KWD_METHOD           },
 
-   { OGC_OBJ_TYPE_GEOCENTRIC_CRS,         OGC_OBJ_KWD_GEOCENTRIC_CRS   },
-   { OGC_OBJ_TYPE_GEOG2D_CRS,             OGC_OBJ_KWD_GEOG2D_CRS       },
-   { OGC_OBJ_TYPE_GEOG3D_CRS,             OGC_OBJ_KWD_GEOG3D_CRS       },
-   { OGC_OBJ_TYPE_PROJECTED_CRS,          OGC_OBJ_KWD_PROJECTED_CRS    },
-   { OGC_OBJ_TYPE_VERTICAL_CRS,           OGC_OBJ_KWD_VERTICAL_CRS     },
-   { OGC_OBJ_TYPE_ENGINEERING_CRS,        OGC_OBJ_KWD_ENGINEERING_CRS  },
+   { OGC_OBJ_TYPE_ENGR_CRS,               OGC_OBJ_KWD_ENGR_CRS         },
+   { OGC_OBJ_TYPE_GEOD_CRS,               OGC_OBJ_KWD_GEOD_CRS         },
    { OGC_OBJ_TYPE_IMAGE_CRS,              OGC_OBJ_KWD_IMAGE_CRS        },
-   { OGC_OBJ_TYPE_TEMPORAL_CRS,           OGC_OBJ_KWD_TEMPORAL_CRS     },
-   { OGC_OBJ_TYPE_PARAMETRIC_CRS,         OGC_OBJ_KWD_PARAMETRIC_CRS   },
+   { OGC_OBJ_TYPE_PARAM_CRS,              OGC_OBJ_KWD_PARAM_CRS        },
+   { OGC_OBJ_TYPE_PROJ_CRS,               OGC_OBJ_KWD_PROJ_CRS         },
+   { OGC_OBJ_TYPE_TIME_CRS,               OGC_OBJ_KWD_TIME_CRS         },
+   { OGC_OBJ_TYPE_VERT_CRS,               OGC_OBJ_KWD_VERT_CRS         },
    { OGC_OBJ_TYPE_COMPOUND_CRS,           OGC_OBJ_KWD_COMPOUND_CRS     },
 
-   { OGC_OBJ_TYPE_OPACCURACY,             OGC_OBJ_KWD_OPACCURACY       },
-   { OGC_OBJ_TYPE_COORDOP,                OGC_OBJ_KWD_COORDOP          },
+   { OGC_OBJ_TYPE_OP_ACCURACY,            OGC_OBJ_KWD_OP_ACCURACY      },
+   { OGC_OBJ_TYPE_COORD_OP,               OGC_OBJ_KWD_COORD_OP         },
 
    { OGC_OBJ_TYPE_UNKNOWN,                OGC_OBJ_KWD_UNKNOWN          }
 };
@@ -91,15 +95,13 @@ const ogc_tables::obj_tbl ogc_tables::ogc_obj_types[] =
 
 const ogc_tables::crs_tbl ogc_tables::ogc_crs_types[] =
 {
-   { OGC_CRS_TYPE_GEOCENTRIC,             OGC_CRS_KWD_GEOCENTRIC       },
-   { OGC_CRS_TYPE_GEOG2D,                 OGC_CRS_KWD_GEOG2D           },
-   { OGC_CRS_TYPE_GEOG3D,                 OGC_CRS_KWD_GEOG3D           },
-   { OGC_CRS_TYPE_ENGINEERING,            OGC_CRS_KWD_ENGINEERING      },
+   { OGC_CRS_TYPE_ENGR,                   OGC_CRS_KWD_ENGR             },
+   { OGC_CRS_TYPE_GEOD,                   OGC_CRS_KWD_GEOD             },
    { OGC_CRS_TYPE_IMAGE,                  OGC_CRS_KWD_IMAGE            },
-   { OGC_CRS_TYPE_PARAMETRIC,             OGC_CRS_KWD_PARAMETRIC       },
-   { OGC_CRS_TYPE_PROJECTED,              OGC_CRS_KWD_PROJECTED        },
-   { OGC_CRS_TYPE_TEMPORAL,               OGC_CRS_KWD_TEMPORAL         },
-   { OGC_CRS_TYPE_VERTICAL,               OGC_CRS_KWD_VERTICAL         },
+   { OGC_CRS_TYPE_PARAM,                  OGC_CRS_KWD_PARAM            },
+   { OGC_CRS_TYPE_PROJ,                   OGC_CRS_KWD_PROJ             },
+   { OGC_CRS_TYPE_TIME,                   OGC_CRS_KWD_TIME             },
+   { OGC_CRS_TYPE_VERT,                   OGC_CRS_KWD_VERT             },
    { OGC_CRS_TYPE_COMPOUND,               OGC_CRS_KWD_COMPOUND         },
 
    { OGC_CRS_TYPE_UNKNOWN,                OGC_CRS_KWD_UNKNOWN          }
@@ -127,8 +129,12 @@ const ogc_tables::unit_tbl ogc_tables::ogc_unit_types[] =
 
 const ogc_tables::datum_tbl ogc_tables::ogc_datum_types[] =
 {
-   { OGC_DATUM_TYPE_GENERIC,              OGC_DATUM_KWD_GENERIC        },
-   { OGC_DATUM_TYPE_GEODETIC,             OGC_DATUM_KWD_GEODETIC       },
+   { OGC_DATUM_TYPE_ENGR,                 OGC_DATUM_KWD_ENGR           },
+   { OGC_DATUM_TYPE_GEOD,                 OGC_DATUM_KWD_GEOD           },
+   { OGC_DATUM_TYPE_IMAGE,                OGC_DATUM_KWD_IMAGE          },
+   { OGC_DATUM_TYPE_PARAM,                OGC_DATUM_KWD_PARAM          },
+   { OGC_DATUM_TYPE_TIME,                 OGC_DATUM_KWD_TIME           },
+   { OGC_DATUM_TYPE_VERT,                 OGC_DATUM_KWD_VERT           },
 
    { OGC_DATUM_TYPE_UNKNOWN,              OGC_DATUM_KWD_UNKNOWN        }
 };

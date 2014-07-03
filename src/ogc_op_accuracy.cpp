@@ -15,63 +15,43 @@
 /* ------------------------------------------------------------------------- */
 
 /* ------------------------------------------------------------------------- */
-/* GENDATUM (Generic datum) object                                           */
+/* OPACCURACY (Operation accuracy) object                                    */
 /* ------------------------------------------------------------------------- */
 
 #include "ogc_common.h"
 
 namespace OGC {
 
-const char * ogc_generic_datum :: obj_kwd() { return OGC_OBJ_KWD_GENERIC_DATUM; }
-const char * ogc_generic_datum :: old_kwd() { return OGC_OBJ_KWD_VDATUM;        }
+const char * ogc_op_accuracy :: obj_kwd() { return OGC_OBJ_KWD_OP_ACCURACY; }
 
 /*------------------------------------------------------------------------
  * create
  */
-ogc_generic_datum * ogc_generic_datum :: create(
-   const char * name,
-   ogc_anchor * anchor,
-   ogc_vector * ids,
-   ogc_error *  err)
+ogc_op_accuracy * ogc_op_accuracy :: create(
+   double        accuracy,
+   ogc_error *   err)
 {
-   ogc_generic_datum * p = OGC_NULL;
+   ogc_op_accuracy * p = OGC_NULL;
    bool bad = false;
 
    /*---------------------------------------------------------
     * error checks
     */
-   if ( name == OGC_NULL || *name == 0 )
-   {
-      ogc_error::set(err, OGC_ERR_EMPTY_NAME, obj_kwd());
-      bad = true;
-   }
-   else
-   {
-      int len = ogc_string::unescape_len(name);
-      if ( len >= OGC_NAME_MAX )
-      {
-         ogc_error::set(err, OGC_ERR_NAME_TOO_LONG, obj_kwd(), len);
-         bad = true;
-      }
-   }
 
    /*---------------------------------------------------------
     * create the object
     */
    if ( !bad )
    {
-      p = new (std::nothrow) ogc_generic_datum();
+      p = new (std::nothrow) ogc_op_accuracy();
       if ( p == OGC_NULL )
       {
          ogc_error::set(err, OGC_ERR_NO_MEMORY, obj_kwd());
          return p;
       }
 
-      ogc_string::unescape_str(p->_name, name, OGC_NAME_MAX);
-      p->_obj_type   = OGC_OBJ_TYPE_GENERIC_DATUM;
-      p->_datum_type = OGC_DATUM_TYPE_GENERIC;
-      p->_anchor     = anchor;
-      p->_ids        = ids;
+      p->_obj_type = OGC_OBJ_TYPE_OP_ACCURACY;
+      p->_accuracy = accuracy;
    }
 
    return p;
@@ -80,12 +60,12 @@ ogc_generic_datum * ogc_generic_datum :: create(
 /*------------------------------------------------------------------------
  * destroy
  */
-ogc_generic_datum :: ~ogc_generic_datum()
+ogc_op_accuracy :: ~ogc_op_accuracy()
 {
 }
 
-void ogc_generic_datum :: destroy(
-   ogc_generic_datum * obj)
+void ogc_op_accuracy :: destroy(
+   ogc_op_accuracy * obj)
 {
    if ( obj != OGC_NULL )
    {
@@ -96,7 +76,7 @@ void ogc_generic_datum :: destroy(
 /*------------------------------------------------------------------------
  * object from tokens
  */
-ogc_generic_datum * ogc_generic_datum :: from_tokens(
+ogc_op_accuracy * ogc_op_accuracy :: from_tokens(
    const ogc_token * t,
    int               start,
    int *             pend,
@@ -110,11 +90,8 @@ ogc_generic_datum * ogc_generic_datum :: from_tokens(
    int  same;
    int  num;
 
-   ogc_generic_datum * obj    = OGC_NULL;
-   ogc_anchor *        anchor = OGC_NULL;
-   ogc_id *            id     = OGC_NULL;
-   ogc_vector *        ids    = OGC_NULL;
-   const char * name;
+   ogc_op_accuracy * obj     = OGC_NULL;
+   double accuracy;
 
    /*---------------------------------------------------------
     * sanity checks
@@ -133,8 +110,7 @@ ogc_generic_datum * ogc_generic_datum :: from_tokens(
    }
    kwd = arr[start].str;
 
-   if ( !ogc_string::is_equal(kwd, obj_kwd()) &&
-        !ogc_string::is_equal(kwd, old_kwd()) )
+   if ( !ogc_string::is_equal(kwd, obj_kwd()) )
    {
       ogc_error::set(err, OGC_ERR_WKT_INVALID_KEYWORD, obj_kwd(), kwd);
       return OGC_NULL;
@@ -163,7 +139,7 @@ ogc_generic_datum * ogc_generic_datum :: from_tokens(
    }
 
    /*---------------------------------------------------------
-    * There must be 1 token: GENDATUM[ "name" ...
+    * There must be 1 token: OPACCURACY[ accuracy ...
     */
    if ( same < 1 )
    {
@@ -183,78 +159,15 @@ ogc_generic_datum * ogc_generic_datum :: from_tokens(
     * Process all non-object tokens.
     * They come first and are syntactically fixed.
     */
-   name = arr[start++].str;
+   accuracy = ogc_string::atod( arr[start++].str );
 
    /*---------------------------------------------------------
     * Now process all sub-objects
     */
+#if 0 /* who cares? */
    int  next = 0;
    for (int i = start; i < end; i = next)
    {
-      if ( ogc_string::is_equal(arr[i].str, ogc_anchor::obj_kwd()) )
-      {
-         if ( anchor != OGC_NULL )
-         {
-            ogc_error::set(err, OGC_ERR_WKT_DUPLICATE_ANCHOR, obj_kwd());
-            bad = true;
-         }
-         else
-         {
-            anchor = ogc_anchor::from_tokens(t, i, &next, err);
-            if ( anchor == OGC_NULL )
-               bad = true;
-         }
-         continue;
-      }
-
-      if ( ogc_string::is_equal(arr[i].str, ogc_id::obj_kwd()) ||
-           ogc_string::is_equal(arr[i].str, ogc_id::alt_kwd()) )
-      {
-         id = ogc_id::from_tokens(t, i, &next, err);
-         if ( id == OGC_NULL )
-         {
-            bad = true;
-         }
-         else
-         {
-            if ( ids == OGC_NULL )
-            {
-               ids = ogc_vector::create(1, 1);
-               if ( ids == OGC_NULL )
-               {
-                  ogc_error::set(err, OGC_ERR_NO_MEMORY, obj_kwd());
-                  delete id;
-                  bad = true;
-               }
-            }
-
-            if ( ids != OGC_NULL )
-            {
-               void * p = ids->find(
-                             id,
-                             false,
-                             ogc_utils::compare_id);
-               if ( p != OGC_NULL )
-               {
-                  ogc_error::set(err, OGC_ERR_WKT_DUPLICATE_ID,
-                     obj_kwd(), id->name());
-                  delete id;
-                  bad = true;
-               }
-               else
-               {
-                  if ( ids->add( id ) < 0 )
-                  {
-                     ogc_error::set(err, OGC_ERR_NO_MEMORY, obj_kwd());
-                     delete id;
-                     bad = true;
-                  }
-               }
-            }
-         }
-         continue;
-      }
-
       /* unknown object, skip over it */
       for (next = i+1; next < end; next++)
       {
@@ -262,19 +175,18 @@ ogc_generic_datum * ogc_generic_datum :: from_tokens(
             break;
       }
    }
+#endif
 
    /*---------------------------------------------------------
     * Create the object
     */
    if ( !bad )
    {
-      obj = create(name, anchor, ids, err);
+      obj = create(accuracy, err);
    }
 
    if ( obj == OGC_NULL )
    {
-      ogc_anchor :: destroy( anchor );
-      ogc_vector :: destroy( ids    );
    }
 
    return obj;
@@ -283,11 +195,11 @@ ogc_generic_datum * ogc_generic_datum :: from_tokens(
 /*------------------------------------------------------------------------
  * object from WKT
  */
-ogc_generic_datum * ogc_generic_datum :: from_wkt(
+ogc_op_accuracy * ogc_op_accuracy :: from_wkt(
    const char * wkt,
    ogc_error *  err)
 {
-   ogc_generic_datum * obj = OGC_NULL;
+   ogc_op_accuracy * obj = OGC_NULL;
    ogc_token t;
 
    if ( t.tokenize(wkt, obj_kwd(), err) )
@@ -301,8 +213,8 @@ ogc_generic_datum * ogc_generic_datum :: from_wkt(
 /*------------------------------------------------------------------------
  * object to WKT
  */
-bool ogc_generic_datum :: to_wkt(
-   const ogc_generic_datum * obj,
+bool ogc_op_accuracy :: to_wkt(
+   const ogc_op_accuracy * obj,
    char      buffer[],
    int       options,
    size_t    buflen)
@@ -317,20 +229,17 @@ bool ogc_generic_datum :: to_wkt(
    return obj->to_wkt(buffer, options, buflen);
 }
 
-bool ogc_generic_datum :: to_wkt(
+bool ogc_op_accuracy :: to_wkt(
    char      buffer[],
    int       options,
    size_t    buflen) const
 {
-   OGC_UTF8_NAME buf_name;
-   OGC_TBUF      buf_hdr;
-   OGC_TBUF      buf_anchor;
-   OGC_TBUF      buf_id;
-   int           opts  =  (options | OGC_WKT_OPT_INTERNAL);
-   size_t        len   = 0;
-   bool          rc    = true;
-   const char *  opn   = "[";
-   const char *  cls   = "]";
+   OGC_TBUF     buf_hdr;
+   OGC_NBUF     buf_accuracy;
+   size_t       len   = 0;
+   bool         rc    = true;
+   const char * opn   = "[";
+   const char * cls   = "]";
    const char *  kwd   = obj_kwd();
 
    if ( (options & OGC_WKT_OPT_PARENS) != 0 )
@@ -339,37 +248,20 @@ bool ogc_generic_datum :: to_wkt(
       cls = ")";
    }
 
-   if ( (opts & OGC_WKT_OPT_TOP_ID_ONLY) != 0 )
-      opts |= OGC_WKT_OPT_NO_IDS;
-
    if ( buffer == OGC_NULL )
       return false;
    *buffer = 0;
 
-   if ( (opts & OGC_WKT_OPT_OLD_SYNTAX) != 0 )
-      kwd = old_kwd();
+   if ( (options & OGC_WKT_OPT_OLD_SYNTAX) != 0 )
+      return true;
 
-   rc &= ogc_anchor :: to_wkt(_anchor, buf_anchor, opts, OGC_TBUF_MAX);
+   ogc_string :: dtoa(_accuracy, buf_accuracy);
 
-   ogc_string::escape_str(buf_name, _name, OGC_UTF8_NAME_MAX);
-   sprintf(buf_hdr, "%s%s\"%s\"",
-      kwd, opn, buf_name);
+   sprintf(buf_hdr, "%s%s%s",
+      kwd, opn, buf_accuracy);
 
-   OGC_CPY_TO_BUF( buf_hdr    );
-   OGC_ADD_TO_BUF( buf_anchor );
-
-   if ( _ids != OGC_NULL && (options & OGC_WKT_OPT_NO_IDS) == 0 )
-   {
-      for (int i = 0; i < id_count(); i++)
-      {
-         rc &= ogc_id :: to_wkt(id(i), buf_id, opts, OGC_TBUF_MAX);
-         OGC_ADD_TO_BUF( buf_id );
-         if ( (options & OGC_WKT_OPT_OLD_SYNTAX) != 0 )
-            break;
-      }
-   }
-
-   OGC_CPY_TO_BUF( cls );
+   OGC_CPY_TO_BUF( buf_hdr );
+   OGC_CPY_TO_BUF( cls     );
 
    if ( (options & OGC_WKT_OPT_INTERNAL) == 0 &&
         (options & OGC_WKT_OPT_EXPAND)   != 0 )
@@ -383,42 +275,30 @@ bool ogc_generic_datum :: to_wkt(
 /*------------------------------------------------------------------------
  * clone
  */
-ogc_generic_datum * ogc_generic_datum :: clone(const ogc_generic_datum * obj)
+ogc_op_accuracy * ogc_op_accuracy :: clone(const ogc_op_accuracy * obj)
 {
    if ( obj == OGC_NULL )
       return OGC_NULL;
    return obj->clone();
 }
 
-ogc_generic_datum * ogc_generic_datum :: clone() const
+ogc_op_accuracy * ogc_op_accuracy :: clone() const
 {
-   ogc_anchor * anchor = ogc_anchor :: clone( _anchor );
-   ogc_vector * ids    = ogc_vector :: clone( _ids    );
-
-   ogc_generic_datum * p = create(_name,
-                                  anchor,
-                                  ids,
-                                  OGC_NULL);
-   if ( p == OGC_NULL )
-   {
-      ogc_anchor :: destroy( anchor );
-      ogc_vector :: destroy( ids    );
-   }
-
+   ogc_op_accuracy * p = create(_accuracy, OGC_NULL);
    return p;
 }
 
 /*------------------------------------------------------------------------
  * compare for computational equality
  */
-bool ogc_generic_datum :: is_equal(
-   const ogc_generic_datum * p1,
-   const ogc_generic_datum * p2)
+bool ogc_op_accuracy :: is_equal(
+   const ogc_op_accuracy * p1,
+   const ogc_op_accuracy * p2)
 {
    if ( p1 == OGC_NULL && p2 == OGC_NULL ) return true;
    if ( p1 == OGC_NULL || p2 == OGC_NULL ) return false;
 
-   if ( !ogc_string :: is_equal( p1->name(), p2->name() ) )
+   if ( !ogc_macros :: eq( p1->accuracy(), p2->accuracy() ) )
    {
       return false;
    }
@@ -426,8 +306,8 @@ bool ogc_generic_datum :: is_equal(
    return true;
 }
 
-bool ogc_generic_datum :: is_equal(
-   const ogc_generic_datum * p) const
+bool ogc_op_accuracy :: is_equal(
+   const ogc_op_accuracy * p) const
 {
    return is_equal(this, p);
 }
@@ -435,16 +315,14 @@ bool ogc_generic_datum :: is_equal(
 /*------------------------------------------------------------------------
  * compare
  */
-bool ogc_generic_datum :: is_identical(
-   const ogc_generic_datum * p1,
-   const ogc_generic_datum * p2)
+bool ogc_op_accuracy :: is_identical(
+   const ogc_op_accuracy * p1,
+   const ogc_op_accuracy * p2)
 {
    if ( p1 == OGC_NULL && p2 == OGC_NULL ) return true;
    if ( p1 == OGC_NULL || p2 == OGC_NULL ) return false;
 
-   if ( !ogc_string :: is_equal    ( p1->name(),   p2->name()   ) ||
-        !ogc_anchor :: is_identical( p1->anchor(), p2->anchor() ) ||
-        !ogc_vector :: is_identical( p1->ids(),    p2->ids()    ) )
+   if ( !ogc_macros :: eq( p1->accuracy(), p2->accuracy() ) )
    {
       return false;
    }
@@ -452,8 +330,8 @@ bool ogc_generic_datum :: is_identical(
    return true;
 }
 
-bool ogc_generic_datum :: is_identical(
-   const ogc_generic_datum * p) const
+bool ogc_op_accuracy :: is_identical(
+   const ogc_op_accuracy * p) const
 {
    return is_identical(this, p);
 }

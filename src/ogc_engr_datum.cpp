@@ -15,27 +15,26 @@
 /* ------------------------------------------------------------------------- */
 
 /* ------------------------------------------------------------------------- */
-/* PRIMEM (Prime Meridian) object                                            */
+/* DATUM (Geodetic datum) object                                             */
 /* ------------------------------------------------------------------------- */
 
 #include "ogc_common.h"
 
 namespace OGC {
 
-const char * ogc_primem :: obj_kwd() { return OGC_OBJ_KWD_PRIMEM; }
-const char * ogc_primem :: alt_kwd() { return OGC_ALT_KWD_PRIMEM; }
+const char * ogc_engr_datum :: obj_kwd() { return OGC_OBJ_KWD_ENGR_DATUM; }
+const char * ogc_engr_datum :: alt_kwd() { return OGC_ALT_KWD_ENGR_DATUM; }
 
 /*------------------------------------------------------------------------
  * create
  */
-ogc_primem * ogc_primem :: create(
-   const char *  name,
-   double        longitude,
-   ogc_angunit * angunit,
-   ogc_vector *  ids,
-   ogc_error *   err)
+ogc_engr_datum * ogc_engr_datum :: create(
+   const char *    name,
+   ogc_anchor *    anchor,
+   ogc_vector *    ids,
+   ogc_error *     err)
 {
-   ogc_primem * p = OGC_NULL;
+   ogc_engr_datum * p = OGC_NULL;
    bool bad = false;
 
    /*---------------------------------------------------------
@@ -55,18 +54,12 @@ ogc_primem * ogc_primem :: create(
       }
    }
 
-   if ( longitude < -180.0 || longitude > 180.0 )
-   {
-      ogc_error::set(err, OGC_ERR_INVALID_LONGITUDE, obj_kwd(), longitude);
-      bad = true;
-   }
-
    /*---------------------------------------------------------
     * create the object
     */
    if ( !bad )
    {
-      p = new (std::nothrow) ogc_primem();
+      p = new (std::nothrow) ogc_engr_datum();
       if ( p == OGC_NULL )
       {
          ogc_error::set(err, OGC_ERR_NO_MEMORY, obj_kwd());
@@ -74,10 +67,10 @@ ogc_primem * ogc_primem :: create(
       }
 
       ogc_string::unescape_str(p->_name, name, OGC_NAME_MAX);
-      p->_obj_type  = OGC_OBJ_TYPE_PRIMEM;
-      p->_longitude = longitude;
-      p->_angunit   = angunit;
-      p->_ids       = ids;
+      p->_obj_type   = OGC_OBJ_TYPE_ENGR_DATUM;
+      p->_datum_type = OGC_DATUM_TYPE_ENGR;
+      p->_anchor     = anchor;
+      p->_ids        = ids;
    }
 
    return p;
@@ -86,14 +79,12 @@ ogc_primem * ogc_primem :: create(
 /*------------------------------------------------------------------------
  * destroy
  */
-ogc_primem :: ~ogc_primem()
+ogc_engr_datum :: ~ogc_engr_datum()
 {
-   ogc_angunit :: destroy( _angunit );
-   ogc_vector  :: destroy( _ids     );
 }
 
-void ogc_primem :: destroy(
-   ogc_primem * obj)
+void ogc_engr_datum :: destroy(
+   ogc_engr_datum * obj)
 {
    if ( obj != OGC_NULL )
    {
@@ -104,7 +95,7 @@ void ogc_primem :: destroy(
 /*------------------------------------------------------------------------
  * object from tokens
  */
-ogc_primem * ogc_primem :: from_tokens(
+ogc_engr_datum * ogc_engr_datum :: from_tokens(
    const ogc_token * t,
    int               start,
    int *             pend,
@@ -114,16 +105,15 @@ ogc_primem * ogc_primem :: from_tokens(
    const char * kwd;
    bool bad = false;
    int  level;
-   int  same;
    int  end;
+   int  same;
    int  num;
 
-   ogc_primem *  obj     = OGC_NULL;
-   ogc_angunit * angunit = OGC_NULL;
-   ogc_id *      id      = OGC_NULL;
-   ogc_vector *  ids     = OGC_NULL;
+   ogc_engr_datum *   obj       = OGC_NULL;
+   ogc_anchor *       anchor    = OGC_NULL;
+   ogc_id *           id        = OGC_NULL;
+   ogc_vector *       ids       = OGC_NULL;
    const char * name;
-   double       longitude;
 
    /*---------------------------------------------------------
     * sanity checks
@@ -171,15 +161,15 @@ ogc_primem * ogc_primem :: from_tokens(
    }
 
    /*---------------------------------------------------------
-    * There must be 2 tokens: PRIMEM[ "name", longitude ...
+    * There must be 1 token: DATUM[ "name" ...
     */
-   if ( same < 2 )
+   if ( same < 1 )
    {
       ogc_error::set(err, OGC_ERR_WKT_INSUFFICIENT_TOKENS, obj_kwd(), same);
       return OGC_NULL;
    }
 
-   if ( same > 2 && get_strict_parsing() )
+   if ( same > 1 && get_strict_parsing() )
    {
       ogc_error::set(err, OGC_ERR_WKT_TOO_MANY_TOKENS,     obj_kwd(), same);
       return OGC_NULL;
@@ -191,8 +181,7 @@ ogc_primem * ogc_primem :: from_tokens(
     * Process all non-object tokens.
     * They come first and are syntactically fixed.
     */
-   name      = arr[start++].str;
-   longitude = ogc_string::atod( arr[start++].str );
+   name = arr[start++].str;
 
    /*---------------------------------------------------------
     * Now process all sub-objects
@@ -200,18 +189,17 @@ ogc_primem * ogc_primem :: from_tokens(
    int  next = 0;
    for (int i = start; i < end; i = next)
    {
-      if ( ogc_string::is_equal(arr[i].str, ogc_angunit::obj_kwd()) ||
-           ogc_string::is_equal(arr[i].str, ogc_angunit::alt_kwd()) )
+      if ( ogc_string::is_equal(arr[i].str, ogc_anchor::obj_kwd()) )
       {
-         if ( angunit != OGC_NULL )
+         if ( anchor != OGC_NULL )
          {
-            ogc_error::set(err, OGC_ERR_WKT_DUPLICATE_UNIT, obj_kwd());
+            ogc_error::set(err, OGC_ERR_WKT_DUPLICATE_ANCHOR, obj_kwd());
             bad = true;
          }
          else
          {
-            angunit = ogc_angunit::from_tokens(t, i, &next, err);
-            if ( angunit == OGC_NULL )
+            anchor = ogc_anchor::from_tokens(t, i, &next, err);
+            if ( anchor == OGC_NULL )
                bad = true;
          }
          continue;
@@ -277,13 +265,13 @@ ogc_primem * ogc_primem :: from_tokens(
     */
    if ( !bad )
    {
-      obj = create(name, longitude, angunit, ids, err);
+      obj = create(name, anchor, ids, err);
    }
 
    if ( obj == OGC_NULL )
    {
-      ogc_angunit :: destroy( angunit );
-      ogc_vector  :: destroy( ids     );
+      ogc_anchor :: destroy( anchor );
+      ogc_vector :: destroy( ids    );
    }
 
    return obj;
@@ -292,11 +280,11 @@ ogc_primem * ogc_primem :: from_tokens(
 /*------------------------------------------------------------------------
  * object from WKT
  */
-ogc_primem * ogc_primem :: from_wkt(
+ogc_engr_datum * ogc_engr_datum :: from_wkt(
    const char * wkt,
    ogc_error *  err)
 {
-   ogc_primem * obj = OGC_NULL;
+   ogc_engr_datum * obj = OGC_NULL;
    ogc_token t;
 
    if ( t.tokenize(wkt, obj_kwd(), err) )
@@ -310,8 +298,8 @@ ogc_primem * ogc_primem :: from_wkt(
 /*------------------------------------------------------------------------
  * object to WKT
  */
-bool ogc_primem :: to_wkt(
-   const ogc_primem * obj,
+bool ogc_engr_datum :: to_wkt(
+   const ogc_engr_datum * obj,
    char      buffer[],
    int       options,
    size_t    buflen)
@@ -326,16 +314,15 @@ bool ogc_primem :: to_wkt(
    return obj->to_wkt(buffer, options, buflen);
 }
 
-bool ogc_primem :: to_wkt(
+bool ogc_engr_datum :: to_wkt(
    char      buffer[],
    int       options,
    size_t    buflen) const
 {
    OGC_UTF8_NAME buf_name;
    OGC_TBUF      buf_hdr;
-   OGC_TBUF      buf_angunit;
+   OGC_TBUF      buf_anchor;
    OGC_TBUF      buf_id;
-   OGC_NBUF      buf_longitude;
    int           opts  =  (options | OGC_WKT_OPT_INTERNAL);
    size_t        len   = 0;
    bool          rc    = true;
@@ -356,19 +343,14 @@ bool ogc_primem :: to_wkt(
       return false;
    *buffer = 0;
 
-   ogc_string :: dtoa(_longitude, buf_longitude);
-
-   if ( (options & OGC_WKT_OPT_OLD_SYNTAX) == 0 )
-      rc &= ogc_angunit :: to_wkt(_angunit, buf_angunit, opts, OGC_TBUF_MAX);
-   else
-      *buf_angunit = 0;
+   rc &= ogc_anchor :: to_wkt(_anchor, buf_anchor, opts, OGC_TBUF_MAX);
 
    ogc_string::escape_str(buf_name, _name, OGC_UTF8_NAME_MAX);
-   sprintf(buf_hdr, "%s%s\"%s\",%s",
-      kwd, opn, buf_name, buf_longitude);
+   sprintf(buf_hdr, "%s%s\"%s\"",
+      kwd, opn, buf_name);
 
-   OGC_CPY_TO_BUF( buf_hdr     );
-   OGC_ADD_TO_BUF( buf_angunit );
+   OGC_CPY_TO_BUF( buf_hdr       );
+   OGC_ADD_TO_BUF( buf_anchor    );
 
    if ( _ids != OGC_NULL && (options & OGC_WKT_OPT_NO_IDS) == 0 )
    {
@@ -395,27 +377,26 @@ bool ogc_primem :: to_wkt(
 /*------------------------------------------------------------------------
  * clone
  */
-ogc_primem * ogc_primem :: clone(const ogc_primem * obj)
+ogc_engr_datum * ogc_engr_datum :: clone(const ogc_engr_datum * obj)
 {
    if ( obj == OGC_NULL )
       return OGC_NULL;
    return obj->clone();
 }
 
-ogc_primem * ogc_primem :: clone() const
+ogc_engr_datum * ogc_engr_datum :: clone() const
 {
-   ogc_angunit * angunit = ogc_angunit :: clone( _angunit );
-   ogc_vector *  ids     = ogc_vector  :: clone( _ids     );
+   ogc_anchor * anchor = ogc_anchor :: clone( _anchor );
+   ogc_vector * ids    = ogc_vector :: clone( _ids    );
 
-   ogc_primem * p = create(_name,
-                           _longitude,
-                           angunit,
-                           ids,
-                           OGC_NULL);
+   ogc_engr_datum * p = create(_name,
+                                   anchor,
+                                   ids,
+                                   OGC_NULL);
    if ( p == OGC_NULL )
    {
-      ogc_angunit :: destroy( angunit );
-      ogc_vector  :: destroy( ids     );
+      ogc_anchor    :: destroy( anchor    );
+      ogc_vector    :: destroy( ids       );
    }
 
    return p;
@@ -424,16 +405,14 @@ ogc_primem * ogc_primem :: clone() const
 /*------------------------------------------------------------------------
  * compare for computational equality
  */
-bool ogc_primem :: is_equal(
-   const ogc_primem * p1,
-   const ogc_primem * p2)
+bool ogc_engr_datum :: is_equal(
+   const ogc_engr_datum * p1,
+   const ogc_engr_datum * p2)
 {
    if ( p1 == OGC_NULL && p2 == OGC_NULL ) return true;
    if ( p1 == OGC_NULL || p2 == OGC_NULL ) return false;
 
-   if ( !ogc_string  :: is_equal( p1->name(),      p2->name()      ) ||
-        !ogc_macros  :: eq      ( p1->longitude(), p2->longitude() ) ||
-        !ogc_angunit :: is_equal( p1->angunit(),   p2->angunit()   ) )
+   if ( !ogc_string :: is_equal( p1->name(), p2->name() ))
    {
       return false;
    }
@@ -441,8 +420,8 @@ bool ogc_primem :: is_equal(
    return true;
 }
 
-bool ogc_primem :: is_equal(
-   const ogc_primem * p) const
+bool ogc_engr_datum :: is_equal(
+   const ogc_engr_datum * p) const
 {
    return is_equal(this, p);
 }
@@ -450,17 +429,16 @@ bool ogc_primem :: is_equal(
 /*------------------------------------------------------------------------
  * compare
  */
-bool ogc_primem :: is_identical(
-   const ogc_primem * p1,
-   const ogc_primem * p2)
+bool ogc_engr_datum :: is_identical(
+   const ogc_engr_datum * p1,
+   const ogc_engr_datum * p2)
 {
    if ( p1 == OGC_NULL && p2 == OGC_NULL ) return true;
    if ( p1 == OGC_NULL || p2 == OGC_NULL ) return false;
 
-   if ( !ogc_string  :: is_equal    ( p1->name(),      p2->name()      ) ||
-        !ogc_macros  :: eq          ( p1->longitude(), p2->longitude() ) ||
-        !ogc_angunit :: is_identical( p1->angunit(),   p2->angunit()   ) ||
-        !ogc_vector  :: is_identical( p1->ids(),       p2->ids()       ) )
+   if ( !ogc_string    :: is_equal    ( p1->name(),      p2->name()      ) ||
+        !ogc_anchor    :: is_identical( p1->anchor(),    p2->anchor()    ) ||
+        !ogc_vector    :: is_identical( p1->ids(),       p2->ids()       ) )
    {
       return false;
    }
@@ -468,202 +446,10 @@ bool ogc_primem :: is_identical(
    return true;
 }
 
-bool ogc_primem :: is_identical(
-   const ogc_primem * p) const
+bool ogc_engr_datum :: is_identical(
+   const ogc_engr_datum * p) const
 {
    return is_identical(this, p);
-}
-
-/*------------------------------------------------------------------------
- * get ID count
- */
-int ogc_primem :: id_count() const
-{
-   return (_ids == OGC_NULL) ? 0 : _ids->length();
-}
-
-/*------------------------------------------------------------------------
- * get the nth ID
- */
-ogc_id * ogc_primem :: id(int n) const
-{
-   return (_ids == OGC_NULL) ? OGC_NULL :
-                               reinterpret_cast<ogc_id *>( _ids->get(n) );
-}
-
-/* ------------------------------------------------------------------------- */
-/* GEOGCS version                                                            */
-/* ------------------------------------------------------------------------- */
-
-/*------------------------------------------------------------------------
- * static object from tokens (GEOGCS version)
- *
- * Since a GEOGCS contains a PRIMEM with no angunit, we artificially add
- * one, since this PRIMEM is assumed to always be in degrees.
- */
-ogc_primem * ogc_primem :: from_tokens_geogcs(
-   const ogc_token * t,
-   int               start,
-   int *             pend,
-   ogc_error *       err)
-{
-   const ogc_token_entry * arr;
-   const char * kwd;
-   bool bad = false;
-   int  level;
-   int  same;
-   int  end;
-   int  num;
-
-   ogc_primem *  obj     = OGC_NULL;
-   ogc_angunit * angunit = OGC_NULL;
-   ogc_id *      id      = OGC_NULL;
-   ogc_vector *  ids     = OGC_NULL;
-   const char * name;
-   double       longitude;
-
-   /*---------------------------------------------------------
-    * sanity checks
-    */
-   if ( t == OGC_NULL )
-   {
-      ogc_error::set(err, OGC_ERR_WKT_EMPTY_STRING, obj_kwd());
-      return OGC_NULL;
-   }
-   arr = t->_arr;
-
-   if ( start < 0 || start >= t->_num )
-   {
-      ogc_error::set(err, OGC_ERR_WKT_INDEX_OUT_OF_RANGE, obj_kwd(), start);
-      return OGC_NULL;
-   }
-   kwd = arr[start].str;
-
-   if ( !ogc_string::is_equal(kwd, obj_kwd()) )
-   {
-      ogc_error::set(err, OGC_ERR_WKT_INVALID_KEYWORD, obj_kwd(), kwd);
-      return OGC_NULL;
-   }
-
-   /*---------------------------------------------------------
-    * Get the level for this object,
-    * the number of tokens at that level,
-    * and the total number of tokens.
-    */
-   level = arr[start].lvl;
-   for (end = start+1; end < t->_num; end++)
-   {
-      if ( arr[end].lvl <= level )
-         break;
-   }
-
-   if ( pend != OGC_NULL )
-      *pend = end;
-   num = (end - start);
-
-   for (same = 0; same < num; same++)
-   {
-      if ( arr[start+same+1].lvl != level+1 || arr[start+same+1].idx == 0 )
-         break;
-   }
-
-   /*---------------------------------------------------------
-    * There must be 2 tokens: PRIMEM[ "name", longitude ...
-    */
-   if ( same < 2 )
-   {
-      ogc_error::set(err, OGC_ERR_WKT_INSUFFICIENT_TOKENS, obj_kwd(), same);
-      return OGC_NULL;
-   }
-
-   if ( same > 2 && get_strict_parsing() )
-   {
-      ogc_error::set(err, OGC_ERR_WKT_TOO_MANY_TOKENS,     obj_kwd(), same);
-      return OGC_NULL;
-   }
-
-   start++;
-
-   /*---------------------------------------------------------
-    * Process all non-object tokens.
-    * They come first and are syntactically fixed.
-    */
-   name      = arr[start++].str;
-   longitude = ogc_string::atod( arr[start++].str );
-
-   /*---------------------------------------------------------
-    * Now process all sub-objects
-    */
-   int  next = 0;
-   for (int i = start; i < end; i = next)
-   {
-      if ( ogc_string::is_equal(arr[i].str, ogc_id::obj_kwd()) )
-      {
-         if ( ids == OGC_NULL )
-         {
-            ids = ogc_vector::create(1,1);
-            if ( ids == OGC_NULL )
-            {
-               ogc_error::set(err, OGC_ERR_NO_MEMORY, obj_kwd());
-               bad = true;
-            }
-         }
-
-         if ( ids != OGC_NULL )
-         {
-            id = ogc_id::from_tokens(t, i, &next, err);
-            if ( id == OGC_NULL )
-            {
-               bad = true;
-            }
-            else
-            {
-               if ( ids->add( id ) < 0 )
-               {
-                  delete id;
-                  ogc_error::set(err, OGC_ERR_NO_MEMORY, obj_kwd());
-                  bad = true;
-               }
-            }
-         }
-         continue;
-      }
-
-      /* unknown object, skip over it */
-      for (next = i+1; next < end; next++)
-      {
-         if ( (arr[next].lvl <= arr[i].lvl) )
-            break;
-      }
-   }
-
-   /*---------------------------------------------------------
-    * Create a default angunit (to make sure it is degrees)
-    */
-   if ( !bad )
-   {
-      angunit = ogc_angunit::create("degree", OGC_PI180, OGC_NULL, err);
-      if ( angunit == OGC_NULL )
-      {
-         bad = true;
-      }
-   }
-
-   /*---------------------------------------------------------
-    * Create the object
-    */
-   if ( !bad )
-   {
-      obj = create(name, longitude, angunit, ids, err);
-   }
-
-   if ( obj == OGC_NULL )
-   {
-      ogc_angunit :: destroy( angunit );
-      ogc_vector  :: destroy( ids     );
-   }
-
-   return obj;
 }
 
 } /* namespace OGC */

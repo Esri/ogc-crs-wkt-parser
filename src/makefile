@@ -79,38 +79,41 @@ C_OBJS   := \
   ogc_citation.$(OBJ_EXT)        \
   ogc_compound_crs.$(OBJ_EXT)    \
   ogc_conversion.$(OBJ_EXT)      \
-  ogc_coordop.$(OBJ_EXT)         \
+  ogc_coord_op.$(OBJ_EXT)        \
   ogc_cs.$(OBJ_EXT)              \
   ogc_ellipsoid.$(OBJ_EXT)       \
-  ogc_engineering_crs.$(OBJ_EXT) \
-  ogc_generic_datum.$(OBJ_EXT)   \
-  ogc_geocentric_crs.$(OBJ_EXT)  \
-  ogc_geodetic_datum.$(OBJ_EXT)  \
-  ogc_geog2d_crs.$(OBJ_EXT)      \
-  ogc_geog3d_crs.$(OBJ_EXT)      \
+  ogc_engr_crs.$(OBJ_EXT)        \
+  ogc_engr_datum.$(OBJ_EXT)      \
+  ogc_geod_crs.$(OBJ_EXT)        \
+  ogc_geod_datum.$(OBJ_EXT)      \
   ogc_id.$(OBJ_EXT)              \
   ogc_image_crs.$(OBJ_EXT)       \
+  ogc_image_datum.$(OBJ_EXT)     \
   ogc_lenunit.$(OBJ_EXT)         \
   ogc_meridian.$(OBJ_EXT)        \
   ogc_method.$(OBJ_EXT)          \
-  ogc_opaccuracy.$(OBJ_EXT)      \
+  ogc_op_accuracy.$(OBJ_EXT)     \
   ogc_order.$(OBJ_EXT)           \
   ogc_parameter.$(OBJ_EXT)       \
   ogc_parameter_file.$(OBJ_EXT)  \
-  ogc_parametric_crs.$(OBJ_EXT)  \
+  ogc_param_crs.$(OBJ_EXT)       \
+  ogc_param_datum.$(OBJ_EXT)     \
   ogc_paramunit.$(OBJ_EXT)       \
   ogc_primem.$(OBJ_EXT)          \
-  ogc_projected_crs.$(OBJ_EXT)   \
+  ogc_proj_crs.$(OBJ_EXT)        \
   ogc_remark.$(OBJ_EXT)          \
   ogc_scaleunit.$(OBJ_EXT)       \
   ogc_scope.$(OBJ_EXT)           \
-  ogc_temporal_crs.$(OBJ_EXT)    \
+  ogc_time_crs.$(OBJ_EXT)        \
+  ogc_time_datum.$(OBJ_EXT)      \
   ogc_time_extent.$(OBJ_EXT)     \
+  ogc_time_origin.$(OBJ_EXT)     \
   ogc_timeunit.$(OBJ_EXT)        \
   ogc_unit.$(OBJ_EXT)            \
   ogc_uri.$(OBJ_EXT)             \
+  ogc_vert_crs.$(OBJ_EXT)        \
+  ogc_vert_datum.$(OBJ_EXT)      \
   ogc_vert_extent.$(OBJ_EXT)     \
-  ogc_vertical_crs.$(OBJ_EXT)    \
   $(NULL)
 
 LIB_OBJS := $(C_OBJS)

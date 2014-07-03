@@ -23,7 +23,7 @@
 namespace OGC {
 
 const char * ogc_compound_crs :: obj_kwd() { return OGC_OBJ_KWD_COMPOUND_CRS; }
-const char * ogc_compound_crs :: old_kwd() { return OGC_OBJ_KWD_COMPDCS;      }
+const char * ogc_compound_crs :: old_kwd() { return OGC_OLD_KWD_COMPDCS;      }
 
 /*------------------------------------------------------------------------
  * create
@@ -32,7 +32,7 @@ ogc_compound_crs * ogc_compound_crs :: create(
    const char *       name,
    ogc_crs *          first_crs,
    ogc_crs *          second_crs,
-   ogc_temporal_crs * third_crs,
+   ogc_time_crs *     third_crs,
    ogc_vector *       ids,
    ogc_remark *       remark,
    ogc_error *        err)
@@ -66,9 +66,9 @@ ogc_compound_crs * ogc_compound_crs :: create(
    {
       switch ( first_crs->crs_type() )
       {
-         case OGC_CRS_TYPE_GEOG2D:
-         case OGC_CRS_TYPE_PROJECTED:
-         case OGC_CRS_TYPE_ENGINEERING:
+         case OGC_CRS_TYPE_GEOD:
+         case OGC_CRS_TYPE_PROJ:
+         case OGC_CRS_TYPE_ENGR:
             break;
 
          default:
@@ -87,11 +87,11 @@ ogc_compound_crs * ogc_compound_crs :: create(
    {
       switch ( second_crs->crs_type() )
       {
-         case OGC_CRS_TYPE_VERTICAL:
-         case OGC_CRS_TYPE_PARAMETRIC:
+         case OGC_CRS_TYPE_VERT:
+         case OGC_CRS_TYPE_PARAM:
             break;
 
-         case OGC_CRS_TYPE_TEMPORAL:
+         case OGC_CRS_TYPE_TIME:
             if ( third_crs != OGC_NULL )
             {
                ogc_error::set(err, OGC_ERR_INVALID_THIRD_CRS, obj_kwd());
@@ -179,7 +179,7 @@ ogc_compound_crs * ogc_compound_crs :: from_tokens(
    ogc_compound_crs * obj        = OGC_NULL;
    ogc_crs *          first_crs  = OGC_NULL;
    ogc_crs *          second_crs = OGC_NULL;
-   ogc_temporal_crs * third_crs  = OGC_NULL;
+   ogc_time_crs *     third_crs  = OGC_NULL;
    ogc_id *           id         = OGC_NULL;
    ogc_vector *       ids        = OGC_NULL;
    ogc_remark *       remark     = OGC_NULL;
@@ -259,9 +259,9 @@ ogc_compound_crs * ogc_compound_crs :: from_tokens(
    int  next = 0;
    for (int i = start; i < end; i = next)
    {
-      if ( ogc_string::is_equal(arr[i].str, ogc_geog2d_crs     ::obj_kwd()) ||
-           ogc_string::is_equal(arr[i].str, ogc_projected_crs  ::obj_kwd()) ||
-           ogc_string::is_equal(arr[i].str, ogc_engineering_crs::obj_kwd()) )
+      if ( ogc_string::is_equal(arr[i].str, ogc_geod_crs::obj_kwd()) ||
+           ogc_string::is_equal(arr[i].str, ogc_proj_crs::obj_kwd()) ||
+           ogc_string::is_equal(arr[i].str, ogc_engr_crs::obj_kwd()) )
       {
          if ( first_crs != OGC_NULL )
          {
@@ -277,8 +277,8 @@ ogc_compound_crs * ogc_compound_crs :: from_tokens(
          continue;
       }
 
-      if ( ogc_string::is_equal(arr[i].str, ogc_vertical_crs::  obj_kwd()) ||
-           ogc_string::is_equal(arr[i].str, ogc_parametric_crs::obj_kwd()) )
+      if ( ogc_string::is_equal(arr[i].str, ogc_vert_crs ::obj_kwd()) ||
+           ogc_string::is_equal(arr[i].str, ogc_param_crs::obj_kwd()) )
       {
          if ( second_crs != OGC_NULL )
          {
@@ -294,10 +294,10 @@ ogc_compound_crs * ogc_compound_crs :: from_tokens(
          continue;
       }
 
-      if ( ogc_string::is_equal(arr[i].str, ogc_temporal_crs::obj_kwd()) )
+      if ( ogc_string::is_equal(arr[i].str, ogc_time_crs::obj_kwd()) )
       {
          if ( (second_crs != OGC_NULL &&
-               second_crs->crs_type() == OGC_CRS_TYPE_TEMPORAL) ||
+               second_crs->crs_type() == OGC_CRS_TYPE_TIME) ||
               third_crs != OGC_NULL )
          {
             ogc_error::set(err, OGC_ERR_WKT_DUPLICATE_TIME_CRS, obj_kwd());
@@ -305,21 +305,20 @@ ogc_compound_crs * ogc_compound_crs :: from_tokens(
          }
          else if ( second_crs == OGC_NULL )
          {
-            second_crs = ogc_temporal_crs::from_tokens(t, i, &next, err);
+            second_crs = ogc_time_crs::from_tokens(t, i, &next, err);
             if ( second_crs == OGC_NULL )
                bad = true;
          }
          else if ( third_crs == OGC_NULL )
          {
-            third_crs = ogc_temporal_crs::from_tokens(t, i, &next, err);
+            third_crs = ogc_time_crs::from_tokens(t, i, &next, err);
             if ( third_crs == OGC_NULL )
                bad = true;
          }
          continue;
       }
 
-      if ( ogc_string::is_equal(arr[i].str, ogc_id::obj_kwd()) ||
-           ogc_string::is_equal(arr[i].str, ogc_id::alt_kwd()) )
+      if ( ogc_string::is_equal(arr[i].str, ogc_id::obj_kwd()) )
       {
          id = ogc_id::from_tokens(t, i, &next, err);
          if ( id == OGC_NULL )
@@ -482,10 +481,10 @@ bool ogc_compound_crs :: to_wkt(
    if ( (opts & OGC_WKT_OPT_OLD_SYNTAX) != 0 )
       kwd = old_kwd();
 
-   rc &= ogc_crs          :: to_wkt(_first_crs,  buf_first,  opts, OGC_BUFF_MAX);
-   rc &= ogc_crs          :: to_wkt(_second_crs, buf_second, opts, OGC_BUFF_MAX);
-   rc &= ogc_temporal_crs :: to_wkt(_third_crs,  buf_third,  opts, OGC_BUFF_MAX);
-   rc &= ogc_remark       :: to_wkt(_remark,     buf_remark, opts, OGC_TBUF_MAX);
+   rc &= ogc_crs      :: to_wkt(_first_crs,  buf_first,  opts, OGC_BUFF_MAX);
+   rc &= ogc_crs      :: to_wkt(_second_crs, buf_second, opts, OGC_BUFF_MAX);
+   rc &= ogc_time_crs :: to_wkt(_third_crs,  buf_third,  opts, OGC_BUFF_MAX);
+   rc &= ogc_remark   :: to_wkt(_remark,     buf_remark, opts, OGC_TBUF_MAX);
 
    ogc_string::escape_str(buf_name, _name, OGC_UTF8_NAME_MAX);
    sprintf(buf_hdr, "%s%s\"%s\"",
@@ -531,11 +530,11 @@ ogc_compound_crs * ogc_compound_crs :: clone(const ogc_compound_crs * obj)
 
 ogc_compound_crs * ogc_compound_crs :: clone() const
 {
-   ogc_crs *          first_crs  = ogc_crs          :: clone( _first_crs  );
-   ogc_crs *          second_crs = ogc_crs          :: clone( _second_crs );
-   ogc_temporal_crs * third_crs  = ogc_temporal_crs :: clone( _third_crs  );
-   ogc_vector *       ids        = ogc_vector       :: clone( _ids        );
-   ogc_remark *       remark     = ogc_remark       :: clone( _remark     );
+   ogc_crs *      first_crs  = ogc_crs      :: clone( _first_crs  );
+   ogc_crs *      second_crs = ogc_crs      :: clone( _second_crs );
+   ogc_time_crs * third_crs  = ogc_time_crs :: clone( _third_crs  );
+   ogc_vector *   ids        = ogc_vector   :: clone( _ids        );
+   ogc_remark *   remark     = ogc_remark   :: clone( _remark     );
 
    ogc_compound_crs * p = create(_name,
                                  first_crs,
@@ -546,11 +545,11 @@ ogc_compound_crs * ogc_compound_crs :: clone() const
                                  OGC_NULL);
    if ( p == OGC_NULL )
    {
-      ogc_crs          :: destroy( first_crs  );
-      ogc_crs          :: destroy( second_crs );
-      ogc_temporal_crs :: destroy( third_crs  );
-      ogc_vector       :: destroy( ids        );
-      ogc_remark       :: destroy( remark     );
+      ogc_crs      :: destroy( first_crs  );
+      ogc_crs      :: destroy( second_crs );
+      ogc_time_crs :: destroy( third_crs  );
+      ogc_vector   :: destroy( ids        );
+      ogc_remark   :: destroy( remark     );
    }
 
    return p;

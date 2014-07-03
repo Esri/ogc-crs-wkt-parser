@@ -28,17 +28,17 @@ const char * ogc_image_crs :: obj_kwd() { return OGC_OBJ_KWD_IMAGE_CRS; }
  * create
  */
 ogc_image_crs * ogc_image_crs :: create(
-   const char *         name,
-   ogc_generic_datum *  datum,
-   ogc_cs *             cs,
-   ogc_axis *           axis_1,
-   ogc_axis *           axis_2,
-   ogc_unit *           unit,
-   ogc_scope *          scope,
-   ogc_vector *         extents,
-   ogc_vector *         ids,
-   ogc_remark *         remark,
-   ogc_error *          err)
+   const char *       name,
+   ogc_image_datum *  datum,
+   ogc_cs *           cs,
+   ogc_axis *         axis_1,
+   ogc_axis *         axis_2,
+   ogc_unit *         unit,
+   ogc_scope *        scope,
+   ogc_vector *       extents,
+   ogc_vector *       ids,
+   ogc_remark *       remark,
+   ogc_error *        err)
 {
    ogc_image_crs * p = OGC_NULL;
    bool bad = false;
@@ -112,7 +112,7 @@ ogc_image_crs * ogc_image_crs :: create(
  */
 ogc_image_crs :: ~ogc_image_crs()
 {
-   ogc_generic_datum :: destroy( _datum );
+   ogc_image_datum :: destroy( _datum );
 }
 
 void ogc_image_crs :: destroy(
@@ -141,19 +141,19 @@ ogc_image_crs * ogc_image_crs :: from_tokens(
    int  same;
    int  num;
 
-   ogc_image_crs *       obj     = OGC_NULL;
-   ogc_generic_datum *   datum   = OGC_NULL;
-   ogc_cs *              cs      = OGC_NULL;
-   ogc_axis *            axis    = OGC_NULL;
-   ogc_axis *            axis_1  = OGC_NULL;
-   ogc_axis *            axis_2  = OGC_NULL;
-   ogc_unit *            unit    = OGC_NULL;
-   ogc_scope *           scope   = OGC_NULL;
-   ogc_extent *          extent  = OGC_NULL;
-   ogc_vector *          extents = OGC_NULL;
-   ogc_id *              id      = OGC_NULL;
-   ogc_vector *          ids     = OGC_NULL;
-   ogc_remark *          remark  = OGC_NULL;
+   ogc_image_crs *     obj     = OGC_NULL;
+   ogc_image_datum *   datum   = OGC_NULL;
+   ogc_cs *            cs      = OGC_NULL;
+   ogc_axis *          axis    = OGC_NULL;
+   ogc_axis *          axis_1  = OGC_NULL;
+   ogc_axis *          axis_2  = OGC_NULL;
+   ogc_unit *          unit    = OGC_NULL;
+   ogc_scope *         scope   = OGC_NULL;
+   ogc_extent *        extent  = OGC_NULL;
+   ogc_vector *        extents = OGC_NULL;
+   ogc_id *            id      = OGC_NULL;
+   ogc_vector *        ids     = OGC_NULL;
+   ogc_remark *        remark  = OGC_NULL;
    const char * name;
 
    /*---------------------------------------------------------
@@ -230,7 +230,7 @@ ogc_image_crs * ogc_image_crs :: from_tokens(
    int  next = 0;
    for (int i = start; i < end; i = next)
    {
-      if ( ogc_string::is_equal(arr[i].str, ogc_generic_datum::obj_kwd()) )
+      if ( ogc_string::is_equal(arr[i].str, ogc_image_datum::obj_kwd()) )
       {
          if ( datum != OGC_NULL )
          {
@@ -239,7 +239,7 @@ ogc_image_crs * ogc_image_crs :: from_tokens(
          }
          else
          {
-            datum = ogc_generic_datum::from_tokens(t, i, &next, err);
+            datum = ogc_image_datum::from_tokens(t, i, &next, err);
             if ( datum == OGC_NULL )
                bad = true;
          }
@@ -365,8 +365,7 @@ ogc_image_crs * ogc_image_crs :: from_tokens(
          continue;
       }
 
-      if ( ogc_string::is_equal(arr[i].str, ogc_id::obj_kwd()) ||
-           ogc_string::is_equal(arr[i].str, ogc_id::alt_kwd()) )
+      if ( ogc_string::is_equal(arr[i].str, ogc_id::obj_kwd()) )
       {
          id = ogc_id::from_tokens(t, i, &next, err);
          if ( id == OGC_NULL )
@@ -448,15 +447,15 @@ ogc_image_crs * ogc_image_crs :: from_tokens(
 
    if ( obj == OGC_NULL )
    {
-      ogc_generic_datum  :: destroy( datum   );
-      ogc_cs             :: destroy( cs      );
-      ogc_axis           :: destroy( axis_1  );
-      ogc_axis           :: destroy( axis_2  );
-      ogc_unit           :: destroy( unit    );
-      ogc_scope          :: destroy( scope   );
-      ogc_vector         :: destroy( extents );
-      ogc_vector         :: destroy( ids     );
-      ogc_remark         :: destroy( remark  );
+      ogc_image_datum  :: destroy( datum   );
+      ogc_cs           :: destroy( cs      );
+      ogc_axis         :: destroy( axis_1  );
+      ogc_axis         :: destroy( axis_2  );
+      ogc_unit         :: destroy( unit    );
+      ogc_scope        :: destroy( scope   );
+      ogc_vector       :: destroy( extents );
+      ogc_vector       :: destroy( ids     );
+      ogc_remark       :: destroy( remark  );
    }
 
    return obj;
@@ -537,7 +536,7 @@ bool ogc_image_crs :: to_wkt(
    if ( (opts & OGC_WKT_OPT_OLD_SYNTAX) != 0 )
       return true;
 
-   rc &= ogc_generic_datum :: to_wkt(_datum,  buf_datum,  opts, OGC_TBUF_MAX);
+   rc &= ogc_image_datum :: to_wkt(_datum,  buf_datum,  opts, OGC_TBUF_MAX);
    rc &= ogc_cs            :: to_wkt(_cs,     buf_cs,     opts, OGC_TBUF_MAX);
    rc &= ogc_axis          :: to_wkt(_axis_1, buf_axis_1, opts, OGC_TBUF_MAX);
    rc &= ogc_axis          :: to_wkt(_axis_2, buf_axis_2, opts, OGC_TBUF_MAX);
@@ -597,7 +596,7 @@ ogc_image_crs * ogc_image_crs :: clone(const ogc_image_crs * obj)
 
 ogc_image_crs * ogc_image_crs :: clone() const
 {
-   ogc_generic_datum *  datum   = ogc_generic_datum :: clone( _datum   );
+   ogc_image_datum *  datum   = ogc_image_datum :: clone( _datum   );
    ogc_cs *             cs      = ogc_cs            :: clone( _cs      );
    ogc_axis *           axis_1  = ogc_axis          :: clone( _axis_1  );
    ogc_axis *           axis_2  = ogc_axis          :: clone( _axis_2  );
@@ -620,15 +619,15 @@ ogc_image_crs * ogc_image_crs :: clone() const
                               OGC_NULL);
    if ( p == OGC_NULL )
    {
-      ogc_generic_datum :: destroy( datum   );
-      ogc_cs            :: destroy( cs      );
-      ogc_axis          :: destroy( axis_1  );
-      ogc_axis          :: destroy( axis_2  );
-      ogc_unit          :: destroy( unit    );
-      ogc_scope         :: destroy( scope   );
-      ogc_vector        :: destroy( extents );
-      ogc_vector        :: destroy( ids     );
-      ogc_remark        :: destroy( remark  );
+      ogc_image_datum :: destroy( datum   );
+      ogc_cs          :: destroy( cs      );
+      ogc_axis        :: destroy( axis_1  );
+      ogc_axis        :: destroy( axis_2  );
+      ogc_unit        :: destroy( unit    );
+      ogc_scope       :: destroy( scope   );
+      ogc_vector      :: destroy( extents );
+      ogc_vector      :: destroy( ids     );
+      ogc_remark      :: destroy( remark  );
    }
 
    return p;
@@ -644,12 +643,12 @@ bool ogc_image_crs :: is_equal(
    if ( p1 == OGC_NULL && p2 == OGC_NULL ) return true;
    if ( p1 == OGC_NULL || p2 == OGC_NULL ) return false;
 
-   if ( !ogc_string        :: is_equal( p1->name(),   p2->name()   ) ||
-        !ogc_generic_datum :: is_equal( p1->datum(),  p2->datum()  ) ||
-        !ogc_cs            :: is_equal( p1->cs(),     p2->cs()     ) ||
-        !ogc_axis          :: is_equal( p1->axis_1(), p2->axis_1() ) ||
-        !ogc_axis          :: is_equal( p1->axis_2(), p2->axis_2() ) ||
-        !ogc_unit          :: is_equal( p1->unit(),   p2->unit()   ) )
+   if ( !ogc_string      :: is_equal( p1->name(),   p2->name()   ) ||
+        !ogc_image_datum :: is_equal( p1->datum(),  p2->datum()  ) ||
+        !ogc_cs          :: is_equal( p1->cs(),     p2->cs()     ) ||
+        !ogc_axis        :: is_equal( p1->axis_1(), p2->axis_1() ) ||
+        !ogc_axis        :: is_equal( p1->axis_2(), p2->axis_2() ) ||
+        !ogc_unit        :: is_equal( p1->unit(),   p2->unit()   ) )
    {
       return false;
    }
@@ -674,7 +673,7 @@ bool ogc_image_crs :: is_identical(
    if ( p1 == OGC_NULL || p2 == OGC_NULL ) return false;
 
    if ( !ogc_string        :: is_equal    ( p1->name(),    p2->name()    ) ||
-        !ogc_generic_datum :: is_identical( p1->datum(),   p2->datum()   ) ||
+        !ogc_image_datum :: is_identical( p1->datum(),   p2->datum()   ) ||
         !ogc_cs            :: is_identical( p1->cs(),      p2->cs()      ) ||
         !ogc_axis          :: is_identical( p1->axis_1(),  p2->axis_1()  ) ||
         !ogc_axis          :: is_identical( p1->axis_2(),  p2->axis_2()  ) ||

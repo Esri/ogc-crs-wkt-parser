@@ -22,8 +22,8 @@
 
 namespace OGC {
 
-const char * ogc_method :: obj_kwd() { return OGC_OBJ_KWD_METHOD;     }
-const char * ogc_method :: alt_kwd() { return OGC_OBJ_KWD_PROJECTION; }
+const char * ogc_method :: obj_kwd() { return OGC_OBJ_KWD_METHOD; }
+const char * ogc_method :: alt_kwd() { return OGC_ALT_KWD_METHOD; }
 
 /*------------------------------------------------------------------------
  * create
@@ -188,8 +188,7 @@ ogc_method * ogc_method :: from_tokens(
    int  next = 0;
    for (int i = start; i < end; i = next)
    {
-      if ( ogc_string::is_equal(arr[i].str, ogc_id::obj_kwd()) ||
-           ogc_string::is_equal(arr[i].str, ogc_id::alt_kwd()) )
+      if ( ogc_string::is_equal(arr[i].str, ogc_id::obj_kwd()) )
       {
          id = ogc_id::from_tokens(t, i, &next, err);
          if ( id == OGC_NULL )

@@ -15,32 +15,31 @@
 /* ------------------------------------------------------------------------- */
 
 /* ------------------------------------------------------------------------- */
-/* VERT CRS (Vertical CRS) object                                            */
+/* TIME CRS (Temporal CRS) object                                            */
 /* ------------------------------------------------------------------------- */
 
 #include "ogc_common.h"
 
 namespace OGC {
 
-const char * ogc_vertical_crs :: obj_kwd() { return OGC_OBJ_KWD_VERTICAL_CRS; }
-const char * ogc_vertical_crs :: old_kwd() { return OGC_OBJ_KWD_VERTCS;       }
+const char * ogc_time_crs :: obj_kwd() { return OGC_OBJ_KWD_TIME_CRS; }
 
 /*------------------------------------------------------------------------
  * create
  */
-ogc_vertical_crs * ogc_vertical_crs :: create(
-   const char *         name,
-   ogc_generic_datum *  datum,
-   ogc_cs *             cs,
-   ogc_axis *           axis_1,
-   ogc_lenunit *        lenunit,
-   ogc_scope *          scope,
-   ogc_vector *         extents,
-   ogc_vector *         ids,
-   ogc_remark *         remark,
-   ogc_error *          err)
+ogc_time_crs * ogc_time_crs :: create(
+   const char *      name,
+   ogc_time_datum *  datum,
+   ogc_cs *          cs,
+   ogc_axis *        axis_1,
+   ogc_timeunit *    timeunit,
+   ogc_scope *       scope,
+   ogc_vector *      extents,
+   ogc_vector *      ids,
+   ogc_remark *      remark,
+   ogc_error *       err)
 {
-   ogc_vertical_crs * p = OGC_NULL;
+   ogc_time_crs * p = OGC_NULL;
    bool bad = false;
 
    /*---------------------------------------------------------
@@ -71,8 +70,8 @@ ogc_vertical_crs * ogc_vertical_crs :: create(
       ogc_error::set(err, OGC_ERR_MISSING_CS, obj_kwd());
       bad = true;
    }
-   else if ( !ogc_utils::validate_cs(OGC_OBJ_TYPE_VERTICAL_CRS, cs,
-                                     axis_1, OGC_NULL, OGC_NULL, lenunit, err) )
+   else if ( !ogc_utils::validate_cs(OGC_OBJ_TYPE_TIME_CRS, cs,
+                                     axis_1, OGC_NULL, OGC_NULL, timeunit, err) )
    {
       bad = true;
    }
@@ -82,7 +81,7 @@ ogc_vertical_crs * ogc_vertical_crs :: create(
     */
    if ( !bad )
    {
-      p = new (std::nothrow) ogc_vertical_crs();
+      p = new (std::nothrow) ogc_time_crs();
       if ( p == OGC_NULL )
       {
          ogc_error::set(err, OGC_ERR_NO_MEMORY, obj_kwd());
@@ -90,14 +89,14 @@ ogc_vertical_crs * ogc_vertical_crs :: create(
       }
 
       ogc_string::unescape_str(p->_name, name, OGC_NAME_MAX);
-      p->_obj_type = OGC_OBJ_TYPE_VERTICAL_CRS;
-      p->_crs_type = OGC_CRS_TYPE_VERTICAL;
+      p->_obj_type = OGC_OBJ_TYPE_TIME_CRS;
+      p->_crs_type = OGC_CRS_TYPE_TIME;
       p->_cs       = cs;
       p->_datum    = datum;
       p->_axis_1   = axis_1;
       p->_axis_2   = OGC_NULL;
       p->_axis_3   = OGC_NULL;
-      p->_unit     = lenunit;
+      p->_unit     = timeunit;
       p->_scope    = scope;
       p->_extents  = extents;
       p->_ids      = ids;
@@ -110,13 +109,13 @@ ogc_vertical_crs * ogc_vertical_crs :: create(
 /*------------------------------------------------------------------------
  * destroy
  */
-ogc_vertical_crs :: ~ogc_vertical_crs()
+ogc_time_crs :: ~ogc_time_crs()
 {
-   ogc_generic_datum :: destroy( _datum );
+   ogc_time_datum :: destroy( _datum    );
 }
 
-void ogc_vertical_crs :: destroy(
-   ogc_vertical_crs * obj)
+void ogc_time_crs :: destroy(
+   ogc_time_crs * obj)
 {
    if ( obj != OGC_NULL )
    {
@@ -127,7 +126,7 @@ void ogc_vertical_crs :: destroy(
 /*------------------------------------------------------------------------
  * object from tokens
  */
-ogc_vertical_crs * ogc_vertical_crs :: from_tokens(
+ogc_time_crs * ogc_time_crs :: from_tokens(
    const ogc_token * t,
    int               start,
    int *             pend,
@@ -141,18 +140,18 @@ ogc_vertical_crs * ogc_vertical_crs :: from_tokens(
    int  same;
    int  num;
 
-   ogc_vertical_crs *    obj     = OGC_NULL;
-   ogc_generic_datum *   datum   = OGC_NULL;
-   ogc_cs *              cs      = OGC_NULL;
-   ogc_axis *            axis    = OGC_NULL;
-   ogc_axis *            axis_1  = OGC_NULL;
-   ogc_lenunit *         unit    = OGC_NULL;
-   ogc_scope *           scope   = OGC_NULL;
-   ogc_extent *          extent  = OGC_NULL;
-   ogc_vector *          extents = OGC_NULL;
-   ogc_id *              id      = OGC_NULL;
-   ogc_vector *          ids     = OGC_NULL;
-   ogc_remark *          remark  = OGC_NULL;
+   ogc_time_crs *    obj     = OGC_NULL;
+   ogc_time_datum *   datum   = OGC_NULL;
+   ogc_cs *           cs      = OGC_NULL;
+   ogc_axis *         axis    = OGC_NULL;
+   ogc_axis *         axis_1  = OGC_NULL;
+   ogc_timeunit *     unit    = OGC_NULL;
+   ogc_scope *        scope   = OGC_NULL;
+   ogc_extent *       extent  = OGC_NULL;
+   ogc_vector *       extents = OGC_NULL;
+   ogc_id *           id      = OGC_NULL;
+   ogc_vector *       ids     = OGC_NULL;
+   ogc_remark *       remark  = OGC_NULL;
    const char * name;
 
    /*---------------------------------------------------------
@@ -172,8 +171,7 @@ ogc_vertical_crs * ogc_vertical_crs :: from_tokens(
    }
    kwd = arr[start].str;
 
-   if ( !ogc_string::is_equal(kwd, obj_kwd()) &&
-        !ogc_string::is_equal(kwd, old_kwd()) )
+   if ( !ogc_string::is_equal(kwd, obj_kwd()) )
    {
       ogc_error::set(err, OGC_ERR_WKT_INVALID_KEYWORD, obj_kwd(), kwd);
       return OGC_NULL;
@@ -202,7 +200,7 @@ ogc_vertical_crs * ogc_vertical_crs :: from_tokens(
    }
 
    /*---------------------------------------------------------
-    * There must be 1 token: VERTCRS[ "name" ...
+    * There must be 1 token: TIMECRS[ "name" ...
     */
    if ( same < 1 )
    {
@@ -230,7 +228,7 @@ ogc_vertical_crs * ogc_vertical_crs :: from_tokens(
    int  next = 0;
    for (int i = start; i < end; i = next)
    {
-      if ( ogc_string::is_equal(arr[i].str, ogc_generic_datum::obj_kwd()) )
+      if ( ogc_string::is_equal(arr[i].str, ogc_time_datum::obj_kwd()) )
       {
          if ( datum != OGC_NULL )
          {
@@ -239,7 +237,7 @@ ogc_vertical_crs * ogc_vertical_crs :: from_tokens(
          }
          else
          {
-            datum = ogc_generic_datum::from_tokens(t, i, &next, err);
+            datum = ogc_time_datum::from_tokens(t, i, &next, err);
             if ( datum == OGC_NULL )
                bad = true;
          }
@@ -281,8 +279,8 @@ ogc_vertical_crs * ogc_vertical_crs :: from_tokens(
          continue;
       }
 
-      if ( ogc_string::is_equal(arr[i].str, ogc_lenunit::obj_kwd()) ||
-           ogc_string::is_equal(arr[i].str, ogc_lenunit::alt_kwd()) )
+      if ( ogc_string::is_equal(arr[i].str, ogc_timeunit::obj_kwd()) ||
+           ogc_string::is_equal(arr[i].str, ogc_timeunit::alt_kwd()) )
       {
          if ( unit != OGC_NULL )
          {
@@ -291,7 +289,7 @@ ogc_vertical_crs * ogc_vertical_crs :: from_tokens(
          }
          else
          {
-            unit = ogc_lenunit::from_tokens(t, i, &next, err);
+            unit = ogc_timeunit::from_tokens(t, i, &next, err);
             if ( unit == OGC_NULL )
                bad = true;
          }
@@ -365,8 +363,7 @@ ogc_vertical_crs * ogc_vertical_crs :: from_tokens(
          continue;
       }
 
-      if ( ogc_string::is_equal(arr[i].str, ogc_id::obj_kwd()) ||
-           ogc_string::is_equal(arr[i].str, ogc_id::alt_kwd()) )
+      if ( ogc_string::is_equal(arr[i].str, ogc_id::obj_kwd()) )
       {
          id = ogc_id::from_tokens(t, i, &next, err);
          if ( id == OGC_NULL )
@@ -448,14 +445,14 @@ ogc_vertical_crs * ogc_vertical_crs :: from_tokens(
 
    if ( obj == OGC_NULL )
    {
-      ogc_generic_datum  :: destroy( datum   );
-      ogc_cs             :: destroy( cs      );
-      ogc_axis           :: destroy( axis_1  );
-      ogc_unit           :: destroy( unit    );
-      ogc_scope          :: destroy( scope   );
-      ogc_vector         :: destroy( extents );
-      ogc_vector         :: destroy( ids     );
-      ogc_remark         :: destroy( remark  );
+      ogc_time_datum  :: destroy( datum   );
+      ogc_cs          :: destroy( cs      );
+      ogc_axis        :: destroy( axis_1  );
+      ogc_unit        :: destroy( unit    );
+      ogc_scope       :: destroy( scope   );
+      ogc_vector      :: destroy( extents );
+      ogc_vector      :: destroy( ids     );
+      ogc_remark      :: destroy( remark  );
    }
 
    return obj;
@@ -464,11 +461,11 @@ ogc_vertical_crs * ogc_vertical_crs :: from_tokens(
 /*------------------------------------------------------------------------
  * object from WKT
  */
-ogc_vertical_crs * ogc_vertical_crs :: from_wkt(
+ogc_time_crs * ogc_time_crs :: from_wkt(
    const char * wkt,
    ogc_error *  err)
 {
-   ogc_vertical_crs * obj = OGC_NULL;
+   ogc_time_crs * obj = OGC_NULL;
    ogc_token t;
 
    if ( t.tokenize(wkt, obj_kwd(), err) )
@@ -482,8 +479,8 @@ ogc_vertical_crs * ogc_vertical_crs :: from_wkt(
 /*------------------------------------------------------------------------
  * object to WKT
  */
-bool ogc_vertical_crs :: to_wkt(
-   const ogc_vertical_crs * obj,
+bool ogc_time_crs :: to_wkt(
+   const ogc_time_crs * obj,
    char      buffer[],
    int       options,
    size_t    buflen)
@@ -498,7 +495,7 @@ bool ogc_vertical_crs :: to_wkt(
    return obj->to_wkt(buffer, options, buflen);
 }
 
-bool ogc_vertical_crs :: to_wkt(
+bool ogc_time_crs :: to_wkt(
    char      buffer[],
    int       options,
    size_t    buflen) const
@@ -533,13 +530,13 @@ bool ogc_vertical_crs :: to_wkt(
    *buffer = 0;
 
    if ( (opts & OGC_WKT_OPT_OLD_SYNTAX) != 0 )
-      kwd = old_kwd();
+      return true;
 
-   rc &= ogc_generic_datum :: to_wkt(_datum,  buf_datum,   opts, OGC_TBUF_MAX);
-   rc &= ogc_cs            :: to_wkt(_cs,     buf_cs,      opts, OGC_TBUF_MAX);
-   rc &= ogc_axis          :: to_wkt(_axis_1, buf_axis_1,  opts, OGC_TBUF_MAX);
-   rc &= ogc_unit          :: to_wkt(_unit,   buf_unit,    opts, OGC_TBUF_MAX);
-   rc &= ogc_remark        :: to_wkt(_remark, buf_remark,  opts, OGC_TBUF_MAX);
+   rc &= ogc_time_datum :: to_wkt(_datum,   buf_datum,  opts, OGC_TBUF_MAX);
+   rc &= ogc_cs            :: to_wkt(_cs,      buf_cs,     opts, OGC_TBUF_MAX);
+   rc &= ogc_axis          :: to_wkt(_axis_1,  buf_axis_1, opts, OGC_TBUF_MAX);
+   rc &= ogc_unit          :: to_wkt(_unit,    buf_unit,   opts, OGC_TBUF_MAX);
+   rc &= ogc_remark        :: to_wkt(_remark,  buf_remark, opts, OGC_TBUF_MAX);
 
    ogc_string::escape_str(buf_name, _name, OGC_UTF8_NAME_MAX);
    sprintf(buf_hdr, "%s%s\"%s\"",
@@ -551,7 +548,7 @@ bool ogc_vertical_crs :: to_wkt(
    OGC_ADD_TO_BUF( buf_axis_1 );
    OGC_ADD_TO_BUF( buf_unit   );
 
-   if ( _extents != OGC_NULL && (options & OGC_WKT_OPT_OLD_SYNTAX) == 0 )
+   if ( _extents != OGC_NULL )
    {
       for (int i = 0; i < extent_count(); i++)
       {
@@ -584,31 +581,31 @@ bool ogc_vertical_crs :: to_wkt(
 /*------------------------------------------------------------------------
  * clone
  */
-ogc_vertical_crs * ogc_vertical_crs :: clone(const ogc_vertical_crs * obj)
+ogc_time_crs * ogc_time_crs :: clone(const ogc_time_crs * obj)
 {
    if ( obj == OGC_NULL )
       return OGC_NULL;
    return obj->clone();
 }
 
-ogc_vertical_crs * ogc_vertical_crs :: clone() const
+ogc_time_crs * ogc_time_crs :: clone() const
 {
-   ogc_lenunit * u = reinterpret_cast<ogc_lenunit *>(_unit);
+   ogc_timeunit * u = reinterpret_cast<ogc_timeunit *>(_unit);
 
-   ogc_generic_datum *  datum   = ogc_generic_datum :: clone( _datum   );
-   ogc_cs *             cs      = ogc_cs            :: clone( _cs      );
-   ogc_axis *           axis_1  = ogc_axis          :: clone( _axis_1  );
-   ogc_lenunit *        lenunit = ogc_lenunit       :: clone( u        );
-   ogc_scope *          scope   = ogc_scope         :: clone( _scope   );
-   ogc_vector *         extents = ogc_vector        :: clone( _extents );
-   ogc_vector *         ids     = ogc_vector        :: clone( _ids     );
-   ogc_remark *         remark  = ogc_remark        :: clone( _remark  );
+   ogc_time_datum *  datum    = ogc_time_datum :: clone( _datum   );
+   ogc_cs *          cs       = ogc_cs         :: clone( _cs      );
+   ogc_axis *        axis_1   = ogc_axis       :: clone( _axis_1  );
+   ogc_timeunit *    timeunit = ogc_timeunit   :: clone( u        );
+   ogc_scope *       scope    = ogc_scope      :: clone( _scope   );
+   ogc_vector *      extents  = ogc_vector     :: clone( _extents );
+   ogc_vector *      ids      = ogc_vector     :: clone( _ids     );
+   ogc_remark *      remark   = ogc_remark     :: clone( _remark  );
 
-   ogc_vertical_crs * p = create(_name,
+   ogc_time_crs * p = create(_name,
                                  datum,
                                  cs,
                                  axis_1,
-                                 lenunit,
+                                 timeunit,
                                  scope,
                                  extents,
                                  ids,
@@ -616,14 +613,14 @@ ogc_vertical_crs * ogc_vertical_crs :: clone() const
                                  OGC_NULL);
    if ( p == OGC_NULL )
    {
-      ogc_generic_datum :: destroy( datum   );
-      ogc_cs            :: destroy( cs      );
-      ogc_axis          :: destroy( axis_1  );
-      ogc_lenunit       :: destroy( lenunit );
-      ogc_scope         :: destroy( scope   );
-      ogc_vector        :: destroy( extents );
-      ogc_vector        :: destroy( ids     );
-      ogc_remark        :: destroy( remark  );
+      ogc_time_datum :: destroy( datum    );
+      ogc_cs         :: destroy( cs       );
+      ogc_axis       :: destroy( axis_1   );
+      ogc_timeunit   :: destroy( timeunit );
+      ogc_scope      :: destroy( scope    );
+      ogc_vector     :: destroy( extents  );
+      ogc_vector     :: destroy( ids      );
+      ogc_remark     :: destroy( remark   );
    }
 
    return p;
@@ -632,18 +629,18 @@ ogc_vertical_crs * ogc_vertical_crs :: clone() const
 /*------------------------------------------------------------------------
  * compare for computational equality
  */
-bool ogc_vertical_crs :: is_equal(
-   const ogc_vertical_crs * p1,
-   const ogc_vertical_crs * p2)
+bool ogc_time_crs :: is_equal(
+   const ogc_time_crs * p1,
+   const ogc_time_crs * p2)
 {
    if ( p1 == OGC_NULL && p2 == OGC_NULL ) return true;
    if ( p1 == OGC_NULL || p2 == OGC_NULL ) return false;
 
-   if ( !ogc_string        :: is_equal( p1->name(),    p2->name()    ) ||
-        !ogc_generic_datum :: is_equal( p1->datum(),   p2->datum()   ) ||
-        !ogc_cs            :: is_equal( p1->cs(),      p2->cs()      ) ||
-        !ogc_axis          :: is_equal( p1->axis_1(),  p2->axis_1()  ) ||
-        !ogc_lenunit       :: is_equal( p1->lenunit(), p2->lenunit() ) )
+   if ( !ogc_string     :: is_equal( p1->name(),     p2->name()     ) ||
+        !ogc_time_datum :: is_equal( p1->datum(),    p2->datum()    ) ||
+        !ogc_cs         :: is_equal( p1->cs(),       p2->cs()       ) ||
+        !ogc_axis       :: is_equal( p1->axis_1(),   p2->axis_1()   ) ||
+        !ogc_timeunit   :: is_equal( p1->timeunit(), p2->timeunit() ) )
    {
       return false;
    }
@@ -651,8 +648,8 @@ bool ogc_vertical_crs :: is_equal(
    return true;
 }
 
-bool ogc_vertical_crs :: is_equal(
-   const ogc_vertical_crs * p) const
+bool ogc_time_crs :: is_equal(
+   const ogc_time_crs * p) const
 {
    return is_equal(this, p);
 }
@@ -660,22 +657,22 @@ bool ogc_vertical_crs :: is_equal(
 /*------------------------------------------------------------------------
  * compare
  */
-bool ogc_vertical_crs :: is_identical(
-   const ogc_vertical_crs * p1,
-   const ogc_vertical_crs * p2)
+bool ogc_time_crs :: is_identical(
+   const ogc_time_crs * p1,
+   const ogc_time_crs * p2)
 {
    if ( p1 == OGC_NULL && p2 == OGC_NULL ) return true;
    if ( p1 == OGC_NULL || p2 == OGC_NULL ) return false;
 
-   if ( !ogc_string        :: is_equal    ( p1->name(),    p2->name()    ) ||
-        !ogc_generic_datum :: is_identical( p1->datum(),   p2->datum()   ) ||
-        !ogc_cs            :: is_identical( p1->cs(),      p2->cs()      ) ||
-        !ogc_axis          :: is_identical( p1->axis_1(),  p2->axis_1()  ) ||
-        !ogc_lenunit       :: is_identical( p1->lenunit(), p2->lenunit() ) ||
-        !ogc_scope         :: is_identical( p1->scope(),   p2->scope()   ) ||
-        !ogc_vector        :: is_identical( p1->extents(), p2->extents() ) ||
-        !ogc_vector        :: is_identical( p1->ids(),     p2->ids()     ) ||
-        !ogc_remark        :: is_identical( p1->remark(),  p2->remark()  ) )
+   if ( !ogc_string     :: is_equal    ( p1->name(),     p2->name()     ) ||
+        !ogc_time_datum :: is_identical( p1->datum(),    p2->datum()    ) ||
+        !ogc_cs         :: is_identical( p1->cs(),       p2->cs()       ) ||
+        !ogc_axis       :: is_identical( p1->axis_1(),   p2->axis_1()   ) ||
+        !ogc_timeunit   :: is_identical( p1->timeunit(), p2->timeunit() ) ||
+        !ogc_scope      :: is_identical( p1->scope(),    p2->scope()    ) ||
+        !ogc_vector     :: is_identical( p1->extents(),  p2->extents()  ) ||
+        !ogc_vector     :: is_identical( p1->ids(),      p2->ids()      ) ||
+        !ogc_remark     :: is_identical( p1->remark(),   p2->remark()   ) )
    {
       return false;
    }
@@ -683,8 +680,8 @@ bool ogc_vertical_crs :: is_identical(
    return true;
 }
 
-bool ogc_vertical_crs :: is_identical(
-   const ogc_vertical_crs * p) const
+bool ogc_time_crs :: is_identical(
+   const ogc_time_crs * p) const
 {
    return is_identical(this, p);
 }

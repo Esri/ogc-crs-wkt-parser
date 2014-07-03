@@ -22,19 +22,19 @@
 
 namespace OGC {
 
-const char * ogc_geodetic_datum :: obj_kwd() { return OGC_OBJ_KWD_GEODETIC_DATUM; }
+const char * ogc_vert_datum :: obj_kwd() { return OGC_OBJ_KWD_VERT_DATUM; }
+const char * ogc_vert_datum :: alt_kwd() { return OGC_ALT_KWD_VERT_DATUM; }
 
 /*------------------------------------------------------------------------
  * create
  */
-ogc_geodetic_datum * ogc_geodetic_datum :: create(
+ogc_vert_datum * ogc_vert_datum :: create(
    const char *    name,
-   ogc_ellipsoid * ellipsoid,
    ogc_anchor *    anchor,
    ogc_vector *    ids,
    ogc_error *     err)
 {
-   ogc_geodetic_datum * p = OGC_NULL;
+   ogc_vert_datum * p = OGC_NULL;
    bool bad = false;
 
    /*---------------------------------------------------------
@@ -54,18 +54,12 @@ ogc_geodetic_datum * ogc_geodetic_datum :: create(
       }
    }
 
-   if ( ellipsoid == OGC_NULL )
-   {
-      ogc_error::set(err, OGC_ERR_MISSING_ELLIPSOID, obj_kwd());
-      bad = true;
-   }
-
    /*---------------------------------------------------------
     * create the object
     */
    if ( !bad )
    {
-      p = new (std::nothrow) ogc_geodetic_datum();
+      p = new (std::nothrow) ogc_vert_datum();
       if ( p == OGC_NULL )
       {
          ogc_error::set(err, OGC_ERR_NO_MEMORY, obj_kwd());
@@ -73,9 +67,8 @@ ogc_geodetic_datum * ogc_geodetic_datum :: create(
       }
 
       ogc_string::unescape_str(p->_name, name, OGC_NAME_MAX);
-      p->_obj_type   = OGC_OBJ_TYPE_GEODETIC_DATUM;
-      p->_datum_type = OGC_DATUM_TYPE_GEODETIC;
-      p->_ellipsoid  = ellipsoid;
+      p->_obj_type   = OGC_OBJ_TYPE_VERT_DATUM;
+      p->_datum_type = OGC_DATUM_TYPE_VERT;
       p->_anchor     = anchor;
       p->_ids        = ids;
    }
@@ -86,13 +79,12 @@ ogc_geodetic_datum * ogc_geodetic_datum :: create(
 /*------------------------------------------------------------------------
  * destroy
  */
-ogc_geodetic_datum :: ~ogc_geodetic_datum()
+ogc_vert_datum :: ~ogc_vert_datum()
 {
-   ogc_ellipsoid :: destroy( _ellipsoid );
 }
 
-void ogc_geodetic_datum :: destroy(
-   ogc_geodetic_datum * obj)
+void ogc_vert_datum :: destroy(
+   ogc_vert_datum * obj)
 {
    if ( obj != OGC_NULL )
    {
@@ -103,7 +95,7 @@ void ogc_geodetic_datum :: destroy(
 /*------------------------------------------------------------------------
  * object from tokens
  */
-ogc_geodetic_datum * ogc_geodetic_datum :: from_tokens(
+ogc_vert_datum * ogc_vert_datum :: from_tokens(
    const ogc_token * t,
    int               start,
    int *             pend,
@@ -117,11 +109,10 @@ ogc_geodetic_datum * ogc_geodetic_datum :: from_tokens(
    int  same;
    int  num;
 
-   ogc_geodetic_datum * obj       = OGC_NULL;
-   ogc_ellipsoid *      ellipsoid = OGC_NULL;
-   ogc_anchor *         anchor    = OGC_NULL;
-   ogc_id *             id        = OGC_NULL;
-   ogc_vector *         ids       = OGC_NULL;
+   ogc_vert_datum *   obj       = OGC_NULL;
+   ogc_anchor *       anchor    = OGC_NULL;
+   ogc_id *           id        = OGC_NULL;
+   ogc_vector *       ids       = OGC_NULL;
    const char * name;
 
    /*---------------------------------------------------------
@@ -198,23 +189,6 @@ ogc_geodetic_datum * ogc_geodetic_datum :: from_tokens(
    int  next = 0;
    for (int i = start; i < end; i = next)
    {
-      if ( ogc_string::is_equal(arr[i].str, ogc_ellipsoid::obj_kwd()) ||
-           ogc_string::is_equal(arr[i].str, ogc_ellipsoid::alt_kwd()) )
-      {
-         if ( ellipsoid != OGC_NULL )
-         {
-            ogc_error::set(err, OGC_ERR_WKT_DUPLICATE_ELLIPSOID, obj_kwd());
-            bad = true;
-         }
-         else
-         {
-            ellipsoid = ogc_ellipsoid::from_tokens(t, i, &next, err);
-            if ( ellipsoid == OGC_NULL )
-               bad = true;
-         }
-         continue;
-      }
-
       if ( ogc_string::is_equal(arr[i].str, ogc_anchor::obj_kwd()) )
       {
          if ( anchor != OGC_NULL )
@@ -231,8 +205,7 @@ ogc_geodetic_datum * ogc_geodetic_datum :: from_tokens(
          continue;
       }
 
-      if ( ogc_string::is_equal(arr[i].str, ogc_id::obj_kwd()) ||
-           ogc_string::is_equal(arr[i].str, ogc_id::alt_kwd()) )
+      if ( ogc_string::is_equal(arr[i].str, ogc_id::obj_kwd()) )
       {
          id = ogc_id::from_tokens(t, i, &next, err);
          if ( id == OGC_NULL )
@@ -292,14 +265,13 @@ ogc_geodetic_datum * ogc_geodetic_datum :: from_tokens(
     */
    if ( !bad )
    {
-      obj = create(name, ellipsoid, anchor, ids, err);
+      obj = create(name, anchor, ids, err);
    }
 
    if ( obj == OGC_NULL )
    {
-      ogc_ellipsoid :: destroy( ellipsoid );
-      ogc_anchor    :: destroy( anchor    );
-      ogc_vector    :: destroy( ids       );
+      ogc_anchor :: destroy( anchor );
+      ogc_vector :: destroy( ids    );
    }
 
    return obj;
@@ -308,11 +280,11 @@ ogc_geodetic_datum * ogc_geodetic_datum :: from_tokens(
 /*------------------------------------------------------------------------
  * object from WKT
  */
-ogc_geodetic_datum * ogc_geodetic_datum :: from_wkt(
+ogc_vert_datum * ogc_vert_datum :: from_wkt(
    const char * wkt,
    ogc_error *  err)
 {
-   ogc_geodetic_datum * obj = OGC_NULL;
+   ogc_vert_datum * obj = OGC_NULL;
    ogc_token t;
 
    if ( t.tokenize(wkt, obj_kwd(), err) )
@@ -326,8 +298,8 @@ ogc_geodetic_datum * ogc_geodetic_datum :: from_wkt(
 /*------------------------------------------------------------------------
  * object to WKT
  */
-bool ogc_geodetic_datum :: to_wkt(
-   const ogc_geodetic_datum * obj,
+bool ogc_vert_datum :: to_wkt(
+   const ogc_vert_datum * obj,
    char      buffer[],
    int       options,
    size_t    buflen)
@@ -342,14 +314,13 @@ bool ogc_geodetic_datum :: to_wkt(
    return obj->to_wkt(buffer, options, buflen);
 }
 
-bool ogc_geodetic_datum :: to_wkt(
+bool ogc_vert_datum :: to_wkt(
    char      buffer[],
    int       options,
    size_t    buflen) const
 {
    OGC_UTF8_NAME buf_name;
    OGC_TBUF      buf_hdr;
-   OGC_TBUF      buf_ellipsoid;
    OGC_TBUF      buf_anchor;
    OGC_TBUF      buf_id;
    int           opts  =  (options | OGC_WKT_OPT_INTERNAL);
@@ -372,15 +343,13 @@ bool ogc_geodetic_datum :: to_wkt(
       return false;
    *buffer = 0;
 
-   rc &= ogc_ellipsoid :: to_wkt(_ellipsoid, buf_ellipsoid, opts, OGC_TBUF_MAX);
-   rc &= ogc_anchor    :: to_wkt(_anchor,    buf_anchor,    opts, OGC_TBUF_MAX);
+   rc &= ogc_anchor :: to_wkt(_anchor, buf_anchor, opts, OGC_TBUF_MAX);
 
    ogc_string::escape_str(buf_name, _name, OGC_UTF8_NAME_MAX);
    sprintf(buf_hdr, "%s%s\"%s\"",
       kwd, opn, buf_name);
 
    OGC_CPY_TO_BUF( buf_hdr       );
-   OGC_ADD_TO_BUF( buf_ellipsoid );
    OGC_ADD_TO_BUF( buf_anchor    );
 
    if ( _ids != OGC_NULL && (options & OGC_WKT_OPT_NO_IDS) == 0 )
@@ -408,27 +377,24 @@ bool ogc_geodetic_datum :: to_wkt(
 /*------------------------------------------------------------------------
  * clone
  */
-ogc_geodetic_datum * ogc_geodetic_datum :: clone(const ogc_geodetic_datum * obj)
+ogc_vert_datum * ogc_vert_datum :: clone(const ogc_vert_datum * obj)
 {
    if ( obj == OGC_NULL )
       return OGC_NULL;
    return obj->clone();
 }
 
-ogc_geodetic_datum * ogc_geodetic_datum :: clone() const
+ogc_vert_datum * ogc_vert_datum :: clone() const
 {
-   ogc_ellipsoid * ellipsoid = ogc_ellipsoid :: clone( _ellipsoid );
-   ogc_anchor *    anchor    = ogc_anchor    :: clone( _anchor    );
-   ogc_vector *    ids       = ogc_vector    :: clone( _ids       );
+   ogc_anchor * anchor = ogc_anchor :: clone( _anchor );
+   ogc_vector * ids    = ogc_vector :: clone( _ids    );
 
-   ogc_geodetic_datum * p = create(_name,
-                                   ellipsoid,
+   ogc_vert_datum * p = create(_name,
                                    anchor,
                                    ids,
                                    OGC_NULL);
    if ( p == OGC_NULL )
    {
-      ogc_ellipsoid :: destroy( ellipsoid );
       ogc_anchor    :: destroy( anchor    );
       ogc_vector    :: destroy( ids       );
    }
@@ -439,15 +405,14 @@ ogc_geodetic_datum * ogc_geodetic_datum :: clone() const
 /*------------------------------------------------------------------------
  * compare for computational equality
  */
-bool ogc_geodetic_datum :: is_equal(
-   const ogc_geodetic_datum * p1,
-   const ogc_geodetic_datum * p2)
+bool ogc_vert_datum :: is_equal(
+   const ogc_vert_datum * p1,
+   const ogc_vert_datum * p2)
 {
    if ( p1 == OGC_NULL && p2 == OGC_NULL ) return true;
    if ( p1 == OGC_NULL || p2 == OGC_NULL ) return false;
 
-   if ( !ogc_string    :: is_equal( p1->name(),      p2->name()      ) ||
-        !ogc_ellipsoid :: is_equal( p1->ellipsoid(), p2->ellipsoid() ) )
+   if ( !ogc_string :: is_equal( p1->name(), p2->name() ))
    {
       return false;
    }
@@ -455,8 +420,8 @@ bool ogc_geodetic_datum :: is_equal(
    return true;
 }
 
-bool ogc_geodetic_datum :: is_equal(
-   const ogc_geodetic_datum * p) const
+bool ogc_vert_datum :: is_equal(
+   const ogc_vert_datum * p) const
 {
    return is_equal(this, p);
 }
@@ -464,15 +429,14 @@ bool ogc_geodetic_datum :: is_equal(
 /*------------------------------------------------------------------------
  * compare
  */
-bool ogc_geodetic_datum :: is_identical(
-   const ogc_geodetic_datum * p1,
-   const ogc_geodetic_datum * p2)
+bool ogc_vert_datum :: is_identical(
+   const ogc_vert_datum * p1,
+   const ogc_vert_datum * p2)
 {
    if ( p1 == OGC_NULL && p2 == OGC_NULL ) return true;
    if ( p1 == OGC_NULL || p2 == OGC_NULL ) return false;
 
    if ( !ogc_string    :: is_equal    ( p1->name(),      p2->name()      ) ||
-        !ogc_ellipsoid :: is_identical( p1->ellipsoid(), p2->ellipsoid() ) ||
         !ogc_anchor    :: is_identical( p1->anchor(),    p2->anchor()    ) ||
         !ogc_vector    :: is_identical( p1->ids(),       p2->ids()       ) )
    {
@@ -482,8 +446,8 @@ bool ogc_geodetic_datum :: is_identical(
    return true;
 }
 
-bool ogc_geodetic_datum :: is_identical(
-   const ogc_geodetic_datum * p) const
+bool ogc_vert_datum :: is_identical(
+   const ogc_vert_datum * p) const
 {
    return is_identical(this, p);
 }

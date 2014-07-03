@@ -15,21 +15,23 @@
 /* ------------------------------------------------------------------------- */
 
 /* ------------------------------------------------------------------------- */
-/* ENGCRS (Engineering CRS) object                                           */
+/* GCENCRS (Geocentric CRS) object                                           */
 /* ------------------------------------------------------------------------- */
 
 #include "ogc_common.h"
 
 namespace OGC {
 
-const char * ogc_engineering_crs :: obj_kwd() { return OGC_OBJ_KWD_ENGINEERING_CRS; }
+const char * ogc_geod_crs :: obj_kwd() { return OGC_OBJ_KWD_GEOD_CRS; }
+const char * ogc_geod_crs :: alt_kwd() { return OGC_ALT_KWD_GEOD_CRS; }
 
 /*------------------------------------------------------------------------
  * create
  */
-ogc_engineering_crs * ogc_engineering_crs :: create(
+ogc_geod_crs * ogc_geod_crs :: create(
    const char *         name,
-   ogc_generic_datum *  datum,
+   ogc_geod_datum *     datum,
+   ogc_primem *         primem,
    ogc_cs *             cs,
    ogc_axis *           axis_1,
    ogc_axis *           axis_2,
@@ -41,7 +43,7 @@ ogc_engineering_crs * ogc_engineering_crs :: create(
    ogc_remark *         remark,
    ogc_error *          err)
 {
-   ogc_engineering_crs * p = OGC_NULL;
+   ogc_geod_crs * p = OGC_NULL;
    bool bad = false;
 
    /*---------------------------------------------------------
@@ -72,7 +74,7 @@ ogc_engineering_crs * ogc_engineering_crs :: create(
       ogc_error::set(err, OGC_ERR_MISSING_CS, obj_kwd());
       bad = true;
    }
-   else if ( !ogc_utils::validate_cs(OGC_OBJ_TYPE_ENGINEERING_CRS, cs,
+   else if ( !ogc_utils::validate_cs(OGC_OBJ_TYPE_GEOD_CRS, cs,
                                      axis_1, axis_2, axis_3, unit, err) )
    {
       bad = true;
@@ -83,7 +85,7 @@ ogc_engineering_crs * ogc_engineering_crs :: create(
     */
    if ( !bad )
    {
-      p = new (std::nothrow) ogc_engineering_crs();
+      p = new (std::nothrow) ogc_geod_crs();
       if ( p == OGC_NULL )
       {
          ogc_error::set(err, OGC_ERR_NO_MEMORY, obj_kwd());
@@ -91,9 +93,10 @@ ogc_engineering_crs * ogc_engineering_crs :: create(
       }
 
       ogc_string::unescape_str(p->_name, name, OGC_NAME_MAX);
-      p->_obj_type = OGC_OBJ_TYPE_ENGINEERING_CRS;
-      p->_crs_type = OGC_CRS_TYPE_ENGINEERING;
+      p->_obj_type = OGC_OBJ_TYPE_GEOD_CRS;
+      p->_crs_type = OGC_CRS_TYPE_GEOD;
       p->_datum    = datum;
+      p->_primem   = primem;
       p->_cs       = cs;
       p->_axis_1   = axis_1;
       p->_axis_2   = axis_2;
@@ -111,13 +114,13 @@ ogc_engineering_crs * ogc_engineering_crs :: create(
 /*------------------------------------------------------------------------
  * destroy
  */
-ogc_engineering_crs :: ~ogc_engineering_crs()
+ogc_geod_crs :: ~ogc_geod_crs()
 {
-   ogc_generic_datum :: destroy( _datum );
+   ogc_geod_datum :: destroy( _datum );
 }
 
-void ogc_engineering_crs :: destroy(
-   ogc_engineering_crs * obj)
+void ogc_geod_crs :: destroy(
+   ogc_geod_crs * obj)
 {
    if ( obj != OGC_NULL )
    {
@@ -128,7 +131,7 @@ void ogc_engineering_crs :: destroy(
 /*------------------------------------------------------------------------
  * object from tokens
  */
-ogc_engineering_crs * ogc_engineering_crs :: from_tokens(
+ogc_geod_crs * ogc_geod_crs :: from_tokens(
    const ogc_token * t,
    int               start,
    int *             pend,
@@ -142,8 +145,9 @@ ogc_engineering_crs * ogc_engineering_crs :: from_tokens(
    int  same;
    int  num;
 
-   ogc_engineering_crs * obj     = OGC_NULL;
-   ogc_generic_datum *   datum   = OGC_NULL;
+   ogc_geod_crs *        obj     = OGC_NULL;
+   ogc_geod_datum *      datum   = OGC_NULL;
+   ogc_primem *          primem  = OGC_NULL;
    ogc_cs *              cs      = OGC_NULL;
    ogc_axis *            axis    = OGC_NULL;
    ogc_axis *            axis_1  = OGC_NULL;
@@ -204,7 +208,7 @@ ogc_engineering_crs * ogc_engineering_crs :: from_tokens(
    }
 
    /*---------------------------------------------------------
-    * There must be 1 token: ENGCRS[ "name" ...
+    * There must be 1 token: GCENCRS[ "name" ...
     */
    if ( same < 1 )
    {
@@ -232,7 +236,7 @@ ogc_engineering_crs * ogc_engineering_crs :: from_tokens(
    int  next = 0;
    for (int i = start; i < end; i = next)
    {
-      if ( ogc_string::is_equal(arr[i].str, ogc_generic_datum::obj_kwd()) )
+      if ( ogc_string::is_equal(arr[i].str, ogc_geod_datum::obj_kwd()) )
       {
          if ( datum != OGC_NULL )
          {
@@ -241,8 +245,24 @@ ogc_engineering_crs * ogc_engineering_crs :: from_tokens(
          }
          else
          {
-            datum = ogc_generic_datum::from_tokens(t, i, &next, err);
+            datum = ogc_geod_datum::from_tokens(t, i, &next, err);
             if ( datum == OGC_NULL )
+               bad = true;
+         }
+         continue;
+      }
+
+      if ( ogc_string::is_equal(arr[i].str, ogc_primem::obj_kwd()) )
+      {
+         if ( primem != OGC_NULL )
+         {
+            ogc_error::set(err, OGC_ERR_WKT_DUPLICATE_PRIMEM, obj_kwd());
+            bad = true;
+         }
+         else
+         {
+            primem = ogc_primem::from_tokens(t, i, &next, err);
+            if ( primem == OGC_NULL )
                bad = true;
          }
          continue;
@@ -367,8 +387,7 @@ ogc_engineering_crs * ogc_engineering_crs :: from_tokens(
          continue;
       }
 
-      if ( ogc_string::is_equal(arr[i].str, ogc_id::obj_kwd()) ||
-           ogc_string::is_equal(arr[i].str, ogc_id::alt_kwd()) )
+      if ( ogc_string::is_equal(arr[i].str, ogc_id::obj_kwd()) )
       {
          id = ogc_id::from_tokens(t, i, &next, err);
          if ( id == OGC_NULL )
@@ -444,22 +463,23 @@ ogc_engineering_crs * ogc_engineering_crs :: from_tokens(
     */
    if ( !bad )
    {
-      obj = create(name, datum, cs, axis_1, axis_2, axis_3, unit,
+      obj = create(name, datum, primem, cs, axis_1, axis_2, axis_3, unit,
                    scope, extents, ids, remark, err);
    }
 
    if ( obj == OGC_NULL )
    {
-      ogc_generic_datum :: destroy( datum   );
-      ogc_cs            :: destroy( cs      );
-      ogc_axis          :: destroy( axis_1  );
-      ogc_axis          :: destroy( axis_2  );
-      ogc_axis          :: destroy( axis_3  );
-      ogc_unit          :: destroy( unit    );
-      ogc_scope         :: destroy( scope   );
-      ogc_vector        :: destroy( extents );
-      ogc_vector        :: destroy( ids     );
-      ogc_remark        :: destroy( remark  );
+      ogc_geod_datum :: destroy( datum   );
+      ogc_primem     :: destroy( primem  );
+      ogc_cs         :: destroy( cs      );
+      ogc_axis       :: destroy( axis_1  );
+      ogc_axis       :: destroy( axis_2  );
+      ogc_axis       :: destroy( axis_3  );
+      ogc_unit       :: destroy( unit    );
+      ogc_vector     :: destroy( ids     );
+      ogc_scope      :: destroy( scope   );
+      ogc_vector     :: destroy( extents );
+      ogc_remark     :: destroy( remark  );
    }
 
    return obj;
@@ -468,11 +488,11 @@ ogc_engineering_crs * ogc_engineering_crs :: from_tokens(
 /*------------------------------------------------------------------------
  * object from WKT
  */
-ogc_engineering_crs * ogc_engineering_crs :: from_wkt(
+ogc_geod_crs * ogc_geod_crs :: from_wkt(
    const char * wkt,
    ogc_error *  err)
 {
-   ogc_engineering_crs * obj = OGC_NULL;
+   ogc_geod_crs * obj = OGC_NULL;
    ogc_token t;
 
    if ( t.tokenize(wkt, obj_kwd(), err) )
@@ -486,8 +506,8 @@ ogc_engineering_crs * ogc_engineering_crs :: from_wkt(
 /*------------------------------------------------------------------------
  * object to WKT
  */
-bool ogc_engineering_crs :: to_wkt(
-   const ogc_engineering_crs * obj,
+bool ogc_geod_crs :: to_wkt(
+   const ogc_geod_crs * obj,
    char      buffer[],
    int       options,
    size_t    buflen)
@@ -502,7 +522,7 @@ bool ogc_engineering_crs :: to_wkt(
    return obj->to_wkt(buffer, options, buflen);
 }
 
-bool ogc_engineering_crs :: to_wkt(
+bool ogc_geod_crs :: to_wkt(
    char      buffer[],
    int       options,
    size_t    buflen) const
@@ -510,6 +530,7 @@ bool ogc_engineering_crs :: to_wkt(
    OGC_UTF8_NAME buf_name;
    OGC_TBUF      buf_hdr;
    OGC_TBUF      buf_datum;
+   OGC_TBUF      buf_primem;
    OGC_TBUF      buf_cs;
    OGC_TBUF      buf_axis_1;
    OGC_TBUF      buf_axis_2;
@@ -541,13 +562,14 @@ bool ogc_engineering_crs :: to_wkt(
    if ( (opts & OGC_WKT_OPT_OLD_SYNTAX) != 0 )
       return true;
 
-   rc &= ogc_generic_datum :: to_wkt(_datum,  buf_datum,  opts, OGC_TBUF_MAX);
-   rc &= ogc_cs            :: to_wkt(_cs,     buf_cs,     opts, OGC_TBUF_MAX);
-   rc &= ogc_axis          :: to_wkt(_axis_1, buf_axis_1, opts, OGC_TBUF_MAX);
-   rc &= ogc_axis          :: to_wkt(_axis_2, buf_axis_2, opts, OGC_TBUF_MAX);
-   rc &= ogc_axis          :: to_wkt(_axis_3, buf_axis_3, opts, OGC_TBUF_MAX);
-   rc &= ogc_unit          :: to_wkt(_unit,   buf_unit,   opts, OGC_TBUF_MAX);
-   rc &= ogc_remark        :: to_wkt(_remark, buf_remark, opts, OGC_TBUF_MAX);
+   rc &= ogc_geod_datum :: to_wkt(_datum,  buf_datum,  opts, OGC_TBUF_MAX);
+   rc &= ogc_primem     :: to_wkt(_primem, buf_primem, opts, OGC_TBUF_MAX);
+   rc &= ogc_cs         :: to_wkt(_cs,     buf_cs,     opts, OGC_TBUF_MAX);
+   rc &= ogc_axis       :: to_wkt(_axis_1, buf_axis_1, opts, OGC_TBUF_MAX);
+   rc &= ogc_axis       :: to_wkt(_axis_2, buf_axis_2, opts, OGC_TBUF_MAX);
+   rc &= ogc_axis       :: to_wkt(_axis_3, buf_axis_3, opts, OGC_TBUF_MAX);
+   rc &= ogc_unit       :: to_wkt(_unit,   buf_unit,   opts, OGC_TBUF_MAX);
+   rc &= ogc_remark     :: to_wkt(_remark, buf_remark, opts, OGC_TBUF_MAX);
 
    ogc_string::escape_str(buf_name, _name, OGC_UTF8_NAME_MAX);
    sprintf(buf_hdr, "%s%s\"%s\"",
@@ -555,6 +577,7 @@ bool ogc_engineering_crs :: to_wkt(
 
    OGC_CPY_TO_BUF( buf_hdr    );
    OGC_ADD_TO_BUF( buf_datum  );
+   OGC_ADD_TO_BUF( buf_primem );
    OGC_ADD_TO_BUF( buf_cs     );
    OGC_ADD_TO_BUF( buf_axis_1 );
    OGC_ADD_TO_BUF( buf_axis_2 );
@@ -594,50 +617,53 @@ bool ogc_engineering_crs :: to_wkt(
 /*------------------------------------------------------------------------
  * clone
  */
-ogc_engineering_crs * ogc_engineering_crs :: clone(const ogc_engineering_crs * obj)
+ogc_geod_crs * ogc_geod_crs :: clone(const ogc_geod_crs * obj)
 {
    if ( obj == OGC_NULL )
       return OGC_NULL;
    return obj->clone();
 }
 
-ogc_engineering_crs * ogc_engineering_crs :: clone() const
+ogc_geod_crs * ogc_geod_crs :: clone() const
 {
-   ogc_generic_datum *  datum   = ogc_generic_datum :: clone( _datum   );
-   ogc_cs *             cs      = ogc_cs            :: clone( _cs      );
-   ogc_axis *           axis_1  = ogc_axis          :: clone( _axis_1  );
-   ogc_axis *           axis_2  = ogc_axis          :: clone( _axis_2  );
-   ogc_axis *           axis_3  = ogc_axis          :: clone( _axis_3  );
-   ogc_unit *           unit    = ogc_unit          :: clone( _unit    );
-   ogc_scope *          scope   = ogc_scope         :: clone( _scope   );
-   ogc_vector *         extents = ogc_vector        :: clone( _extents );
-   ogc_vector *         ids     = ogc_vector        :: clone( _ids     );
-   ogc_remark *         remark  = ogc_remark        :: clone( _remark  );
+   ogc_geod_datum * datum   = ogc_geod_datum :: clone( _datum   );
+   ogc_primem *     primem  = ogc_primem     :: clone( _primem  );
+   ogc_cs *         cs      = ogc_cs         :: clone( _cs      );
+   ogc_axis *       axis_1  = ogc_axis       :: clone( _axis_1  );
+   ogc_axis *       axis_2  = ogc_axis       :: clone( _axis_2  );
+   ogc_axis *       axis_3  = ogc_axis       :: clone( _axis_3  );
+   ogc_unit *       unit    = ogc_unit       :: clone( _unit    );
+   ogc_scope *      scope   = ogc_scope      :: clone( _scope   );
+   ogc_vector *     extents = ogc_vector     :: clone( _extents );
+   ogc_vector *     ids     = ogc_vector     :: clone( _ids     );
+   ogc_remark *     remark  = ogc_remark     :: clone( _remark  );
 
-   ogc_engineering_crs * p = create(_name,
-                                    datum,
-                                    cs,
-                                    axis_1,
-                                    axis_2,
-                                    axis_3,
-                                    unit,
-                                    scope,
-                                    extents,
-                                    ids,
-                                    remark,
-                                    OGC_NULL);
+   ogc_geod_crs * p = create(_name,
+                                   datum,
+                                   primem,
+                                   cs,
+                                   axis_1,
+                                   axis_2,
+                                   axis_3,
+                                   unit,
+                                   scope,
+                                   extents,
+                                   ids,
+                                   remark,
+                                   OGC_NULL);
    if ( p == OGC_NULL )
    {
-      ogc_generic_datum :: destroy( datum   );
-      ogc_cs            :: destroy( cs      );
-      ogc_axis          :: destroy( axis_1  );
-      ogc_axis          :: destroy( axis_2  );
-      ogc_axis          :: destroy( axis_3  );
-      ogc_unit          :: destroy( unit    );
-      ogc_scope         :: destroy( scope   );
-      ogc_vector        :: destroy( extents );
-      ogc_vector        :: destroy( ids     );
-      ogc_remark        :: destroy( remark  );
+      ogc_geod_datum :: destroy( datum   );
+      ogc_primem     :: destroy( primem  );
+      ogc_cs         :: destroy( cs      );
+      ogc_axis       :: destroy( axis_1  );
+      ogc_axis       :: destroy( axis_2  );
+      ogc_axis       :: destroy( axis_3  );
+      ogc_unit       :: destroy( unit    );
+      ogc_scope      :: destroy( scope   );
+      ogc_vector     :: destroy( extents );
+      ogc_vector     :: destroy( ids     );
+      ogc_remark     :: destroy( remark  );
    }
 
    return p;
@@ -646,20 +672,21 @@ ogc_engineering_crs * ogc_engineering_crs :: clone() const
 /*------------------------------------------------------------------------
  * compare for computational equality
  */
-bool ogc_engineering_crs :: is_equal(
-   const ogc_engineering_crs * p1,
-   const ogc_engineering_crs * p2)
+bool ogc_geod_crs :: is_equal(
+   const ogc_geod_crs * p1,
+   const ogc_geod_crs * p2)
 {
    if ( p1 == OGC_NULL && p2 == OGC_NULL ) return true;
    if ( p1 == OGC_NULL || p2 == OGC_NULL ) return false;
 
-   if ( !ogc_string        :: is_equal( p1->name(),   p2->name()   ) ||
-        !ogc_generic_datum :: is_equal( p1->datum(),  p2->datum()  ) ||
-        !ogc_cs            :: is_equal( p1->cs(),     p2->cs()     ) ||
-        !ogc_axis          :: is_equal( p1->axis_1(), p2->axis_1() ) ||
-        !ogc_axis          :: is_equal( p1->axis_2(), p2->axis_2() ) ||
-        !ogc_axis          :: is_equal( p1->axis_3(), p2->axis_3() ) ||
-        !ogc_unit          :: is_equal( p1->unit(),   p2->unit()   ) )
+   if ( !ogc_string     :: is_equal( p1->name(),   p2->name()   ) ||
+        !ogc_geod_datum :: is_equal( p1->datum(),  p2->datum()  ) ||
+        !ogc_primem     :: is_equal( p1->primem(), p2->primem() ) ||
+        !ogc_cs         :: is_equal( p1->cs(),     p2->cs()     ) ||
+        !ogc_axis       :: is_equal( p1->axis_1(), p2->axis_1() ) ||
+        !ogc_axis       :: is_equal( p1->axis_2(), p2->axis_2() ) ||
+        !ogc_axis       :: is_equal( p1->axis_3(), p2->axis_3() ) ||
+        !ogc_unit       :: is_equal( p1->unit(),   p2->unit()   ) )
    {
       return false;
    }
@@ -667,8 +694,8 @@ bool ogc_engineering_crs :: is_equal(
    return true;
 }
 
-bool ogc_engineering_crs :: is_equal(
-   const ogc_engineering_crs * p) const
+bool ogc_geod_crs :: is_equal(
+   const ogc_geod_crs * p) const
 {
    return is_equal(this, p);
 }
@@ -676,24 +703,25 @@ bool ogc_engineering_crs :: is_equal(
 /*------------------------------------------------------------------------
  * compare
  */
-bool ogc_engineering_crs :: is_identical(
-   const ogc_engineering_crs * p1,
-   const ogc_engineering_crs * p2)
+bool ogc_geod_crs :: is_identical(
+   const ogc_geod_crs * p1,
+   const ogc_geod_crs * p2)
 {
    if ( p1 == OGC_NULL && p2 == OGC_NULL ) return true;
    if ( p1 == OGC_NULL || p2 == OGC_NULL ) return false;
 
-   if ( !ogc_string        :: is_equal    ( p1->name(),    p2->name()    ) ||
-        !ogc_generic_datum :: is_identical( p1->datum(),   p2->datum()   ) ||
-        !ogc_cs            :: is_identical( p1->cs(),      p2->cs()      ) ||
-        !ogc_axis          :: is_identical( p1->axis_1(),  p2->axis_1()  ) ||
-        !ogc_axis          :: is_identical( p1->axis_2(),  p2->axis_2()  ) ||
-        !ogc_axis          :: is_identical( p1->axis_3(),  p2->axis_3()  ) ||
-        !ogc_unit          :: is_identical( p1->unit(),    p2->unit()    ) ||
-        !ogc_scope         :: is_identical( p1->scope(),   p2->scope()   ) ||
-        !ogc_vector        :: is_identical( p1->extents(), p2->extents() ) ||
-        !ogc_vector        :: is_identical( p1->ids(),     p2->ids()     ) ||
-        !ogc_remark        :: is_identical( p1->remark(),  p2->remark()  ) )
+   if ( !ogc_string     :: is_equal    ( p1->name(),    p2->name()    ) ||
+        !ogc_geod_datum :: is_identical( p1->datum(),   p2->datum()   ) ||
+        !ogc_primem     :: is_identical( p1->primem(),  p2->primem()  ) ||
+        !ogc_cs         :: is_identical( p1->cs(),      p2->cs()      ) ||
+        !ogc_axis       :: is_identical( p1->axis_1(),  p2->axis_1()  ) ||
+        !ogc_axis       :: is_identical( p1->axis_2(),  p2->axis_2()  ) ||
+        !ogc_axis       :: is_identical( p1->axis_3(),  p2->axis_3()  ) ||
+        !ogc_unit       :: is_identical( p1->unit(),    p2->unit()    ) ||
+        !ogc_scope      :: is_identical( p1->scope(),   p2->scope()   ) ||
+        !ogc_vector     :: is_identical( p1->extents(), p2->extents() ) ||
+        !ogc_vector     :: is_identical( p1->ids(),     p2->ids()     ) ||
+        !ogc_remark     :: is_identical( p1->remark(),  p2->remark()  ) )
    {
       return false;
    }
@@ -701,8 +729,8 @@ bool ogc_engineering_crs :: is_identical(
    return true;
 }
 
-bool ogc_engineering_crs :: is_identical(
-   const ogc_engineering_crs * p) const
+bool ogc_geod_crs :: is_identical(
+   const ogc_geod_crs * p) const
 {
    return is_identical(this, p);
 }

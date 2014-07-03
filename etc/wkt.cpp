@@ -157,7 +157,7 @@ static int process_options (int argc, const char **argv)
 /*------------------------------------------------------------------------
  * error call-back routine
  */
-static void error_rtn(
+static void _CDECL error_rtn(
    void *       data,
    ogc_err_code err_code,
    const char * err_msg)

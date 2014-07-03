@@ -22,8 +22,7 @@
 
 namespace OGC {
 
-const char * ogc_id :: obj_kwd() { return OGC_OBJ_KWD_ID;        }
-const char * ogc_id :: alt_kwd() { return OGC_OBJ_KWD_AUTHORITY; }
+const char * ogc_id :: obj_kwd() { return OGC_OBJ_KWD_ID; }
 
 /*------------------------------------------------------------------------
  * create
@@ -166,8 +165,7 @@ ogc_id * ogc_id :: from_tokens(
    }
    kwd = arr[start].str;
 
-   if ( !ogc_string::is_equal(kwd, obj_kwd()) &&
-        !ogc_string::is_equal(kwd, alt_kwd()) )
+   if ( !ogc_string::is_equal(kwd, obj_kwd()) )
    {
       ogc_error::set(err, OGC_ERR_WKT_INVALID_KEYWORD, obj_kwd(), kwd);
       return OGC_NULL;

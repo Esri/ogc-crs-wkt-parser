@@ -340,230 +340,65 @@
 		<Filter
 			Name="Source Files"
 			>
-			<File
-				RelativePath="..\..\src\ogc_abrtrans.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\..\src\ogc_anchor.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\..\src\ogc_angunit.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\..\src\ogc_area_extent.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\..\src\ogc_axis.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\..\src\ogc_bbox_extent.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\..\src\ogc_bearing.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\..\src\ogc_bound_crs.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\..\src\ogc_citation.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\..\src\ogc_compound_crs.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\..\src\ogc_conversion.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\..\src\ogc_coordop.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\..\src\ogc_crs.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\..\src\ogc_cs.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\..\src\ogc_datetime.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\..\src\ogc_datum.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\..\src\ogc_ellipsoid.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\..\src\ogc_engineering_crs.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\..\src\ogc_error.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\..\src\ogc_extent.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\..\src\ogc_generic_datum.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\..\src\ogc_geocentric_crs.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\..\src\ogc_geodetic_datum.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\..\src\ogc_geog2d_crs.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\..\src\ogc_geog3d_crs.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\..\src\ogc_id.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\..\src\ogc_image_crs.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\..\src\ogc_lenunit.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\..\src\ogc_macros.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\..\src\ogc_meridian.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\..\src\ogc_method.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\..\src\ogc_object.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\..\src\ogc_opaccuracy.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\..\src\ogc_order.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\..\src\ogc_parameter.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\..\src\ogc_parameter_file.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\..\src\ogc_parametric_crs.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\..\src\ogc_paramunit.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\..\src\ogc_primem.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\..\src\ogc_projected_crs.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\..\src\ogc_remark.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\..\src\ogc_scaleunit.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\..\src\ogc_scope.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\..\src\ogc_string.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\..\src\ogc_tables.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\..\src\ogc_temporal_crs.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\..\src\ogc_time_extent.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\..\src\ogc_timeunit.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\..\src\ogc_token.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\..\src\ogc_unicode.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\..\src\ogc_unit.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\..\src\ogc_uri.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\..\src\ogc_utils.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\..\src\ogc_vector.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\..\src\ogc_vert_extent.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\..\src\ogc_vertical_crs.cpp"
-				>
-			</File>
+			<File RelativePath="..\..\src\ogc_abrtrans.cpp" />
+			<File RelativePath="..\..\src\ogc_anchor.cpp" />
+			<File RelativePath="..\..\src\ogc_angunit.cpp" />
+			<File RelativePath="..\..\src\ogc_area_extent.cpp" />
+			<File RelativePath="..\..\src\ogc_axis.cpp" />
+			<File RelativePath="..\..\src\ogc_bbox_extent.cpp" />
+			<File RelativePath="..\..\src\ogc_bearing.cpp" />
+			<File RelativePath="..\..\src\ogc_bound_crs.cpp" />
+			<File RelativePath="..\..\src\ogc_citation.cpp" />
+			<File RelativePath="..\..\src\ogc_compound_crs.cpp" />
+			<File RelativePath="..\..\src\ogc_conversion.cpp" />
+			<File RelativePath="..\..\src\ogc_coord_op.cpp" />
+			<File RelativePath="..\..\src\ogc_crs.cpp" />
+			<File RelativePath="..\..\src\ogc_cs.cpp" />
+			<File RelativePath="..\..\src\ogc_datetime.cpp" />
+			<File RelativePath="..\..\src\ogc_datum.cpp" />
+			<File RelativePath="..\..\src\ogc_ellipsoid.cpp" />
+			<File RelativePath="..\..\src\ogc_engr_crs.cpp" />
+			<File RelativePath="..\..\src\ogc_engr_datum.cpp" />
+			<File RelativePath="..\..\src\ogc_error.cpp" />
+			<File RelativePath="..\..\src\ogc_extent.cpp" />
+			<File RelativePath="..\..\src\ogc_geod_crs.cpp" />
+			<File RelativePath="..\..\src\ogc_geod_datum.cpp" />
+			<File RelativePath="..\..\src\ogc_id.cpp" />
+			<File RelativePath="..\..\src\ogc_image_crs.cpp" />
+			<File RelativePath="..\..\src\ogc_image_datum.cpp" />
+			<File RelativePath="..\..\src\ogc_lenunit.cpp" />
+			<File RelativePath="..\..\src\ogc_macros.cpp" />
+			<File RelativePath="..\..\src\ogc_meridian.cpp" />
+			<File RelativePath="..\..\src\ogc_method.cpp" />
+			<File RelativePath="..\..\src\ogc_object.cpp" />
+			<File RelativePath="..\..\src\ogc_opaccuracy.cpp" />
+			<File RelativePath="..\..\src\ogc_order.cpp" />
+			<File RelativePath="..\..\src\ogc_parameter.cpp" />
+			<File RelativePath="..\..\src\ogc_parameter_file.cpp" />
+			<File RelativePath="..\..\src\ogc_param_crs.cpp" />
+			<File RelativePath="..\..\src\ogc_param_datum.cpp" />
+			<File RelativePath="..\..\src\ogc_paramunit.cpp" />
+			<File RelativePath="..\..\src\ogc_primem.cpp" />
+			<File RelativePath="..\..\src\ogc_proj_crs.cpp" />
+			<File RelativePath="..\..\src\ogc_remark.cpp" />
+			<File RelativePath="..\..\src\ogc_scaleunit.cpp" />
+			<File RelativePath="..\..\src\ogc_scope.cpp" />
+			<File RelativePath="..\..\src\ogc_string.cpp" />
+			<File RelativePath="..\..\src\ogc_tables.cpp" />
+			<File RelativePath="..\..\src\ogc_time_crs.cpp" />
+			<File RelativePath="..\..\src\ogc_time_datum.cpp" />
+			<File RelativePath="..\..\src\ogc_time_extent.cpp" />
+			<File RelativePath="..\..\src\ogc_time_origin.cpp" />
+			<File RelativePath="..\..\src\ogc_timeunit.cpp" />
+			<File RelativePath="..\..\src\ogc_token.cpp" />
+			<File RelativePath="..\..\src\ogc_unicode.cpp" />
+			<File RelativePath="..\..\src\ogc_unit.cpp" />
+			<File RelativePath="..\..\src\ogc_uri.cpp" />
+			<File RelativePath="..\..\src\ogc_utils.cpp" />
+			<File RelativePath="..\..\src\ogc_vector.cpp" />
+			<File RelativePath="..\..\src\ogc_vert_crs.cpp" />
+			<File RelativePath="..\..\src\ogc_vert_datum.cpp" />
+			<File RelativePath="..\..\src\ogc_vert_extent.cpp" />
 		</Filter>
 		<Filter
 			Name="Header Files"

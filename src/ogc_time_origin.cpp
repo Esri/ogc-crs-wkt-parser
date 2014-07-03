@@ -15,43 +15,56 @@
 /* ------------------------------------------------------------------------- */
 
 /* ------------------------------------------------------------------------- */
-/* OPACCURACY (Operation accuracy) object                                    */
+/* TIME EXTENT (Temporal extent) object                                      */
 /* ------------------------------------------------------------------------- */
 
 #include "ogc_common.h"
 
 namespace OGC {
 
-const char * ogc_opaccuracy :: obj_kwd() { return OGC_OBJ_KWD_OPACCURACY; }
+const char * ogc_time_origin :: obj_kwd() { return OGC_OBJ_KWD_TIME_ORIGIN; }
 
 /*------------------------------------------------------------------------
  * create
  */
-ogc_opaccuracy * ogc_opaccuracy :: create(
-   double        accuracy,
-   ogc_error *   err)
+ogc_time_origin * ogc_time_origin :: create(
+   const char *   origin,
+   ogc_error *    err)
 {
-   ogc_opaccuracy * p = OGC_NULL;
+   ogc_time_origin * p = OGC_NULL;
    bool bad = false;
 
    /*---------------------------------------------------------
     * error checks
     */
+   if ( origin == OGC_NULL )
+   {
+      origin = "";
+   }
+   else
+   {
+      int len = ogc_string::unescape_len(origin);
+      if ( len >= OGC_TIME_MAX )
+      {
+         ogc_error::set(err, OGC_ERR_TIME_TOO_LONG, obj_kwd(), len);
+         bad = true;
+      }
+   }
 
    /*---------------------------------------------------------
     * create the object
     */
    if ( !bad )
    {
-      p = new (std::nothrow) ogc_opaccuracy();
+      p = new (std::nothrow) ogc_time_origin();
       if ( p == OGC_NULL )
       {
          ogc_error::set(err, OGC_ERR_NO_MEMORY, obj_kwd());
          return p;
       }
 
-      p->_obj_type = OGC_OBJ_TYPE_OPACCURACY;
-      p->_accuracy = accuracy;
+      ogc_string::unescape_str(p->_origin, origin, OGC_TIME_MAX);
+      p->_obj_type = OGC_OBJ_TYPE_TIME_ORIGIN;
    }
 
    return p;
@@ -60,12 +73,12 @@ ogc_opaccuracy * ogc_opaccuracy :: create(
 /*------------------------------------------------------------------------
  * destroy
  */
-ogc_opaccuracy :: ~ogc_opaccuracy()
+ogc_time_origin :: ~ogc_time_origin()
 {
 }
 
-void ogc_opaccuracy :: destroy(
-   ogc_opaccuracy * obj)
+void ogc_time_origin :: destroy(
+   ogc_time_origin * obj)
 {
    if ( obj != OGC_NULL )
    {
@@ -76,7 +89,7 @@ void ogc_opaccuracy :: destroy(
 /*------------------------------------------------------------------------
  * object from tokens
  */
-ogc_opaccuracy * ogc_opaccuracy :: from_tokens(
+ogc_time_origin * ogc_time_origin :: from_tokens(
    const ogc_token * t,
    int               start,
    int *             pend,
@@ -86,12 +99,12 @@ ogc_opaccuracy * ogc_opaccuracy :: from_tokens(
    const char * kwd;
    bool bad = false;
    int  level;
-   int  end;
    int  same;
+   int  end;
    int  num;
 
-   ogc_opaccuracy * obj     = OGC_NULL;
-   double accuracy;
+   ogc_time_origin * obj      = OGC_NULL;
+   const char * origin;
 
    /*---------------------------------------------------------
     * sanity checks
@@ -139,15 +152,15 @@ ogc_opaccuracy * ogc_opaccuracy :: from_tokens(
    }
 
    /*---------------------------------------------------------
-    * There must be 1 token: OPACCURACY[ accuracy ...
+    * There must be 2 tokens: TIMEEXTENT[ start, end ...
     */
-   if ( same < 1 )
+   if ( same < 2 )
    {
       ogc_error::set(err, OGC_ERR_WKT_INSUFFICIENT_TOKENS, obj_kwd(), same);
       return OGC_NULL;
    }
 
-   if ( same > 1 && get_strict_parsing() )
+   if ( same > 2 && get_strict_parsing() )
    {
       ogc_error::set(err, OGC_ERR_WKT_TOO_MANY_TOKENS,     obj_kwd(), same);
       return OGC_NULL;
@@ -159,7 +172,7 @@ ogc_opaccuracy * ogc_opaccuracy :: from_tokens(
     * Process all non-object tokens.
     * They come first and are syntactically fixed.
     */
-   accuracy = ogc_string::atod( arr[start++].str );
+   origin = arr[start++].str;
 
    /*---------------------------------------------------------
     * Now process all sub-objects
@@ -182,7 +195,7 @@ ogc_opaccuracy * ogc_opaccuracy :: from_tokens(
     */
    if ( !bad )
    {
-      obj = create(accuracy, err);
+      obj = create(origin, err);
    }
 
    if ( obj == OGC_NULL )
@@ -195,11 +208,11 @@ ogc_opaccuracy * ogc_opaccuracy :: from_tokens(
 /*------------------------------------------------------------------------
  * object from WKT
  */
-ogc_opaccuracy * ogc_opaccuracy :: from_wkt(
+ogc_time_origin * ogc_time_origin :: from_wkt(
    const char * wkt,
    ogc_error *  err)
 {
-   ogc_opaccuracy * obj = OGC_NULL;
+   ogc_time_origin * obj = OGC_NULL;
    ogc_token t;
 
    if ( t.tokenize(wkt, obj_kwd(), err) )
@@ -213,8 +226,8 @@ ogc_opaccuracy * ogc_opaccuracy :: from_wkt(
 /*------------------------------------------------------------------------
  * object to WKT
  */
-bool ogc_opaccuracy :: to_wkt(
-   const ogc_opaccuracy * obj,
+bool ogc_time_origin :: to_wkt(
+   const ogc_time_origin * obj,
    char      buffer[],
    int       options,
    size_t    buflen)
@@ -229,17 +242,16 @@ bool ogc_opaccuracy :: to_wkt(
    return obj->to_wkt(buffer, options, buflen);
 }
 
-bool ogc_opaccuracy :: to_wkt(
+bool ogc_time_origin :: to_wkt(
    char      buffer[],
    int       options,
    size_t    buflen) const
 {
-   OGC_TBUF     buf_hdr;
-   OGC_NBUF     buf_accuracy;
-   size_t       len   = 0;
-   bool         rc    = true;
-   const char * opn   = "[";
-   const char * cls   = "]";
+   OGC_TBUF      buf_hdr;
+   size_t        len   = 0;
+   bool          rc    = true;
+   const char *  opn   = "[";
+   const char *  cls   = "]";
    const char *  kwd   = obj_kwd();
 
    if ( (options & OGC_WKT_OPT_PARENS) != 0 )
@@ -252,13 +264,11 @@ bool ogc_opaccuracy :: to_wkt(
       return false;
    *buffer = 0;
 
-   if ( (options & OGC_WKT_OPT_OLD_SYNTAX) != 0 )
+   if ( (options & OGC_WKT_OPT_OLD_SYNTAX) == 0 )
       return true;
 
-   ogc_string :: dtoa(_accuracy, buf_accuracy);
-
-   sprintf(buf_hdr, "%s%s%s",
-      kwd, opn, buf_accuracy);
+   sprintf(buf_hdr, "%s%s\"%s\"",
+      kwd, opn, _origin);
 
    OGC_CPY_TO_BUF( buf_hdr );
    OGC_CPY_TO_BUF( cls     );
@@ -275,30 +285,30 @@ bool ogc_opaccuracy :: to_wkt(
 /*------------------------------------------------------------------------
  * clone
  */
-ogc_opaccuracy * ogc_opaccuracy :: clone(const ogc_opaccuracy * obj)
+ogc_time_origin * ogc_time_origin :: clone(const ogc_time_origin * obj)
 {
    if ( obj == OGC_NULL )
       return OGC_NULL;
    return obj->clone();
 }
 
-ogc_opaccuracy * ogc_opaccuracy :: clone() const
+ogc_time_origin * ogc_time_origin :: clone() const
 {
-   ogc_opaccuracy * p = create(_accuracy, OGC_NULL);
+   ogc_time_origin * p = create(_origin, OGC_NULL);
    return p;
 }
 
 /*------------------------------------------------------------------------
  * compare for computational equality
  */
-bool ogc_opaccuracy :: is_equal(
-   const ogc_opaccuracy * p1,
-   const ogc_opaccuracy * p2)
+bool ogc_time_origin :: is_equal(
+   const ogc_time_origin * p1,
+   const ogc_time_origin * p2)
 {
    if ( p1 == OGC_NULL && p2 == OGC_NULL ) return true;
    if ( p1 == OGC_NULL || p2 == OGC_NULL ) return false;
 
-   if ( !ogc_macros :: eq( p1->accuracy(), p2->accuracy() ) )
+   if ( !ogc_string :: is_equal( p1->origin(), p2->origin() ))
    {
       return false;
    }
@@ -306,8 +316,8 @@ bool ogc_opaccuracy :: is_equal(
    return true;
 }
 
-bool ogc_opaccuracy :: is_equal(
-   const ogc_opaccuracy * p) const
+bool ogc_time_origin :: is_equal(
+   const ogc_time_origin * p) const
 {
    return is_equal(this, p);
 }
@@ -315,14 +325,14 @@ bool ogc_opaccuracy :: is_equal(
 /*------------------------------------------------------------------------
  * compare
  */
-bool ogc_opaccuracy :: is_identical(
-   const ogc_opaccuracy * p1,
-   const ogc_opaccuracy * p2)
+bool ogc_time_origin :: is_identical(
+   const ogc_time_origin * p1,
+   const ogc_time_origin * p2)
 {
    if ( p1 == OGC_NULL && p2 == OGC_NULL ) return true;
    if ( p1 == OGC_NULL || p2 == OGC_NULL ) return false;
 
-   if ( !ogc_macros :: eq( p1->accuracy(), p2->accuracy() ) )
+   if ( !ogc_string :: is_equal( p1->origin(), p2->origin() ))
    {
       return false;
    }
@@ -330,8 +340,8 @@ bool ogc_opaccuracy :: is_identical(
    return true;
 }
 
-bool ogc_opaccuracy :: is_identical(
-   const ogc_opaccuracy * p) const
+bool ogc_time_origin :: is_identical(
+   const ogc_time_origin * p) const
 {
    return is_identical(this, p);
 }

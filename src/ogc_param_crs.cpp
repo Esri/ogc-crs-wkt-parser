@@ -22,24 +22,24 @@
 
 namespace OGC {
 
-const char * ogc_parametric_crs :: obj_kwd() { return OGC_OBJ_KWD_PARAMETRIC_CRS; }
+const char * ogc_param_crs :: obj_kwd() { return OGC_OBJ_KWD_PARAM_CRS; }
 
 /*------------------------------------------------------------------------
  * create
  */
-ogc_parametric_crs * ogc_parametric_crs :: create(
-   const char *         name,
-   ogc_generic_datum *  datum,
-   ogc_cs *             cs,
-   ogc_axis *           axis_1,
-   ogc_paramunit *      paramunit,
-   ogc_scope *          scope,
-   ogc_vector *         extents,
-   ogc_vector *         ids,
-   ogc_remark *         remark,
-   ogc_error *          err)
+ogc_param_crs * ogc_param_crs :: create(
+   const char *       name,
+   ogc_param_datum *  datum,
+   ogc_cs *           cs,
+   ogc_axis *         axis_1,
+   ogc_paramunit *    paramunit,
+   ogc_scope *        scope,
+   ogc_vector *       extents,
+   ogc_vector *       ids,
+   ogc_remark *       remark,
+   ogc_error *        err)
 {
-   ogc_parametric_crs * p = OGC_NULL;
+   ogc_param_crs * p = OGC_NULL;
    bool bad = false;
 
    /*---------------------------------------------------------
@@ -70,7 +70,7 @@ ogc_parametric_crs * ogc_parametric_crs :: create(
       ogc_error::set(err, OGC_ERR_MISSING_CS, obj_kwd());
       bad = true;
    }
-   else if ( !ogc_utils::validate_cs(OGC_OBJ_TYPE_PARAMETRIC_CRS, cs,
+   else if ( !ogc_utils::validate_cs(OGC_OBJ_TYPE_PARAM_CRS, cs,
                                      axis_1, OGC_NULL, OGC_NULL, paramunit, err) )
    {
       bad = true;
@@ -81,7 +81,7 @@ ogc_parametric_crs * ogc_parametric_crs :: create(
     */
    if ( !bad )
    {
-      p = new (std::nothrow) ogc_parametric_crs();
+      p = new (std::nothrow) ogc_param_crs();
       if ( p == OGC_NULL )
       {
          ogc_error::set(err, OGC_ERR_NO_MEMORY, obj_kwd());
@@ -89,8 +89,8 @@ ogc_parametric_crs * ogc_parametric_crs :: create(
       }
 
       ogc_string::unescape_str(p->_name, name, OGC_NAME_MAX);
-      p->_obj_type = OGC_OBJ_TYPE_PARAMETRIC_CRS;
-      p->_crs_type = OGC_CRS_TYPE_PARAMETRIC;
+      p->_obj_type = OGC_OBJ_TYPE_PARAM_CRS;
+      p->_crs_type = OGC_CRS_TYPE_PARAM;
       p->_cs       = cs;
       p->_datum    = datum;
       p->_axis_1   = axis_1;
@@ -109,13 +109,13 @@ ogc_parametric_crs * ogc_parametric_crs :: create(
 /*------------------------------------------------------------------------
  * destroy
  */
-ogc_parametric_crs :: ~ogc_parametric_crs()
+ogc_param_crs :: ~ogc_param_crs()
 {
-   ogc_generic_datum :: destroy( _datum );
+   ogc_param_datum :: destroy( _datum );
 }
 
-void ogc_parametric_crs :: destroy(
-   ogc_parametric_crs * obj)
+void ogc_param_crs :: destroy(
+   ogc_param_crs * obj)
 {
    if ( obj != OGC_NULL )
    {
@@ -126,7 +126,7 @@ void ogc_parametric_crs :: destroy(
 /*------------------------------------------------------------------------
  * object from tokens
  */
-ogc_parametric_crs * ogc_parametric_crs :: from_tokens(
+ogc_param_crs * ogc_param_crs :: from_tokens(
    const ogc_token * t,
    int               start,
    int *             pend,
@@ -140,18 +140,18 @@ ogc_parametric_crs * ogc_parametric_crs :: from_tokens(
    int  same;
    int  num;
 
-   ogc_parametric_crs *  obj     = OGC_NULL;
-   ogc_generic_datum *   datum   = OGC_NULL;
-   ogc_cs *              cs      = OGC_NULL;
-   ogc_axis *            axis    = OGC_NULL;
-   ogc_axis *            axis_1  = OGC_NULL;
-   ogc_paramunit *       unit    = OGC_NULL;
-   ogc_scope *           scope   = OGC_NULL;
-   ogc_extent *          extent  = OGC_NULL;
-   ogc_vector *          extents = OGC_NULL;
-   ogc_id *              id      = OGC_NULL;
-   ogc_vector *          ids     = OGC_NULL;
-   ogc_remark *          remark  = OGC_NULL;
+   ogc_param_crs *  obj     = OGC_NULL;
+   ogc_param_datum *   datum   = OGC_NULL;
+   ogc_cs *            cs      = OGC_NULL;
+   ogc_axis *          axis    = OGC_NULL;
+   ogc_axis *          axis_1  = OGC_NULL;
+   ogc_paramunit *     unit    = OGC_NULL;
+   ogc_scope *         scope   = OGC_NULL;
+   ogc_extent *        extent  = OGC_NULL;
+   ogc_vector *        extents = OGC_NULL;
+   ogc_id *            id      = OGC_NULL;
+   ogc_vector *        ids     = OGC_NULL;
+   ogc_remark *        remark  = OGC_NULL;
    const char * name;
 
    /*---------------------------------------------------------
@@ -228,7 +228,7 @@ ogc_parametric_crs * ogc_parametric_crs :: from_tokens(
    int  next = 0;
    for (int i = start; i < end; i = next)
    {
-      if ( ogc_string::is_equal(arr[i].str, ogc_generic_datum::obj_kwd()) )
+      if ( ogc_string::is_equal(arr[i].str, ogc_param_datum::obj_kwd()) )
       {
          if ( datum != OGC_NULL )
          {
@@ -237,7 +237,7 @@ ogc_parametric_crs * ogc_parametric_crs :: from_tokens(
          }
          else
          {
-            datum = ogc_generic_datum::from_tokens(t, i, &next, err);
+            datum = ogc_param_datum::from_tokens(t, i, &next, err);
             if ( datum == OGC_NULL )
                bad = true;
          }
@@ -363,8 +363,7 @@ ogc_parametric_crs * ogc_parametric_crs :: from_tokens(
          continue;
       }
 
-      if ( ogc_string::is_equal(arr[i].str, ogc_id::obj_kwd()) ||
-           ogc_string::is_equal(arr[i].str, ogc_id::alt_kwd()) )
+      if ( ogc_string::is_equal(arr[i].str, ogc_id::obj_kwd()) )
       {
          id = ogc_id::from_tokens(t, i, &next, err);
          if ( id == OGC_NULL )
@@ -446,14 +445,14 @@ ogc_parametric_crs * ogc_parametric_crs :: from_tokens(
 
    if ( obj == OGC_NULL )
    {
-      ogc_generic_datum  :: destroy( datum   );
-      ogc_cs             :: destroy( cs      );
-      ogc_axis           :: destroy( axis_1  );
-      ogc_unit           :: destroy( unit    );
-      ogc_scope          :: destroy( scope   );
-      ogc_vector         :: destroy( extents );
-      ogc_vector         :: destroy( ids     );
-      ogc_remark         :: destroy( remark  );
+      ogc_param_datum  :: destroy( datum   );
+      ogc_cs           :: destroy( cs      );
+      ogc_axis         :: destroy( axis_1  );
+      ogc_unit         :: destroy( unit    );
+      ogc_scope        :: destroy( scope   );
+      ogc_vector       :: destroy( extents );
+      ogc_vector       :: destroy( ids     );
+      ogc_remark       :: destroy( remark  );
    }
 
    return obj;
@@ -462,11 +461,11 @@ ogc_parametric_crs * ogc_parametric_crs :: from_tokens(
 /*------------------------------------------------------------------------
  * object from WKT
  */
-ogc_parametric_crs * ogc_parametric_crs :: from_wkt(
+ogc_param_crs * ogc_param_crs :: from_wkt(
    const char * wkt,
    ogc_error *  err)
 {
-   ogc_parametric_crs * obj = OGC_NULL;
+   ogc_param_crs * obj = OGC_NULL;
    ogc_token t;
 
    if ( t.tokenize(wkt, obj_kwd(), err) )
@@ -480,8 +479,8 @@ ogc_parametric_crs * ogc_parametric_crs :: from_wkt(
 /*------------------------------------------------------------------------
  * object to WKT
  */
-bool ogc_parametric_crs :: to_wkt(
-   const ogc_parametric_crs * obj,
+bool ogc_param_crs :: to_wkt(
+   const ogc_param_crs * obj,
    char      buffer[],
    int       options,
    size_t    buflen)
@@ -496,7 +495,7 @@ bool ogc_parametric_crs :: to_wkt(
    return obj->to_wkt(buffer, options, buflen);
 }
 
-bool ogc_parametric_crs :: to_wkt(
+bool ogc_param_crs :: to_wkt(
    char      buffer[],
    int       options,
    size_t    buflen) const
@@ -533,7 +532,7 @@ bool ogc_parametric_crs :: to_wkt(
    if ( (opts & OGC_WKT_OPT_OLD_SYNTAX) != 0 )
       return true;
 
-   rc &= ogc_generic_datum :: to_wkt(_datum,  buf_datum,  opts, OGC_TBUF_MAX);
+   rc &= ogc_param_datum :: to_wkt(_datum,  buf_datum,  opts, OGC_TBUF_MAX);
    rc &= ogc_cs            :: to_wkt(_cs,     buf_cs,     opts, OGC_TBUF_MAX);
    rc &= ogc_axis          :: to_wkt(_axis_1, buf_axis_1, opts, OGC_TBUF_MAX);
    rc &= ogc_unit          :: to_wkt(_unit,   buf_unit,   opts, OGC_TBUF_MAX);
@@ -582,27 +581,27 @@ bool ogc_parametric_crs :: to_wkt(
 /*------------------------------------------------------------------------
  * clone
  */
-ogc_parametric_crs * ogc_parametric_crs :: clone(const ogc_parametric_crs * obj)
+ogc_param_crs * ogc_param_crs :: clone(const ogc_param_crs * obj)
 {
    if ( obj == OGC_NULL )
       return OGC_NULL;
    return obj->clone();
 }
 
-ogc_parametric_crs * ogc_parametric_crs :: clone() const
+ogc_param_crs * ogc_param_crs :: clone() const
 {
    ogc_paramunit * u = reinterpret_cast<ogc_paramunit *>(_unit);
 
-   ogc_generic_datum *  datum     = ogc_generic_datum :: clone( _datum   );
-   ogc_cs *             cs        = ogc_cs            :: clone( _cs      );
-   ogc_axis *           axis_1    = ogc_axis          :: clone( _axis_1  );
-   ogc_paramunit *      paramunit = ogc_paramunit     :: clone( u        );
-   ogc_scope *          scope     = ogc_scope         :: clone( _scope   );
-   ogc_vector *         extents   = ogc_vector        :: clone( _extents );
-   ogc_vector *         ids       = ogc_vector        :: clone( _ids     );
-   ogc_remark *         remark    = ogc_remark        :: clone( _remark  );
+   ogc_param_datum *  datum     = ogc_param_datum :: clone( _datum   );
+   ogc_cs *           cs        = ogc_cs          :: clone( _cs      );
+   ogc_axis *         axis_1    = ogc_axis        :: clone( _axis_1  );
+   ogc_paramunit *    paramunit = ogc_paramunit   :: clone( u        );
+   ogc_scope *        scope     = ogc_scope       :: clone( _scope   );
+   ogc_vector *       extents   = ogc_vector      :: clone( _extents );
+   ogc_vector *       ids       = ogc_vector      :: clone( _ids     );
+   ogc_remark *       remark    = ogc_remark      :: clone( _remark  );
 
-   ogc_parametric_crs * p = create(_name,
+   ogc_param_crs * p = create(_name,
                                    datum,
                                    cs,
                                    axis_1,
@@ -614,14 +613,14 @@ ogc_parametric_crs * ogc_parametric_crs :: clone() const
                                    OGC_NULL);
    if ( p == OGC_NULL )
    {
-      ogc_generic_datum :: destroy( datum     );
-      ogc_cs            :: destroy( cs        );
-      ogc_axis          :: destroy( axis_1    );
-      ogc_paramunit     :: destroy( paramunit );
-      ogc_scope         :: destroy( scope     );
-      ogc_vector        :: destroy( extents   );
-      ogc_vector        :: destroy( ids       );
-      ogc_remark        :: destroy( remark    );
+      ogc_param_datum :: destroy( datum     );
+      ogc_cs          :: destroy( cs        );
+      ogc_axis        :: destroy( axis_1    );
+      ogc_paramunit   :: destroy( paramunit );
+      ogc_scope       :: destroy( scope     );
+      ogc_vector      :: destroy( extents   );
+      ogc_vector      :: destroy( ids       );
+      ogc_remark      :: destroy( remark    );
    }
 
    return p;
@@ -630,18 +629,18 @@ ogc_parametric_crs * ogc_parametric_crs :: clone() const
 /*------------------------------------------------------------------------
  * compare for computational equality
  */
-bool ogc_parametric_crs :: is_equal(
-   const ogc_parametric_crs * p1,
-   const ogc_parametric_crs * p2)
+bool ogc_param_crs :: is_equal(
+   const ogc_param_crs * p1,
+   const ogc_param_crs * p2)
 {
    if ( p1 == OGC_NULL && p2 == OGC_NULL ) return true;
    if ( p1 == OGC_NULL || p2 == OGC_NULL ) return false;
 
-   if ( !ogc_string        :: is_equal( p1->name(),      p2->name()      ) ||
-        !ogc_generic_datum :: is_equal( p1->datum(),     p2->datum()     ) ||
-        !ogc_cs            :: is_equal( p1->cs(),        p2->cs()        ) ||
-        !ogc_axis          :: is_equal( p1->axis_1(),    p2->axis_1()    ) ||
-        !ogc_paramunit     :: is_equal( p1->paramunit(), p2->paramunit() ) )
+   if ( !ogc_string      :: is_equal( p1->name(),      p2->name()      ) ||
+        !ogc_param_datum :: is_equal( p1->datum(),     p2->datum()     ) ||
+        !ogc_cs          :: is_equal( p1->cs(),        p2->cs()        ) ||
+        !ogc_axis        :: is_equal( p1->axis_1(),    p2->axis_1()    ) ||
+        !ogc_paramunit   :: is_equal( p1->paramunit(), p2->paramunit() ) )
    {
       return false;
    }
@@ -649,8 +648,8 @@ bool ogc_parametric_crs :: is_equal(
    return true;
 }
 
-bool ogc_parametric_crs :: is_equal(
-   const ogc_parametric_crs * p) const
+bool ogc_param_crs :: is_equal(
+   const ogc_param_crs * p) const
 {
    return is_equal(this, p);
 }
@@ -658,22 +657,22 @@ bool ogc_parametric_crs :: is_equal(
 /*------------------------------------------------------------------------
  * compare
  */
-bool ogc_parametric_crs :: is_identical(
-   const ogc_parametric_crs * p1,
-   const ogc_parametric_crs * p2)
+bool ogc_param_crs :: is_identical(
+   const ogc_param_crs * p1,
+   const ogc_param_crs * p2)
 {
    if ( p1 == OGC_NULL && p2 == OGC_NULL ) return true;
    if ( p1 == OGC_NULL || p2 == OGC_NULL ) return false;
 
-   if ( !ogc_string        :: is_equal    ( p1->name(),      p2->name()      ) ||
-        !ogc_generic_datum :: is_identical( p1->datum(),     p2->datum()     ) ||
-        !ogc_cs            :: is_identical( p1->cs(),        p2->cs()        ) ||
-        !ogc_axis          :: is_identical( p1->axis_1(),    p2->axis_1()    ) ||
-        !ogc_paramunit     :: is_identical( p1->paramunit(), p2->paramunit() ) ||
-        !ogc_scope         :: is_identical( p1->scope(),     p2->scope()     ) ||
-        !ogc_vector        :: is_identical( p1->extents(),   p2->extents()   ) ||
-        !ogc_vector        :: is_identical( p1->ids(),       p2->ids()       ) ||
-        !ogc_remark        :: is_identical( p1->remark(),    p2->remark()    ) )
+   if ( !ogc_string      :: is_equal    ( p1->name(),      p2->name()      ) ||
+        !ogc_param_datum :: is_identical( p1->datum(),     p2->datum()     ) ||
+        !ogc_cs          :: is_identical( p1->cs(),        p2->cs()        ) ||
+        !ogc_axis        :: is_identical( p1->axis_1(),    p2->axis_1()    ) ||
+        !ogc_paramunit   :: is_identical( p1->paramunit(), p2->paramunit() ) ||
+        !ogc_scope       :: is_identical( p1->scope(),     p2->scope()     ) ||
+        !ogc_vector      :: is_identical( p1->extents(),   p2->extents()   ) ||
+        !ogc_vector      :: is_identical( p1->ids(),       p2->ids()       ) ||
+        !ogc_remark      :: is_identical( p1->remark(),    p2->remark()    ) )
    {
       return false;
    }
@@ -681,8 +680,8 @@ bool ogc_parametric_crs :: is_identical(
    return true;
 }
 
-bool ogc_parametric_crs :: is_identical(
-   const ogc_parametric_crs * p) const
+bool ogc_param_crs :: is_identical(
+   const ogc_param_crs * p) const
 {
    return is_identical(this, p);
 }

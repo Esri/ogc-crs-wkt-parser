@@ -22,8 +22,6 @@
 
 namespace OGC {
 
-const char * ogc_datum :: obj_kwd() { return OGC_OBJ_KWD_DATUM; }
-
 /*------------------------------------------------------------------------
  * destroy
  */
@@ -63,8 +61,12 @@ ogc_datum * ogc_datum :: from_tokens(
    if ( ogc_string::is_equal(kwd, ogc_##n :: obj_kwd()) ) \
       return ogc_##n :: from_tokens(t, start, pend, err)
 
-   CHECK( GENERIC_DATUM,  generic_datum  );
-   CHECK( GEODETIC_DATUM, geodetic_datum );
+   CHECK( ENGR_DATUM,     engr_datum     );
+   CHECK( GEOD_DATUM,     geod_datum     );
+   CHECK( IMAGE_DATUM,    image_datum    );
+   CHECK( PARAM_DATUM,    param_datum    );
+   CHECK( TIME_DATUM,     time_datum     );
+   CHECK( VERT_DATUM,     vert_datum     );
 
 #  undef CHECK
 
@@ -124,8 +126,12 @@ bool ogc_datum :: to_wkt(
          return (reinterpret_cast<const ogc_##n *>(this))-> \
                 to_wkt(buffer, options, buflen)
 
-   CASE( GENERIC_DATUM,  generic_datum  );
-   CASE( GEODETIC_DATUM, geodetic_datum );
+   CASE( ENGR_DATUM,     engr_datum     );
+   CASE( GEOD_DATUM,     geod_datum     );
+   CASE( IMAGE_DATUM,    image_datum    );
+   CASE( PARAM_DATUM,    param_datum    );
+   CASE( TIME_DATUM,     time_datum     );
+   CASE( VERT_DATUM,     vert_datum     );
 
 #  undef CASE
 
@@ -154,8 +160,12 @@ ogc_datum * ogc_datum :: clone() const
       case OGC_OBJ_TYPE_##o: \
          return (reinterpret_cast<const ogc_##n *>(this))->clone()
 
-   CASE( GENERIC_DATUM,  generic_datum  );
-   CASE( GEODETIC_DATUM, geodetic_datum );
+   CASE( ENGR_DATUM,     engr_datum     );
+   CASE( GEOD_DATUM,     geod_datum     );
+   CASE( IMAGE_DATUM,    image_datum    );
+   CASE( PARAM_DATUM,    param_datum    );
+   CASE( TIME_DATUM,     time_datum     );
+   CASE( VERT_DATUM,     vert_datum     );
 
 #  undef CASE
 
@@ -184,8 +194,12 @@ bool ogc_datum :: is_equal(
          return ogc_##n::is_equal(reinterpret_cast<const ogc_##n *>(p1), \
                                   reinterpret_cast<const ogc_##n *>(p2))
 
-   CASE( GENERIC_DATUM,  generic_datum  );
-   CASE( GEODETIC_DATUM, geodetic_datum );
+   CASE( ENGR_DATUM,     engr_datum     );
+   CASE( GEOD_DATUM,     geod_datum     );
+   CASE( IMAGE_DATUM,    image_datum    );
+   CASE( PARAM_DATUM,    param_datum    );
+   CASE( TIME_DATUM,     time_datum     );
+   CASE( VERT_DATUM,     vert_datum     );
 
 #  undef CASE
 
@@ -220,8 +234,12 @@ bool ogc_datum :: is_identical(
          return ogc_##n::is_identical(reinterpret_cast<const ogc_##n *>(p1), \
                                       reinterpret_cast<const ogc_##n *>(p2))
 
-   CASE( GENERIC_DATUM,  generic_datum  );
-   CASE( GEODETIC_DATUM, geodetic_datum );
+   CASE( ENGR_DATUM,     engr_datum     );
+   CASE( GEOD_DATUM,     geod_datum     );
+   CASE( IMAGE_DATUM,    image_datum    );
+   CASE( PARAM_DATUM,    param_datum    );
+   CASE( TIME_DATUM,     time_datum     );
+   CASE( VERT_DATUM,     vert_datum     );
 
 #  undef CASE
 

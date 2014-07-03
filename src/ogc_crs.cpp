@@ -22,8 +22,6 @@
 
 namespace OGC {
 
-const char * ogc_crs :: obj_kwd() { return OGC_OBJ_KWD_CRS; }
-
 /*------------------------------------------------------------------------
  * destroy
  */
@@ -69,21 +67,19 @@ ogc_crs * ogc_crs :: from_tokens(
    if ( ogc_string::is_equal(kwd, ogc_##n :: obj_kwd()) ) \
       return ogc_##n :: from_tokens(t, start, pend, err)
 
-   CHECK( ENGINEERING_CRS, engineering_crs );
-   CHECK( GEOCENTRIC_CRS,  geocentric_crs  );
-   CHECK( GEOG2D_CRS,      geog2d_crs      );
-   CHECK( GEOG3D_CRS,      geog3d_crs      );
-   CHECK( IMAGE_CRS,       image_crs       );
-   CHECK( PARAMETRIC_CRS,  parametric_crs  );
-   CHECK( PROJECTED_CRS,   projected_crs   );
-   CHECK( TEMPORAL_CRS,    temporal_crs    );
-   CHECK( VERTICAL_CRS,    vertical_crs    );
-   CHECK( COMPOUND_CRS,    compound_crs    );
+   CHECK( ENGR_CRS,     engr_crs     );
+   CHECK( GEOD_CRS,     geod_crs     );
+   CHECK( IMAGE_CRS,    image_crs    );
+   CHECK( PARAM_CRS,    param_crs    );
+   CHECK( PROJ_CRS,     proj_crs     );
+   CHECK( TIME_CRS,     time_crs     );
+   CHECK( VERT_CRS,     vert_crs     );
+   CHECK( COMPOUND_CRS, compound_crs );
 
    /* legacy object keywords */
 
-   CHECK( GEOGCS,          geog2d_crs      );
-   CHECK( PROJCS,          projected_crs   );
+   CHECK( GEOGCS,       geod_crs     );
+   CHECK( PROJCS,       proj_crs     );
 
 #  undef CHECK
 
@@ -143,16 +139,14 @@ bool ogc_crs :: to_wkt(
          return (reinterpret_cast<const ogc_##n *>(this))-> \
                 to_wkt(buffer, options, buflen)
 
-   CASE( ENGINEERING_CRS, engineering_crs );
-   CASE( GEOCENTRIC_CRS,  geocentric_crs  );
-   CASE( GEOG2D_CRS,      geog2d_crs      );
-   CASE( GEOG3D_CRS,      geog3d_crs      );
-   CASE( IMAGE_CRS,       image_crs       );
-   CASE( PARAMETRIC_CRS,  parametric_crs  );
-   CASE( PROJECTED_CRS,   projected_crs   );
-   CASE( TEMPORAL_CRS,    temporal_crs    );
-   CASE( VERTICAL_CRS,    vertical_crs    );
-   CASE( COMPOUND_CRS,    compound_crs    );
+   CASE( ENGR_CRS,     engr_crs     );
+   CASE( GEOD_CRS,     geod_crs     );
+   CASE( IMAGE_CRS,    image_crs    );
+   CASE( PARAM_CRS,    param_crs    );
+   CASE( PROJ_CRS,     proj_crs     );
+   CASE( TIME_CRS,     time_crs     );
+   CASE( VERT_CRS,     vert_crs     );
+   CASE( COMPOUND_CRS, compound_crs );
 
 #  undef CASE
 
@@ -181,16 +175,14 @@ ogc_crs * ogc_crs :: clone() const
       case OGC_OBJ_TYPE_##o: \
          return (reinterpret_cast<const ogc_##n *>(this))->clone()
 
-   CASE( ENGINEERING_CRS, engineering_crs );
-   CASE( GEOCENTRIC_CRS,  geocentric_crs  );
-   CASE( GEOG2D_CRS,      geog2d_crs      );
-   CASE( GEOG3D_CRS,      geog3d_crs      );
-   CASE( IMAGE_CRS,       image_crs       );
-   CASE( PARAMETRIC_CRS,  parametric_crs  );
-   CASE( PROJECTED_CRS,   projected_crs   );
-   CASE( TEMPORAL_CRS,    temporal_crs    );
-   CASE( VERTICAL_CRS,    vertical_crs    );
-   CASE( COMPOUND_CRS,    compound_crs    );
+   CASE( ENGR_CRS,     engr_crs     );
+   CASE( GEOD_CRS,     geod_crs     );
+   CASE( IMAGE_CRS,    image_crs    );
+   CASE( PARAM_CRS,    param_crs    );
+   CASE( PROJ_CRS,     proj_crs     );
+   CASE( TIME_CRS,     time_crs     );
+   CASE( VERT_CRS,     vert_crs     );
+   CASE( COMPOUND_CRS, compound_crs );
 
 #  undef CASE
 
@@ -219,16 +211,14 @@ bool ogc_crs :: is_equal(
          return ogc_##n::is_equal(reinterpret_cast<const ogc_##n *>(p1), \
                                   reinterpret_cast<const ogc_##n *>(p2))
 
-   CASE( ENGINEERING_CRS, engineering_crs );
-   CASE( GEOCENTRIC_CRS,  geocentric_crs  );
-   CASE( GEOG2D_CRS,      geog2d_crs      );
-   CASE( GEOG3D_CRS,      geog3d_crs      );
-   CASE( IMAGE_CRS,       image_crs       );
-   CASE( PARAMETRIC_CRS,  parametric_crs  );
-   CASE( PROJECTED_CRS,   projected_crs   );
-   CASE( TEMPORAL_CRS,    temporal_crs    );
-   CASE( VERTICAL_CRS,    vertical_crs    );
-   CASE( COMPOUND_CRS,    compound_crs    );
+   CASE( ENGR_CRS,     engr_crs     );
+   CASE( GEOD_CRS,     geod_crs     );
+   CASE( IMAGE_CRS,    image_crs    );
+   CASE( PARAM_CRS,    param_crs    );
+   CASE( PROJ_CRS,     proj_crs     );
+   CASE( TIME_CRS,     time_crs     );
+   CASE( VERT_CRS,     vert_crs     );
+   CASE( COMPOUND_CRS, compound_crs );
 
 #  undef CASE
 
@@ -263,16 +253,14 @@ bool ogc_crs :: is_identical(
          return ogc_##n::is_identical(reinterpret_cast<const ogc_##n *>(p1), \
                                       reinterpret_cast<const ogc_##n *>(p2))
 
-   CASE( ENGINEERING_CRS, engineering_crs );
-   CASE( GEOCENTRIC_CRS,  geocentric_crs  );
-   CASE( GEOG2D_CRS,      geog2d_crs      );
-   CASE( GEOG3D_CRS,      geog3d_crs      );
-   CASE( IMAGE_CRS,       image_crs       );
-   CASE( PARAMETRIC_CRS,  parametric_crs  );
-   CASE( PROJECTED_CRS,   projected_crs   );
-   CASE( TEMPORAL_CRS,    temporal_crs    );
-   CASE( VERTICAL_CRS,    vertical_crs    );
-   CASE( COMPOUND_CRS,    compound_crs    );
+   CASE( ENGR_CRS,     engr_crs     );
+   CASE( GEOD_CRS,     geod_crs     );
+   CASE( IMAGE_CRS,    image_crs    );
+   CASE( PARAM_CRS,    param_crs    );
+   CASE( PROJ_CRS,     proj_crs     );
+   CASE( TIME_CRS,     time_crs     );
+   CASE( VERT_CRS,     vert_crs     );
+   CASE( COMPOUND_CRS, compound_crs );
 
 #  undef CASE
 

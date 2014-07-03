@@ -24,8 +24,6 @@ namespace OGC {
 
 bool         ogc_object :: _strict_parsing = true;
 
-const char * ogc_object :: obj_kwd() { return OGC_OBJ_KWD_OBJECT; }
-
 /*------------------------------------------------------------------------
  * strict parsing
  */
@@ -87,49 +85,71 @@ ogc_object * ogc_object :: from_tokens(
    CHECK( CITATION,        citation        );
    CHECK( COMPOUND_CRS,    compound_crs    );
    CHECK( CONVERSION,      conversion      );
-   CHECK( COORDOP,         coordop         );
+   CHECK( COORD_OP,        coord_op        );
    CHECK( CS,              cs              );
    CHECK( ELLIPSOID,       ellipsoid       );
-   CHECK( ENGINEERING_CRS, engineering_crs );
-   CHECK( GENERIC_DATUM,   generic_datum   );
-   CHECK( GEOCENTRIC_CRS,  geocentric_crs  );
-   CHECK( GEODETIC_DATUM,  geodetic_datum  );
-   CHECK( GEOG2D_CRS,      geog2d_crs      );
-   CHECK( GEOG3D_CRS,      geog3d_crs      );
+   CHECK( ENGR_CRS,        engr_crs        );
+   CHECK( ENGR_DATUM,      engr_datum      );
+   CHECK( GEOD_CRS,        geod_crs        );
+   CHECK( GEOD_DATUM,      geod_datum      );
    CHECK( ID,              id              );
    CHECK( IMAGE_CRS,       image_crs       );
+   CHECK( IMAGE_DATUM,     image_datum     );
    CHECK( LENUNIT,         lenunit         );
    CHECK( MERIDIAN,        meridian        );
    CHECK( METHOD,          method          );
-   CHECK( OPACCURACY,      opaccuracy      );
+   CHECK( OP_ACCURACY,     op_accuracy     );
    CHECK( ORDER,           order           );
    CHECK( PARAMETER,       parameter       );
    CHECK( PARAMETER_FILE,  parameter_file  );
-   CHECK( PARAMETRIC_CRS,  parametric_crs  );
+   CHECK( PARAM_CRS,       param_crs       );
+   CHECK( PARAM_DATUM,     param_datum     );
    CHECK( PARAMUNIT,       paramunit       );
    CHECK( PRIMEM,          primem          );
-   CHECK( PROJECTED_CRS,   projected_crs   );
+   CHECK( PROJ_CRS,        proj_crs        );
    CHECK( REMARK,          remark          );
    CHECK( SCALEUNIT,       scaleunit       );
    CHECK( SCOPE,           scope           );
-   CHECK( TEMPORAL_CRS,    temporal_crs    );
+   CHECK( TIME_CRS,        time_crs        );
+   CHECK( TIME_DATUM,      time_datum      );
    CHECK( TIME_EXTENT,     time_extent     );
    CHECK( TIMEUNIT,        timeunit        );
    CHECK( UNIT,            unit            );
    CHECK( URI,             uri             );
+   CHECK( VERT_CRS,        vert_crs        );
+   CHECK( VERT_DATUM,      vert_datum      );
    CHECK( VERT_EXTENT,     vert_extent     );
-   CHECK( VERTICAL_CRS,    vertical_crs    );
+
+#  undef CHECK
+
+#  define CHECK(o,n) \
+   if ( ogc_string::is_equal(kwd, ogc_##n :: alt_kwd()) ) \
+      return ogc_##n :: from_tokens(t, start, pend, err)
 
    /* alternate object keywords */
 
+   CHECK( ENGR_DATUM,      engr_datum      );
+   CHECK( GEOD_DATUM,      geod_datum      );
+   CHECK( IMAGE_DATUM,     image_datum     );
+   CHECK( PARAM_DATUM,     param_datum     );
+   CHECK( TIME_DATUM,      time_datum      );
+   CHECK( VERT_DATUM,      vert_datum      );
+
+   CHECK( ENGR_CRS,        engr_crs        );
+   CHECK( GEOD_CRS,        geod_crs        );
+   CHECK( PROJ_CRS,        proj_crs        );
+   CHECK( VERT_CRS,        vert_crs        );
+
    CHECK( SPHEROID,        ellipsoid       );
-   CHECK( AUTHORITY,       id              );
    CHECK( PROJECTION,      method          );
 
-   /* legacy object keywords */
+#  undef CHECK
 
-   CHECK( GEOGCS,          geog2d_crs      );
-   CHECK( PROJCS,          projected_crs   );
+#  define CHECK(o,n) \
+   if ( ogc_string::is_equal(kwd, ogc_##n :: old_kwd()) ) \
+      return ogc_##n :: from_tokens(t, start, pend, err)
+
+   /* legacy object keywords */
 
 #  undef CHECK
 
@@ -200,38 +220,40 @@ bool ogc_object :: to_wkt(
    CASE( CITATION,        citation        );
    CASE( COMPOUND_CRS,    compound_crs    );
    CASE( CONVERSION,      conversion      );
-   CASE( COORDOP,         coordop         );
+   CASE( COORD_OP,        coord_op        );
    CASE( CS,              cs              );
    CASE( ELLIPSOID,       ellipsoid       );
-   CASE( ENGINEERING_CRS, engineering_crs );
-   CASE( GENERIC_DATUM,   generic_datum   );
-   CASE( GEOCENTRIC_CRS,  geocentric_crs  );
-   CASE( GEODETIC_DATUM,  geodetic_datum  );
-   CASE( GEOG2D_CRS,      geog2d_crs      );
-   CASE( GEOG3D_CRS,      geog3d_crs      );
+   CASE( ENGR_CRS,        engr_crs        );
+   CASE( ENGR_DATUM,      engr_datum      );
+   CASE( GEOD_CRS,        geod_crs        );
+   CASE( GEOD_DATUM,      geod_datum      );
    CASE( ID,              id              );
    CASE( IMAGE_CRS,       image_crs       );
+   CASE( IMAGE_DATUM,     image_datum     );
    CASE( LENUNIT,         lenunit         );
    CASE( MERIDIAN,        meridian        );
    CASE( METHOD,          method          );
-   CASE( OPACCURACY,      opaccuracy      );
+   CASE( OP_ACCURACY,     op_accuracy     );
    CASE( ORDER,           order           );
    CASE( PARAMETER,       parameter       );
    CASE( PARAMETER_FILE,  parameter_file  );
-   CASE( PARAMETRIC_CRS,  parametric_crs  );
+   CASE( PARAM_CRS,       param_crs       );
+   CASE( PARAM_DATUM,     param_datum     );
    CASE( PARAMUNIT,       paramunit       );
    CASE( PRIMEM,          primem          );
-   CASE( PROJECTED_CRS,   projected_crs   );
+   CASE( PROJ_CRS,        proj_crs        );
    CASE( REMARK,          remark          );
    CASE( SCALEUNIT,       scaleunit       );
    CASE( SCOPE,           scope           );
-   CASE( TEMPORAL_CRS,    temporal_crs    );
+   CASE( TIME_CRS,        time_crs        );
+   CASE( TIME_DATUM,      time_datum      );
    CASE( TIME_EXTENT,     time_extent     );
    CASE( TIMEUNIT,        timeunit        );
    CASE( UNIT,            unit            );
    CASE( URI,             uri             );
+   CASE( VERT_CRS,        vert_crs        );
+   CASE( VERT_DATUM,      vert_datum      );
    CASE( VERT_EXTENT,     vert_extent     );
-   CASE( VERTICAL_CRS,    vertical_crs    );
 
 #  undef CASE
 
@@ -271,38 +293,40 @@ ogc_object * ogc_object :: clone() const
    CASE( CITATION,        citation        );
    CASE( COMPOUND_CRS,    compound_crs    );
    CASE( CONVERSION,      conversion      );
-   CASE( COORDOP,         coordop         );
+   CASE( COORD_OP,        coord_op        );
    CASE( CS,              cs              );
    CASE( ELLIPSOID,       ellipsoid       );
-   CASE( ENGINEERING_CRS, engineering_crs );
-   CASE( GENERIC_DATUM,   generic_datum   );
-   CASE( GEOCENTRIC_CRS,  geocentric_crs  );
-   CASE( GEODETIC_DATUM,  geodetic_datum  );
-   CASE( GEOG2D_CRS,      geog2d_crs      );
-   CASE( GEOG3D_CRS,      geog3d_crs      );
+   CASE( ENGR_CRS,        engr_crs        );
+   CASE( ENGR_DATUM,      engr_datum      );
+   CASE( GEOD_CRS,        geod_crs        );
+   CASE( GEOD_DATUM,      geod_datum      );
    CASE( ID,              id              );
    CASE( IMAGE_CRS,       image_crs       );
+   CASE( IMAGE_DATUM,     image_datum     );
    CASE( LENUNIT,         lenunit         );
    CASE( MERIDIAN,        meridian        );
    CASE( METHOD,          method          );
-   CASE( OPACCURACY,      opaccuracy      );
+   CASE( OP_ACCURACY,     op_accuracy     );
    CASE( ORDER,           order           );
    CASE( PARAMETER,       parameter       );
    CASE( PARAMETER_FILE,  parameter_file  );
-   CASE( PARAMETRIC_CRS,  parametric_crs  );
+   CASE( PARAM_CRS,       param_crs       );
+   CASE( PARAM_DATUM,     param_datum     );
    CASE( PARAMUNIT,       paramunit       );
    CASE( PRIMEM,          primem          );
-   CASE( PROJECTED_CRS,   projected_crs   );
+   CASE( PROJ_CRS,        proj_crs        );
    CASE( REMARK,          remark          );
    CASE( SCALEUNIT,       scaleunit       );
    CASE( SCOPE,           scope           );
-   CASE( TEMPORAL_CRS,    temporal_crs    );
+   CASE( TIME_CRS,        time_crs        );
+   CASE( TIME_DATUM,      time_datum      );
    CASE( TIME_EXTENT,     time_extent     );
    CASE( TIMEUNIT,        timeunit        );
    CASE( UNIT,            unit            );
    CASE( URI,             uri             );
+   CASE( VERT_CRS,        vert_crs        );
+   CASE( VERT_DATUM,      vert_datum      );
    CASE( VERT_EXTENT,     vert_extent     );
-   CASE( VERTICAL_CRS,    vertical_crs    );
 
 #  undef CASE
 
@@ -342,38 +366,40 @@ bool ogc_object :: is_equal(
    CASE( CITATION,        citation        );
    CASE( COMPOUND_CRS,    compound_crs    );
    CASE( CONVERSION,      conversion      );
-   CASE( COORDOP,         coordop         );
+   CASE( COORD_OP,        coord_op        );
    CASE( CS,              cs              );
    CASE( ELLIPSOID,       ellipsoid       );
-   CASE( ENGINEERING_CRS, engineering_crs );
-   CASE( GENERIC_DATUM,   generic_datum   );
-   CASE( GEOCENTRIC_CRS,  geocentric_crs  );
-   CASE( GEODETIC_DATUM,  geodetic_datum  );
-   CASE( GEOG2D_CRS,      geog2d_crs      );
-   CASE( GEOG3D_CRS,      geog3d_crs      );
+   CASE( ENGR_CRS,        engr_crs        );
+   CASE( ENGR_DATUM,      engr_datum      );
+   CASE( GEOD_CRS,        geod_crs        );
+   CASE( GEOD_DATUM,      geod_datum      );
    CASE( ID,              id              );
    CASE( IMAGE_CRS,       image_crs       );
+   CASE( IMAGE_DATUM,     image_datum     );
    CASE( LENUNIT,         lenunit         );
    CASE( MERIDIAN,        meridian        );
    CASE( METHOD,          method          );
-   CASE( OPACCURACY,      opaccuracy      );
+   CASE( OP_ACCURACY,     op_accuracy     );
    CASE( ORDER,           order           );
    CASE( PARAMETER,       parameter       );
    CASE( PARAMETER_FILE,  parameter_file  );
-   CASE( PARAMETRIC_CRS,  parametric_crs  );
+   CASE( PARAM_CRS,       param_crs       );
+   CASE( PARAM_DATUM,     param_datum     );
    CASE( PARAMUNIT,       paramunit       );
    CASE( PRIMEM,          primem          );
-   CASE( PROJECTED_CRS,   projected_crs   );
+   CASE( PROJ_CRS,        proj_crs        );
    CASE( REMARK,          remark          );
    CASE( SCALEUNIT,       scaleunit       );
    CASE( SCOPE,           scope           );
-   CASE( TEMPORAL_CRS,    temporal_crs    );
+   CASE( TIME_CRS,        time_crs        );
+   CASE( TIME_DATUM,      time_datum      );
    CASE( TIME_EXTENT,     time_extent     );
    CASE( TIMEUNIT,        timeunit        );
    CASE( UNIT,            unit            );
    CASE( URI,             uri             );
+   CASE( VERT_CRS,        vert_crs        );
+   CASE( VERT_DATUM,      vert_datum      );
    CASE( VERT_EXTENT,     vert_extent     );
-   CASE( VERTICAL_CRS,    vertical_crs    );
 
 #  undef CASE
 
@@ -419,38 +445,40 @@ bool ogc_object :: is_identical(
    CASE( CITATION,        citation        );
    CASE( COMPOUND_CRS,    compound_crs    );
    CASE( CONVERSION,      conversion      );
-   CASE( COORDOP,         coordop         );
+   CASE( COORD_OP,        coord_op        );
    CASE( CS,              cs              );
    CASE( ELLIPSOID,       ellipsoid       );
-   CASE( ENGINEERING_CRS, engineering_crs );
-   CASE( GENERIC_DATUM,   generic_datum   );
-   CASE( GEOCENTRIC_CRS,  geocentric_crs  );
-   CASE( GEODETIC_DATUM,  geodetic_datum  );
-   CASE( GEOG2D_CRS,      geog2d_crs      );
-   CASE( GEOG3D_CRS,      geog3d_crs      );
+   CASE( ENGR_CRS,        engr_crs        );
+   CASE( ENGR_DATUM,      engr_datum      );
+   CASE( GEOD_CRS,        geod_crs        );
+   CASE( GEOD_DATUM,      geod_datum      );
    CASE( ID,              id              );
    CASE( IMAGE_CRS,       image_crs       );
+   CASE( IMAGE_DATUM,     image_datum     );
    CASE( LENUNIT,         lenunit         );
    CASE( MERIDIAN,        meridian        );
    CASE( METHOD,          method          );
-   CASE( OPACCURACY,      opaccuracy      );
+   CASE( OP_ACCURACY,     op_accuracy     );
    CASE( ORDER,           order           );
    CASE( PARAMETER,       parameter       );
    CASE( PARAMETER_FILE,  parameter_file  );
-   CASE( PARAMETRIC_CRS,  parametric_crs  );
+   CASE( PARAM_CRS,       param_crs       );
+   CASE( PARAM_DATUM,     param_datum     );
    CASE( PARAMUNIT,       paramunit       );
    CASE( PRIMEM,          primem          );
-   CASE( PROJECTED_CRS,   projected_crs   );
+   CASE( PROJ_CRS,        proj_crs        );
    CASE( REMARK,          remark          );
    CASE( SCALEUNIT,       scaleunit       );
    CASE( SCOPE,           scope           );
-   CASE( TEMPORAL_CRS,    temporal_crs    );
+   CASE( TIME_CRS,        time_crs        );
+   CASE( TIME_DATUM,      time_datum      );
    CASE( TIME_EXTENT,     time_extent     );
    CASE( TIMEUNIT,        timeunit        );
    CASE( UNIT,            unit            );
    CASE( URI,             uri             );
+   CASE( VERT_CRS,        vert_crs        );
+   CASE( VERT_DATUM,      vert_datum      );
    CASE( VERT_EXTENT,     vert_extent     );
-   CASE( VERTICAL_CRS,    vertical_crs    );
 
 #  undef CASE
 

@@ -22,27 +22,27 @@
 
 namespace OGC {
 
-const char * ogc_coordop :: obj_kwd() { return OGC_OBJ_KWD_COORDOP; }
+const char * ogc_coord_op :: obj_kwd() { return OGC_OBJ_KWD_COORD_OP; }
 
 /*------------------------------------------------------------------------
  * create
  */
-ogc_coordop * ogc_coordop :: create(
-   const char *     name,
-   ogc_crs *        source_crs,
-   ogc_crs *        target_crs,
-   ogc_crs *        interp_crs,
-   ogc_method *     method,
-   ogc_vector *     parameters,
-   ogc_vector *     parameter_files,
-   ogc_opaccuracy * opaccuracy,
-   ogc_scope *      scope,
-   ogc_vector *     extents,
-   ogc_vector *     ids,
-   ogc_remark *     remark,
-   ogc_error *      err)
+ogc_coord_op * ogc_coord_op :: create(
+   const char *      name,
+   ogc_crs *         source_crs,
+   ogc_crs *         target_crs,
+   ogc_crs *         interp_crs,
+   ogc_method *      method,
+   ogc_vector *      parameters,
+   ogc_vector *      parameter_files,
+   ogc_op_accuracy * op_accuracy,
+   ogc_scope *       scope,
+   ogc_vector *      extents,
+   ogc_vector *      ids,
+   ogc_remark *      remark,
+   ogc_error *       err)
 {
-   ogc_coordop * p = OGC_NULL;
+   ogc_coord_op * p = OGC_NULL;
    bool bad = false;
 
    /*---------------------------------------------------------
@@ -85,7 +85,7 @@ ogc_coordop * ogc_coordop :: create(
     */
    if ( !bad )
    {
-      p = new (std::nothrow) ogc_coordop();
+      p = new (std::nothrow) ogc_coord_op();
       if ( p == OGC_NULL )
       {
          ogc_error::set(err, OGC_ERR_NO_MEMORY, obj_kwd());
@@ -93,14 +93,14 @@ ogc_coordop * ogc_coordop :: create(
       }
 
       ogc_string::unescape_str(p->_name, name, OGC_NAME_MAX);
-      p->_obj_type        = OGC_OBJ_TYPE_COORDOP;
+      p->_obj_type        = OGC_OBJ_TYPE_COORD_OP;
       p->_source_crs      = source_crs;
       p->_target_crs      = target_crs;
       p->_interp_crs      = interp_crs;
       p->_method          = method;
       p->_parameters      = parameters;
       p->_parameter_files = parameter_files;
-      p->_opaccuracy      = opaccuracy;
+      p->_op_accuracy     = op_accuracy;
       p->_scope           = scope;
       p->_extents         = extents;
       p->_ids             = ids;
@@ -113,23 +113,23 @@ ogc_coordop * ogc_coordop :: create(
 /*------------------------------------------------------------------------
  * destroy
  */
-ogc_coordop :: ~ogc_coordop()
+ogc_coord_op :: ~ogc_coord_op()
 {
-   ogc_crs        :: destroy( _source_crs      );
-   ogc_crs        :: destroy( _target_crs      );
-   ogc_crs        :: destroy( _interp_crs      );
-   ogc_method     :: destroy( _method          );
-   ogc_vector     :: destroy( _parameters      );
-   ogc_vector     :: destroy( _parameter_files );
-   ogc_opaccuracy :: destroy( _opaccuracy      );
-   ogc_scope      :: destroy( _scope           );
-   ogc_vector     :: destroy( _extents         );
-   ogc_vector     :: destroy( _ids             );
-   ogc_remark     :: destroy( _remark          );
+   ogc_crs         :: destroy( _source_crs      );
+   ogc_crs         :: destroy( _target_crs      );
+   ogc_crs         :: destroy( _interp_crs      );
+   ogc_method      :: destroy( _method          );
+   ogc_vector      :: destroy( _parameters      );
+   ogc_vector      :: destroy( _parameter_files );
+   ogc_op_accuracy :: destroy( _op_accuracy     );
+   ogc_scope       :: destroy( _scope           );
+   ogc_vector      :: destroy( _extents         );
+   ogc_vector      :: destroy( _ids             );
+   ogc_remark      :: destroy( _remark          );
 }
 
-void ogc_coordop :: destroy(
-   ogc_coordop * obj)
+void ogc_coord_op :: destroy(
+   ogc_coord_op * obj)
 {
    if ( obj != OGC_NULL )
    {
@@ -140,7 +140,7 @@ void ogc_coordop :: destroy(
 /*------------------------------------------------------------------------
  * object from tokens
  */
-ogc_coordop * ogc_coordop :: from_tokens(
+ogc_coord_op * ogc_coord_op :: from_tokens(
    const ogc_token * t,
    int               start,
    int *             pend,
@@ -154,14 +154,14 @@ ogc_coordop * ogc_coordop :: from_tokens(
    int  same;
    int  num;
 
-   ogc_coordop *        obj             = OGC_NULL;
+   ogc_coord_op *       obj             = OGC_NULL;
    ogc_crs *            source_crs      = OGC_NULL;
    ogc_crs *            target_crs      = OGC_NULL;
    ogc_crs *            interp_crs      = OGC_NULL;
    ogc_method *         method          = OGC_NULL;
    ogc_vector *         parameters      = OGC_NULL;
    ogc_vector *         parameter_files = OGC_NULL;
-   ogc_opaccuracy *     opaccuracy      = OGC_NULL;
+   ogc_op_accuracy *    op_accuracy     = OGC_NULL;
    ogc_scope *          scope           = OGC_NULL;
    ogc_extent *         extent          = OGC_NULL;
    ogc_vector *         extents         = OGC_NULL;
@@ -405,17 +405,17 @@ ogc_coordop * ogc_coordop :: from_tokens(
          continue;
       }
 
-      if ( ogc_string::is_equal(arr[i].str, ogc_opaccuracy::obj_kwd()) )
+      if ( ogc_string::is_equal(arr[i].str, ogc_op_accuracy::obj_kwd()) )
       {
-         if ( opaccuracy != OGC_NULL )
+         if ( op_accuracy != OGC_NULL )
          {
             ogc_error::set(err, OGC_ERR_WKT_DUPLICATE_OPACCURACY, obj_kwd());
             bad = true;
          }
          else
          {
-            opaccuracy = ogc_opaccuracy::from_tokens(t, i, &next, err);
-            if ( opaccuracy == OGC_NULL )
+            op_accuracy = ogc_op_accuracy::from_tokens(t, i, &next, err);
+            if ( op_accuracy == OGC_NULL )
                bad = true;
          }
          continue;
@@ -488,8 +488,7 @@ ogc_coordop * ogc_coordop :: from_tokens(
          continue;
       }
 
-      if ( ogc_string::is_equal(arr[i].str, ogc_id::obj_kwd()) ||
-           ogc_string::is_equal(arr[i].str, ogc_id::alt_kwd()) )
+      if ( ogc_string::is_equal(arr[i].str, ogc_id::obj_kwd()) )
       {
          id = ogc_id::from_tokens(t, i, &next, err);
          if ( id == OGC_NULL )
@@ -567,22 +566,22 @@ ogc_coordop * ogc_coordop :: from_tokens(
    {
       obj = create(name, source_crs, target_crs, interp_crs,
                    method, parameters, parameter_files,
-                   opaccuracy, scope, extents, ids, remark, err);
+                   op_accuracy, scope, extents, ids, remark, err);
    }
 
    if ( obj == OGC_NULL )
    {
-      ogc_crs        :: destroy( source_crs      );
-      ogc_crs        :: destroy( target_crs      );
-      ogc_crs        :: destroy( interp_crs      );
-      ogc_method     :: destroy( method          );
-      ogc_vector     :: destroy( parameters      );
-      ogc_vector     :: destroy( parameter_files );
-      ogc_opaccuracy :: destroy( opaccuracy      );
-      ogc_scope      :: destroy( scope           );
-      ogc_vector     :: destroy( extents         );
-      ogc_vector     :: destroy( ids             );
-      ogc_remark     :: destroy( remark          );
+      ogc_crs         :: destroy( source_crs      );
+      ogc_crs         :: destroy( target_crs      );
+      ogc_crs         :: destroy( interp_crs      );
+      ogc_method      :: destroy( method          );
+      ogc_vector      :: destroy( parameters      );
+      ogc_vector      :: destroy( parameter_files );
+      ogc_op_accuracy :: destroy( op_accuracy     );
+      ogc_scope       :: destroy( scope           );
+      ogc_vector      :: destroy( extents         );
+      ogc_vector      :: destroy( ids             );
+      ogc_remark      :: destroy( remark          );
    }
 
    return obj;
@@ -591,11 +590,11 @@ ogc_coordop * ogc_coordop :: from_tokens(
 /*------------------------------------------------------------------------
  * object from WKT
  */
-ogc_coordop * ogc_coordop :: from_wkt(
+ogc_coord_op * ogc_coord_op :: from_wkt(
    const char * wkt,
    ogc_error *  err)
 {
-   ogc_coordop * obj = OGC_NULL;
+   ogc_coord_op * obj = OGC_NULL;
    ogc_token t;
 
    if ( t.tokenize(wkt, obj_kwd(), err) )
@@ -609,8 +608,8 @@ ogc_coordop * ogc_coordop :: from_wkt(
 /*------------------------------------------------------------------------
  * object to WKT
  */
-bool ogc_coordop :: to_wkt(
-   const ogc_coordop * obj,
+bool ogc_coord_op :: to_wkt(
+   const ogc_coord_op * obj,
    char      buffer[],
    int       options,
    size_t    buflen)
@@ -625,7 +624,7 @@ bool ogc_coordop :: to_wkt(
    return obj->to_wkt(buffer, options, buflen);
 }
 
-bool ogc_coordop :: to_wkt(
+bool ogc_coord_op :: to_wkt(
    char      buffer[],
    int       options,
    size_t    buflen) const
@@ -640,7 +639,7 @@ bool ogc_coordop :: to_wkt(
    OGC_BUFF      buf_interp;
    OGC_TBUF      buf_method;
    OGC_TBUF      buf_parameter;
-   OGC_TBUF      buf_opaccuracy;
+   OGC_TBUF      buf_op_accuracy;
    OGC_TBUF      buf_scope;
    OGC_TBUF      buf_extent;
    OGC_TBUF      buf_id;
@@ -669,7 +668,7 @@ bool ogc_coordop :: to_wkt(
    rc &= ogc_crs    :: to_wkt(_target_crs, buf_target_crs, opts, OGC_BUFF_MAX-8);
    rc &= ogc_crs    :: to_wkt(_interp_crs, buf_interp_crs, opts, OGC_BUFF_MAX-8);
    rc &= ogc_method :: to_wkt(_method, buf_method,         opts, OGC_TBUF_MAX);
-   rc &= ogc_opaccuracy  :: to_wkt(_opaccuracy,  buf_opaccuracy, opts, OGC_TBUF_MAX);
+   rc &= ogc_op_accuracy  :: to_wkt(_op_accuracy,  buf_op_accuracy, opts, OGC_TBUF_MAX);
    rc &= ogc_scope  :: to_wkt(_scope,  buf_scope,          opts, OGC_TBUF_MAX);
    rc &= ogc_remark :: to_wkt(_remark, buf_remark,         opts, OGC_TBUF_MAX);
 
@@ -718,9 +717,9 @@ bool ogc_coordop :: to_wkt(
       }
    }
 
-   OGC_ADD_TO_BUF( buf_interp     );
-   OGC_ADD_TO_BUF( buf_opaccuracy );
-   OGC_ADD_TO_BUF( buf_scope      );
+   OGC_ADD_TO_BUF( buf_interp      );
+   OGC_ADD_TO_BUF( buf_op_accuracy );
+   OGC_ADD_TO_BUF( buf_scope       );
 
    if ( _extents != OGC_NULL )
    {
@@ -758,35 +757,35 @@ bool ogc_coordop :: to_wkt(
 /*------------------------------------------------------------------------
  * clone
  */
-ogc_coordop * ogc_coordop :: clone(const ogc_coordop * obj)
+ogc_coord_op * ogc_coord_op :: clone(const ogc_coord_op * obj)
 {
    if ( obj == OGC_NULL )
       return OGC_NULL;
    return obj->clone();
 }
 
-ogc_coordop * ogc_coordop :: clone() const
+ogc_coord_op * ogc_coord_op :: clone() const
 {
-   ogc_crs *        source_crs      = ogc_crs        :: clone( _source_crs      );
-   ogc_crs *        target_crs      = ogc_crs        :: clone( _target_crs      );
-   ogc_crs *        interp_crs      = ogc_crs        :: clone( _interp_crs      );
-   ogc_method *     method          = ogc_method     :: clone( _method          );
-   ogc_vector *     parameters      = ogc_vector     :: clone( _parameters      );
-   ogc_vector *     parameter_files = ogc_vector     :: clone( _parameter_files );
-   ogc_opaccuracy * opaccuracy      = ogc_opaccuracy :: clone( _opaccuracy      );
-   ogc_scope *      scope           = ogc_scope      :: clone( _scope           );
-   ogc_vector *     extents         = ogc_vector     :: clone( _extents         );
-   ogc_vector *     ids             = ogc_vector     :: clone( _ids             );
-   ogc_remark *     remark          = ogc_remark     :: clone( _remark          );
+   ogc_crs *         source_crs      = ogc_crs         :: clone( _source_crs      );
+   ogc_crs *         target_crs      = ogc_crs         :: clone( _target_crs      );
+   ogc_crs *         interp_crs      = ogc_crs         :: clone( _interp_crs      );
+   ogc_method *      method          = ogc_method      :: clone( _method          );
+   ogc_vector *      parameters      = ogc_vector      :: clone( _parameters      );
+   ogc_vector *      parameter_files = ogc_vector      :: clone( _parameter_files );
+   ogc_op_accuracy * op_accuracy     = ogc_op_accuracy :: clone( _op_accuracy     );
+   ogc_scope *       scope           = ogc_scope       :: clone( _scope           );
+   ogc_vector *      extents         = ogc_vector      :: clone( _extents         );
+   ogc_vector *      ids             = ogc_vector      :: clone( _ids             );
+   ogc_remark *      remark          = ogc_remark      :: clone( _remark          );
 
-   ogc_coordop * p = create(_name,
+   ogc_coord_op * p = create(_name,
                             source_crs,
                             target_crs,
                             interp_crs,
                             method,
                             parameters,
                             parameter_files,
-                            opaccuracy,
+                            op_accuracy,
                             scope,
                             extents,
                             ids,
@@ -794,17 +793,17 @@ ogc_coordop * ogc_coordop :: clone() const
                             OGC_NULL);
    if ( p == OGC_NULL )
    {
-      ogc_crs        :: destroy( source_crs      );
-      ogc_crs        :: destroy( target_crs      );
-      ogc_crs        :: destroy( interp_crs      );
-      ogc_method     :: destroy( method          );
-      ogc_vector     :: destroy( parameters      );
-      ogc_vector     :: destroy( parameter_files );
-      ogc_opaccuracy :: destroy( opaccuracy      );
-      ogc_scope      :: destroy( scope           );
-      ogc_vector     :: destroy( extents         );
-      ogc_vector     :: destroy( ids             );
-      ogc_remark     :: destroy( remark          );
+      ogc_crs         :: destroy( source_crs      );
+      ogc_crs         :: destroy( target_crs      );
+      ogc_crs         :: destroy( interp_crs      );
+      ogc_method      :: destroy( method          );
+      ogc_vector      :: destroy( parameters      );
+      ogc_vector      :: destroy( parameter_files );
+      ogc_op_accuracy :: destroy( op_accuracy      );
+      ogc_scope       :: destroy( scope           );
+      ogc_vector      :: destroy( extents         );
+      ogc_vector      :: destroy( ids             );
+      ogc_remark      :: destroy( remark          );
    }
 
    return p;
@@ -813,9 +812,9 @@ ogc_coordop * ogc_coordop :: clone() const
 /*------------------------------------------------------------------------
  * compare for computational equality
  */
-bool ogc_coordop :: is_equal(
-   const ogc_coordop * p1,
-   const ogc_coordop * p2)
+bool ogc_coord_op :: is_equal(
+   const ogc_coord_op * p1,
+   const ogc_coord_op * p2)
 {
    if ( p1 == OGC_NULL && p2 == OGC_NULL ) return true;
    if ( p1 == OGC_NULL || p2 == OGC_NULL ) return false;
@@ -834,8 +833,8 @@ bool ogc_coordop :: is_equal(
    return true;
 }
 
-bool ogc_coordop :: is_equal(
-   const ogc_coordop * p) const
+bool ogc_coord_op :: is_equal(
+   const ogc_coord_op * p) const
 {
    return is_equal(this, p);
 }
@@ -843,25 +842,25 @@ bool ogc_coordop :: is_equal(
 /*------------------------------------------------------------------------
  * compare
  */
-bool ogc_coordop :: is_identical(
-   const ogc_coordop * p1,
-   const ogc_coordop * p2)
+bool ogc_coord_op :: is_identical(
+   const ogc_coord_op * p1,
+   const ogc_coord_op * p2)
 {
    if ( p1 == OGC_NULL && p2 == OGC_NULL ) return true;
    if ( p1 == OGC_NULL || p2 == OGC_NULL ) return false;
 
-   if ( !ogc_string     :: is_equal    ( p1->name(),            p2->name()            ) ||
-        !ogc_crs        :: is_identical( p1->source_crs(),      p2->source_crs()      ) ||
-        !ogc_crs        :: is_identical( p1->target_crs(),      p2->target_crs()      ) ||
-        !ogc_crs        :: is_identical( p1->interp_crs(),      p2->interp_crs()      ) ||
-        !ogc_method     :: is_identical( p1->method(),          p2->method()          ) ||
-        !ogc_vector     :: is_identical( p1->parameters(),      p2->parameters()      ) ||
-        !ogc_vector     :: is_identical( p1->parameter_files(), p2->parameter_files() ) ||
-        !ogc_opaccuracy :: is_identical( p1->opaccuracy(),      p2->opaccuracy()      ) ||
-        !ogc_scope      :: is_identical( p1->scope(),           p2->scope()           ) ||
-        !ogc_vector     :: is_identical( p1->extents(),         p2->extents()         ) ||
-        !ogc_vector     :: is_identical( p1->ids(),             p2->ids()             ) ||
-        !ogc_remark     :: is_identical( p1->remark(),          p2->remark()          ) )
+   if ( !ogc_string      :: is_equal    ( p1->name(),            p2->name()            ) ||
+        !ogc_crs         :: is_identical( p1->source_crs(),      p2->source_crs()      ) ||
+        !ogc_crs         :: is_identical( p1->target_crs(),      p2->target_crs()      ) ||
+        !ogc_crs         :: is_identical( p1->interp_crs(),      p2->interp_crs()      ) ||
+        !ogc_method      :: is_identical( p1->method(),          p2->method()          ) ||
+        !ogc_vector      :: is_identical( p1->parameters(),      p2->parameters()      ) ||
+        !ogc_vector      :: is_identical( p1->parameter_files(), p2->parameter_files() ) ||
+        !ogc_op_accuracy :: is_identical( p1->op_accuracy(),     p2->op_accuracy()     ) ||
+        !ogc_scope       :: is_identical( p1->scope(),           p2->scope()           ) ||
+        !ogc_vector      :: is_identical( p1->extents(),         p2->extents()         ) ||
+        !ogc_vector      :: is_identical( p1->ids(),             p2->ids()             ) ||
+        !ogc_remark      :: is_identical( p1->remark(),          p2->remark()          ) )
    {
       return false;
    }
@@ -869,8 +868,8 @@ bool ogc_coordop :: is_identical(
    return true;
 }
 
-bool ogc_coordop :: is_identical(
-   const ogc_coordop * p) const
+bool ogc_coord_op :: is_identical(
+   const ogc_coord_op * p) const
 {
    return is_identical(this, p);
 }
@@ -878,7 +877,7 @@ bool ogc_coordop :: is_identical(
 /*------------------------------------------------------------------------
  * get parameter count
  */
-int ogc_coordop :: parameter_count() const
+int ogc_coord_op :: parameter_count() const
 {
    return (_parameters == OGC_NULL) ? 0 : _parameters->length();
 }
@@ -886,7 +885,7 @@ int ogc_coordop :: parameter_count() const
 /*------------------------------------------------------------------------
  * get the nth parameter
  */
-ogc_parameter * ogc_coordop :: parameter(int n) const
+ogc_parameter * ogc_coord_op :: parameter(int n) const
 {
    return (_parameters == OGC_NULL) ? OGC_NULL :
                                       reinterpret_cast<ogc_parameter *>
@@ -896,7 +895,7 @@ ogc_parameter * ogc_coordop :: parameter(int n) const
 /*------------------------------------------------------------------------
  * get parameter_file count
  */
-int ogc_coordop :: parameter_file_count() const
+int ogc_coord_op :: parameter_file_count() const
 {
    return (_parameter_files == OGC_NULL) ? 0 : _parameter_files->length();
 }
@@ -904,7 +903,7 @@ int ogc_coordop :: parameter_file_count() const
 /*------------------------------------------------------------------------
  * get the nth parameter_file
  */
-ogc_parameter_file * ogc_coordop :: parameter_file(int n) const
+ogc_parameter_file * ogc_coord_op :: parameter_file(int n) const
 {
    return (_parameter_files == OGC_NULL) ? OGC_NULL :
                                reinterpret_cast<ogc_parameter_file *>
@@ -914,7 +913,7 @@ ogc_parameter_file * ogc_coordop :: parameter_file(int n) const
 /*------------------------------------------------------------------------
  * get extent count
  */
-int ogc_coordop :: extent_count() const
+int ogc_coord_op :: extent_count() const
 {
    return (_extents == OGC_NULL) ? 0 : _extents->length();
 }
@@ -922,7 +921,7 @@ int ogc_coordop :: extent_count() const
 /*------------------------------------------------------------------------
  * get the nth extent
  */
-ogc_extent * ogc_coordop :: extent(int n) const
+ogc_extent * ogc_coord_op :: extent(int n) const
 {
    return (_extents == OGC_NULL) ? OGC_NULL :
                            reinterpret_cast<ogc_extent *>( _extents->get(n) );
@@ -931,7 +930,7 @@ ogc_extent * ogc_coordop :: extent(int n) const
 /*------------------------------------------------------------------------
  * get ID count
  */
-int ogc_coordop :: id_count() const
+int ogc_coord_op :: id_count() const
 {
    return (_ids == OGC_NULL) ? 0 : _ids->length();
 }
@@ -939,7 +938,7 @@ int ogc_coordop :: id_count() const
 /*------------------------------------------------------------------------
  * get the nth ID
  */
-ogc_id * ogc_coordop :: id(int n) const
+ogc_id * ogc_coord_op :: id(int n) const
 {
    return (_ids == OGC_NULL) ? OGC_NULL :
                                reinterpret_cast<ogc_id *>( _ids->get(n) );
