@@ -132,7 +132,8 @@ ogc_engr_datum * ogc_engr_datum :: from_tokens(
    }
    kwd = arr[start].str;
 
-   if ( !ogc_string::is_equal(kwd, obj_kwd()) )
+   if ( !ogc_string::is_equal(kwd, obj_kwd()) &&
+        !ogc_string::is_equal(kwd, alt_kwd()) )
    {
       ogc_error::set(err, OGC_ERR_WKT_INVALID_KEYWORD, obj_kwd(), kwd);
       return OGC_NULL;
