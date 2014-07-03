@@ -273,6 +273,13 @@ enum ogc_obj_type
 #define OGC_OBJ_KWD_BOUND_CRS        "BOUNDCRS"
 #define OGC_OBJ_KWD_ABRTRANS         "ABRIDGEDTRANSFORMATION"
 
+/* keywords for virtual objects */
+
+#define OGC_OBJ_KWD_EXTENT           "extent"
+#define OGC_OBJ_KWD_CRS              "crs"
+#define OGC_OBJ_KWD_DATUM            "datum"
+#define OGC_OBJ_KWD_OBJECT           "object"
+
 /* keywords that are not real objects */
 
 #define OGC_OBJ_KWD_SOURCE_CRS       "SOURCECRS"
@@ -305,6 +312,7 @@ enum ogc_obj_type
 #define OGC_OLD_KWD_VDATUM           "VERT_DATUM"
 #define OGC_OLD_KWD_COMPDCS          "COMPD_CS"
 #define OGC_OLD_KWD_VERTCS           "VERT_CS"
+#define OGC_OLD_KWD_ID               "AUTHORITY"
 
 /* ------------------------------------------------------------------------- */
 /* coordinate reference system types and keywords                            */
@@ -799,7 +807,6 @@ class OGC_EXPORT ogc_object
 {
 private:
    static bool         _strict_parsing;
-   static const char * _obj_kwd;
 
 protected:
    ogc_obj_type _obj_type;
@@ -916,8 +923,6 @@ public:
 class OGC_EXPORT ogc_citation : public ogc_object
 {
 private:
-   static const char * _obj_kwd;
-
    OGC_TEXT _text;
 
    ogc_citation() {}
@@ -974,8 +979,6 @@ public:
 class OGC_EXPORT ogc_uri : public ogc_object
 {
 private:
-   static const char * _obj_kwd;
-
    OGC_TEXT _text;
 
    ogc_uri() {}
@@ -1032,9 +1035,6 @@ public:
 class OGC_EXPORT ogc_id : public ogc_object
 {
 private:
-   static const char * _obj_kwd;
-   static const char * _alt_kwd;
-
    OGC_NAME        _name;
    OGC_TEXT        _identifier;
    OGC_TEXT        _version;
@@ -1045,7 +1045,7 @@ private:
 
 public:
    static const char * obj_kwd();
-   static const char * alt_kwd();
+   static const char * old_kwd();
 
    static ogc_id * create(
       const char *   name,
@@ -1104,8 +1104,6 @@ public:
 class OGC_EXPORT ogc_remark : public ogc_object
 {
 private:
-   static const char * _obj_kwd;
-
    OGC_UTF8_TEXT _text;
 
    ogc_remark() {}
@@ -1161,9 +1159,6 @@ public:
 
 class OGC_EXPORT ogc_unit : public ogc_object
 {
-private:
-   static const char * _obj_kwd;
-
 protected:
    OGC_NAME      _name;
    ogc_unit_type _unit_type;
@@ -1232,9 +1227,6 @@ public:
 class OGC_EXPORT ogc_angunit : public ogc_unit
 {
 private:
-   static const char * _obj_kwd;
-   static const char * _alt_kwd;
-
    ogc_angunit() {}
 
 public:
@@ -1290,9 +1282,6 @@ public:
 class OGC_EXPORT ogc_lenunit : public ogc_unit
 {
 private:
-   static const char * _obj_kwd;
-   static const char * _alt_kwd;
-
    ogc_lenunit() {}
 
 public:
@@ -1348,9 +1337,6 @@ public:
 class OGC_EXPORT ogc_scaleunit : public ogc_unit
 {
 private:
-   static const char * _obj_kwd;
-   static const char * _alt_kwd;
-
    ogc_scaleunit() {}
 
 public:
@@ -1406,9 +1392,6 @@ public:
 class OGC_EXPORT ogc_timeunit : public ogc_unit
 {
 private:
-   static const char * _obj_kwd;
-   static const char * _alt_kwd;
-
    ogc_timeunit() {}
 
 public:
@@ -1464,9 +1447,6 @@ public:
 class OGC_EXPORT ogc_paramunit : public ogc_unit
 {
 private:
-   static const char * _obj_kwd;
-   static const char * _alt_kwd;
-
    ogc_paramunit() {}
 
 public:
@@ -1522,8 +1502,6 @@ public:
 class OGC_EXPORT ogc_scope : public ogc_object
 {
 private:
-   static const char * _obj_kwd;
-
    OGC_TEXT _text;
 
    ogc_scope() {}
@@ -1579,9 +1557,6 @@ public:
 
 class OGC_EXPORT ogc_extent : public ogc_object
 {
-private:
-   static const char * _obj_kwd;
-
 protected:
    ogc_extent() {}
 
@@ -1631,8 +1606,6 @@ public:
 class OGC_EXPORT ogc_area_extent : public ogc_extent
 {
 private:
-   static const char * _obj_kwd;
-
    OGC_TEXT _text;
 
    ogc_area_extent() {}
@@ -1689,8 +1662,6 @@ public:
 class OGC_EXPORT ogc_bbox_extent : public ogc_extent
 {
 private:
-   static const char * _obj_kwd;
-
    double  _ll_lat;
    double  _ll_lon;
    double  _ur_lat;
@@ -1756,8 +1727,6 @@ public:
 class OGC_EXPORT ogc_vert_extent : public ogc_extent
 {
 private:
-   static const char * _obj_kwd;
-
    double        _min_ht;
    double        _max_ht;
    ogc_lenunit * _lenunit;
@@ -1820,8 +1789,6 @@ public:
 class OGC_EXPORT ogc_time_extent : public ogc_extent
 {
 private:
-   static const char * _obj_kwd;
-
    OGC_TIME       _start;
    OGC_TIME       _end;
 
@@ -1881,8 +1848,6 @@ public:
 class OGC_EXPORT ogc_parameter : public ogc_object
 {
 private:
-   static const char * _obj_kwd;
-
    OGC_NAME     _name;
    double       _value;
    ogc_unit *   _unit;
@@ -1951,8 +1916,6 @@ public:
 class OGC_EXPORT ogc_parameter_file : public ogc_object
 {
 private:
-   static const char * _obj_kwd;
-
    OGC_NAME     _name;
    OGC_PATH     _filename;
    ogc_vector * _ids;
@@ -2018,9 +1981,6 @@ public:
 class OGC_EXPORT ogc_ellipsoid : public ogc_object
 {
 private:
-   static const char * _obj_kwd;
-   static const char * _alt_kwd;
-
    OGC_NAME      _name;
    double        _semi_major_axis;
    double        _flattening;
@@ -2099,8 +2059,6 @@ public:
 class OGC_EXPORT ogc_anchor : public ogc_object
 {
 private:
-   static const char * _obj_kwd;
-
    OGC_TEXT _text;
 
    ogc_anchor() {}
@@ -2157,8 +2115,6 @@ public:
 class OGC_EXPORT ogc_time_origin : public ogc_extent
 {
 private:
-   static const char * _obj_kwd;
-
    OGC_TIME _origin;
 
    ogc_time_origin() {}
@@ -2214,9 +2170,6 @@ public:
 
 class OGC_EXPORT ogc_datum : public ogc_object
 {
-private:
-   static const char * _obj_kwd;
-
 protected:
    OGC_NAME       _name;
    ogc_datum_type _datum_type;
@@ -2279,9 +2232,6 @@ public:
 class OGC_EXPORT ogc_geod_datum : public ogc_datum
 {
 private:
-   static const char * _obj_kwd;
-   static const char * _alt_kwd;
-
    ogc_ellipsoid * _ellipsoid;
 
    ogc_geod_datum() {}
@@ -2342,9 +2292,6 @@ public:
 class OGC_EXPORT ogc_engr_datum : public ogc_datum
 {
 private:
-   static const char * _obj_kwd;
-   static const char * _alt_kwd;
-
    ogc_engr_datum() {}
 
 public:
@@ -2400,9 +2347,6 @@ public:
 class OGC_EXPORT ogc_image_datum : public ogc_datum
 {
 private:
-   static const char * _obj_kwd;
-   static const char * _alt_kwd;
-
    ogc_image_datum() {}
 
 public:
@@ -2458,9 +2402,6 @@ public:
 class OGC_EXPORT ogc_param_datum : public ogc_datum
 {
 private:
-   static const char * _obj_kwd;
-   static const char * _alt_kwd;
-
    ogc_param_datum() {}
 
 public:
@@ -2516,9 +2457,6 @@ public:
 class OGC_EXPORT ogc_time_datum : public ogc_datum
 {
 private:
-   static const char * _obj_kwd;
-   static const char * _alt_kwd;
-
    ogc_time_datum() {}
 
 public:
@@ -2574,9 +2512,6 @@ public:
 class OGC_EXPORT ogc_vert_datum : public ogc_datum
 {
 private:
-   static const char * _obj_kwd;
-   static const char * _alt_kwd;
-
    ogc_vert_datum() {}
 
 public:
@@ -2632,9 +2567,6 @@ public:
 class OGC_EXPORT ogc_primem : public ogc_object
 {
 private:
-   static const char * _obj_kwd;
-   static const char * _alt_kwd;
-
    OGC_NAME      _name;
    double        _longitude;
    ogc_angunit * _angunit;
@@ -2712,8 +2644,6 @@ public:
 class OGC_EXPORT ogc_bearing : public ogc_object
 {
 private:
-   static const char * _obj_kwd;
-
    double        _value;
    ogc_angunit * _angunit;
 
@@ -2773,8 +2703,6 @@ public:
 class OGC_EXPORT ogc_meridian : public ogc_object
 {
 private:
-   static const char * _obj_kwd;
-
    double        _value;
    ogc_angunit * _angunit;
 
@@ -2834,8 +2762,6 @@ public:
 class OGC_EXPORT ogc_order : public ogc_object
 {
 private:
-   static const char * _obj_kwd;
-
    int _value;
 
    ogc_order() {}
@@ -2892,8 +2818,6 @@ public:
 class OGC_EXPORT ogc_axis : public ogc_object
 {
 private:
-   static const char * _obj_kwd;
-
    OGC_NAME           _name;
    OGC_NAME           _abbr;
    ogc_axis_direction _direction;
@@ -2982,8 +2906,6 @@ public:
 class OGC_EXPORT ogc_cs : public ogc_object
 {
 private:
-   static const char * _obj_kwd;
-
    ogc_cs_type  _cs_type;
    int          _dimension;
    ogc_vector * _ids;
@@ -3049,8 +2971,6 @@ public:
 class OGC_EXPORT ogc_conversion : public ogc_object
 {
 private:
-   static const char * _obj_kwd;
-
    OGC_NAME     _name;
    ogc_vector * _ids;
 
@@ -3113,9 +3033,6 @@ public:
 class OGC_EXPORT ogc_method : public ogc_object
 {
 private:
-   static const char * _obj_kwd;
-   static const char * _alt_kwd;
-
    OGC_NAME     _name;
    ogc_vector * _ids;
 
@@ -3207,6 +3124,8 @@ protected:
    ogc_crs() {}
 
 public:
+   static const char * obj_kwd();
+
    virtual ~ogc_crs();
    static void destroy(ogc_crs * obj);
 
@@ -3270,9 +3189,6 @@ public:
 class OGC_EXPORT ogc_geod_crs : public ogc_crs
 {
 private:
-   static const char * _obj_kwd;
-   static const char * _alt_kwd;
-
    ogc_geod_datum * _datum;
    ogc_primem *     _primem;
 
@@ -3343,10 +3259,6 @@ public:
 class OGC_EXPORT ogc_proj_crs : public ogc_crs
 {
 private:
-   static const char * _obj_kwd;
-   static const char * _alt_kwd;
-   static const char * _old_kwd;
-
    ogc_geod_crs *     _base_crs;
    ogc_conversion *   _conversion;
    ogc_method *       _method;
@@ -3427,10 +3339,6 @@ public:
 class OGC_EXPORT ogc_vert_crs : public ogc_crs
 {
 private:
-   static const char * _obj_kwd;
-   static const char * _alt_kwd;
-   static const char * _old_kwd;
-
    ogc_vert_datum *  _datum;
 
    ogc_vert_crs() {}
@@ -3498,9 +3406,6 @@ public:
 class OGC_EXPORT ogc_engr_crs : public ogc_crs
 {
 private:
-   static const char * _obj_kwd;
-   static const char * _alt_kwd;
-
    ogc_engr_datum *  _datum;
 
    ogc_engr_crs() {}
@@ -3568,8 +3473,6 @@ public:
 class OGC_EXPORT ogc_image_crs : public ogc_crs
 {
 private:
-   static const char * _obj_kwd;
-
    ogc_image_datum *  _datum;
 
    ogc_image_crs() {}
@@ -3635,8 +3538,6 @@ public:
 class OGC_EXPORT ogc_time_crs : public ogc_crs
 {
 private:
-   static const char * _obj_kwd;
-
    ogc_time_datum *   _datum;
 
    ogc_time_crs() {}
@@ -3702,8 +3603,6 @@ public:
 class OGC_EXPORT ogc_param_crs : public ogc_crs
 {
 private:
-   static const char * _obj_kwd;
-
    ogc_param_datum *   _datum;
 
    ogc_param_crs() {}
@@ -3769,9 +3668,6 @@ public:
 class OGC_EXPORT ogc_compound_crs : public ogc_crs
 {
 private:
-   static const char * _obj_kwd;
-   static const char * _old_kwd;
-
    ogc_crs *          _first_crs;
    ogc_crs *          _second_crs;
    ogc_time_crs *     _third_crs;
@@ -3838,8 +3734,6 @@ public:
 class OGC_EXPORT ogc_op_accuracy : public ogc_object
 {
 private:
-   static const char * _obj_kwd;
-
    double  _accuracy;
 
    ogc_op_accuracy() {}
@@ -3896,8 +3790,6 @@ public:
 class OGC_EXPORT ogc_coord_op : public ogc_object
 {
 private:
-   static const char * _obj_kwd;
-
    OGC_NAME          _name;
    ogc_crs *         _source_crs;
    ogc_crs *         _target_crs;
@@ -3999,8 +3891,6 @@ public:
 class OGC_EXPORT ogc_abrtrans : public ogc_object
 {
 private:
-   static const char * _obj_kwd;
-
    OGC_NAME     _name;
    ogc_method * _method;
    ogc_vector * _parameters;
@@ -4090,8 +3980,6 @@ public:
 class OGC_EXPORT ogc_bound_crs : public ogc_object
 {
 private:
-   static const char * _obj_kwd;
-
    ogc_crs *      _source_crs;
    ogc_crs *      _target_crs;
    ogc_abrtrans * _abrtrans;

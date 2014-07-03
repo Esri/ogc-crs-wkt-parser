@@ -22,6 +22,8 @@
 
 namespace OGC {
 
+const char * ogc_datum :: obj_kwd() { return OGC_OBJ_KWD_DATUM; }
+
 /*------------------------------------------------------------------------
  * destroy
  */
@@ -70,7 +72,7 @@ ogc_datum * ogc_datum :: from_tokens(
 
 #  undef CHECK
 
-   ogc_error::set(err, OGC_ERR_WKT_INVALID_KEYWORD, obj_kwd(), kwd);
+   ogc_error::set(err, OGC_ERR_WKT_INVALID_KEYWORD, kwd);
    return OGC_NULL;
 }
 

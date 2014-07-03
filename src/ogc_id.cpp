@@ -23,6 +23,7 @@
 namespace OGC {
 
 const char * ogc_id :: obj_kwd() { return OGC_OBJ_KWD_ID; }
+const char * ogc_id :: old_kwd() { return OGC_OLD_KWD_ID; }
 
 /*------------------------------------------------------------------------
  * create
@@ -356,7 +357,7 @@ bool ogc_id :: to_wkt(
    *buffer = 0;
 
    if ( (options & OGC_WKT_OPT_OLD_SYNTAX) != 0 )
-      kwd = alt_kwd();
+      kwd = old_kwd();
 
    rc &= ogc_citation :: to_wkt(_citation, buf_citation, opts, OGC_TBUF_MAX);
    rc &= ogc_uri      :: to_wkt(_uri,      buf_uri,      opts, OGC_TBUF_MAX);

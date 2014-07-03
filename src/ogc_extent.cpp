@@ -22,6 +22,8 @@
 
 namespace OGC {
 
+const char * ogc_extent :: obj_kwd() { return OGC_OBJ_KWD_EXTENT; }
+
 /*------------------------------------------------------------------------
  * destroy
  */

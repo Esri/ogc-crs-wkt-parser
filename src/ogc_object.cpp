@@ -22,6 +22,8 @@
 
 namespace OGC {
 
+const char * ogc_object :: obj_kwd() { return OGC_OBJ_KWD_OBJECT; }
+
 bool         ogc_object :: _strict_parsing = true;
 
 /*------------------------------------------------------------------------
