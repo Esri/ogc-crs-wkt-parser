@@ -247,6 +247,52 @@ bool ogc_utils :: axis_direction_valid (ogc_axis_direction dir)
 }
 
 /* ------------------------------------------------------------------------- */
+/* pixel-in-cell types                                                       */
+/* ------------------------------------------------------------------------- */
+
+ogc_pixel_type ogc_utils :: pixel_kwd_to_type (const char * kwd)
+{
+   const ogc_tables::pixel_tbl * t = ogc_tables::ogc_pixel_types;
+
+   if ( kwd == OGC_NULL )
+      return OGC_PIXEL_TYPE_UNKNOWN;
+
+   for (; t->type != OGC_PIXEL_TYPE_UNKNOWN; t++)
+   {
+      if ( ogc_string::strcmp_i(t->kwd, kwd) == 0 )
+         return t->type;
+   }
+
+   return OGC_PIXEL_TYPE_UNKNOWN;
+}
+
+const char * ogc_utils :: pixel_type_to_kwd (ogc_pixel_type type)
+{
+   const ogc_tables::pixel_tbl * t = ogc_tables::ogc_pixel_types;
+
+   for (; t->type != OGC_PIXEL_TYPE_UNKNOWN; t++)
+   {
+      if ( t->type == type )
+         return t->kwd;
+   }
+
+   return OGC_PIXEL_KWD_UNKNOWN;
+}
+
+bool ogc_utils :: pixel_type_valid (ogc_pixel_type type)
+{
+   const ogc_tables::pixel_tbl * t = ogc_tables::ogc_pixel_types;
+
+   for (; t->type != OGC_PIXEL_TYPE_UNKNOWN; t++)
+   {
+      if ( t->type == type )
+         return true;
+   }
+
+   return false;
+}
+
+/* ------------------------------------------------------------------------- */
 /* other utility methods                                                     */
 /* ------------------------------------------------------------------------- */
 

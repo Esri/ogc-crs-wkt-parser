@@ -90,6 +90,13 @@ public:
    };
    static const axis_tbl ogc_axis_types[];
 
+   struct pixel_tbl
+   {
+      ogc_pixel_type     type;
+      const char *       kwd;
+   };
+   static const pixel_tbl ogc_pixel_types[];
+
    struct error_tbl
    {
       ogc_err_code       err_code;

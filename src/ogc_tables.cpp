@@ -215,6 +215,19 @@ const ogc_tables::axis_tbl ogc_tables::ogc_axis_types[] =
 };
 
 /* ------------------------------------------------------------------------- */
+/* pixel-in-cell types                                                       */
+/* ------------------------------------------------------------------------- */
+
+const ogc_tables::pixel_tbl ogc_tables::ogc_pixel_types[] =
+{
+   { OGC_PIXEL_TYPE_CENTER,              OGC_PIXEL_KWD_CENTER                },
+   { OGC_PIXEL_TYPE_CENTRE,              OGC_PIXEL_KWD_CENTRE                },
+   { OGC_PIXEL_TYPE_CORNER,              OGC_PIXEL_KWD_CORNER                },
+
+   { OGC_PIXEL_TYPE_UNKNOWN,             OGC_PIXEL_KWD_UNKNOWN               }
+};
+
+/* ------------------------------------------------------------------------- */
 /* error codes                                                               */
 /* ------------------------------------------------------------------------- */
 
@@ -314,6 +327,7 @@ const ogc_tables::error_tbl ogc_tables :: ogc_errors[] =
    { OGC_ERR_INVALID_SEMIMAJOR_AXIS,        "invalid semimajor axis"   },
    { OGC_ERR_INVALID_THIRD_CRS,             "invalid third crs"        },
    { OGC_ERR_INVALID_UNIT_FACTOR,           "invalid unit factor"      },
+   { OGC_ERR_INVALID_PIXEL_TYPE,            "invalid pixel type"       },
 
    /* other errors */
 

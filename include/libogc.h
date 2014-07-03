@@ -369,6 +369,26 @@ enum ogc_unit_type
 #define OGC_UNIT_KWD_GENERIC         "generic"
 
 /* ------------------------------------------------------------------------- */
+/* pixel-in-cell types and keywords                                          */
+/* ------------------------------------------------------------------------- */
+
+enum ogc_pixel_type
+{
+   OGC_PIXEL_TYPE_UNKNOWN = 0,
+
+   OGC_PIXEL_TYPE_CENTER,
+   OGC_PIXEL_TYPE_CORNER
+};
+
+#define OGC_PIXEL_TYPE_CENTRE         OGC_PIXEL_TYPE_CENTER
+
+#define OGC_PIXEL_KWD_UNKNOWN         "unknown"
+
+#define OGC_PIXEL_KWD_CENTER          "center"
+#define OGC_PIXEL_KWD_CENTRE          "centre"
+#define OGC_PIXEL_KWD_CORNER          "corner"
+
+/* ------------------------------------------------------------------------- */
 /* datum types and keywords                                                  */
 /* ------------------------------------------------------------------------- */
 
@@ -621,6 +641,7 @@ enum ogc_err_code
       OGC_ERR_INVALID_SEMIMAJOR_AXIS,
       OGC_ERR_INVALID_THIRD_CRS,
       OGC_ERR_INVALID_UNIT_FACTOR,
+      OGC_ERR_INVALID_PIXEL_TYPE,
 
       /* missing object errors */
 
@@ -2347,6 +2368,8 @@ public:
 class OGC_EXPORT ogc_image_datum : public ogc_datum
 {
 private:
+   ogc_pixel_type   _pixel_type;
+
    ogc_image_datum() {}
 
 public:
@@ -2354,10 +2377,11 @@ public:
    static const char * alt_kwd();
 
    static ogc_image_datum * create(
-      const char * name,
-      ogc_anchor * anchor,
-      ogc_vector * ids,
-      ogc_error *  err = OGC_NULL);
+      const char *   name,
+      ogc_pixel_type pixel_type,
+      ogc_anchor *   anchor,
+      ogc_vector *   ids,
+      ogc_error *    err = OGC_NULL);
 
    virtual ~ogc_image_datum();
    static void destroy(ogc_image_datum * obj);
@@ -2393,6 +2417,8 @@ public:
    static bool is_identical(const ogc_image_datum * p1,
                             const ogc_image_datum * p2);
           bool is_identical(const ogc_image_datum * p) const;
+
+   ogc_pixel_type  pixel_type() const { return _pixel_type; } 
 };
 
 /* ------------------------------------------------------------------------- */
@@ -4206,6 +4232,12 @@ public:
    static ogc_axis_direction axis_kwd_to_direction (const char *       kwd);
    static const char *       axis_direction_to_kwd (ogc_axis_direction dir);
    static bool               axis_direction_valid  (ogc_axis_direction dir);
+
+   /* pixel-in-cell types */
+
+   static ogc_pixel_type     pixel_kwd_to_type     (const char *       kwd);
+   static const char *       pixel_type_to_kwd     (ogc_pixel_type     type);
+   static bool               pixel_type_valid      (ogc_pixel_type     type);
 
    /* validate a cs, axes, and unit */
 

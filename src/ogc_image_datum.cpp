@@ -30,6 +30,7 @@ const char * ogc_image_datum :: alt_kwd() { return OGC_ALT_KWD_IMAGE_DATUM; }
  */
 ogc_image_datum * ogc_image_datum :: create(
    const char *    name,
+   ogc_pixel_type  pixel_type,
    ogc_anchor *    anchor,
    ogc_vector *    ids,
    ogc_error *     err)
@@ -54,6 +55,13 @@ ogc_image_datum * ogc_image_datum :: create(
       }
    }
 
+   if ( !ogc_utils::pixel_type_valid(pixel_type) )
+   {
+      ogc_error::set(err, OGC_ERR_INVALID_PIXEL_TYPE,
+         obj_kwd(), static_cast<int>(pixel_type));
+      bad = true;
+   }
+
    /*---------------------------------------------------------
     * create the object
     */
@@ -69,6 +77,7 @@ ogc_image_datum * ogc_image_datum :: create(
       ogc_string::unescape_str(p->_name, name, OGC_NAME_MAX);
       p->_obj_type   = OGC_OBJ_TYPE_IMAGE_DATUM;
       p->_datum_type = OGC_DATUM_TYPE_IMAGE;
+      p->_pixel_type = pixel_type;
       p->_anchor     = anchor;
       p->_ids        = ids;
    }
@@ -113,6 +122,7 @@ ogc_image_datum * ogc_image_datum :: from_tokens(
    ogc_anchor *       anchor    = OGC_NULL;
    ogc_id *           id        = OGC_NULL;
    ogc_vector *       ids       = OGC_NULL;
+   ogc_pixel_type     pixel_type;
    const char * name;
 
    /*---------------------------------------------------------
@@ -161,15 +171,15 @@ ogc_image_datum * ogc_image_datum :: from_tokens(
    }
 
    /*---------------------------------------------------------
-    * There must be 1 token: DATUM[ "name" ...
+    * There must be 1 token: <kwd>[ "name", pixel_type ...
     */
-   if ( same < 1 )
+   if ( same < 2 )
    {
       ogc_error::set(err, OGC_ERR_WKT_INSUFFICIENT_TOKENS, obj_kwd(), same);
       return OGC_NULL;
    }
 
-   if ( same > 1 && get_strict_parsing() )
+   if ( same > 2 && get_strict_parsing() )
    {
       ogc_error::set(err, OGC_ERR_WKT_TOO_MANY_TOKENS,     obj_kwd(), same);
       return OGC_NULL;
@@ -182,6 +192,13 @@ ogc_image_datum * ogc_image_datum :: from_tokens(
     * They come first and are syntactically fixed.
     */
    name = arr[start++].str;
+   pixel_type = ogc_utils::pixel_kwd_to_type( arr[start++].str );
+   if ( !ogc_utils::pixel_type_valid(pixel_type) )
+   {
+      ogc_error::set(err, OGC_ERR_INVALID_PIXEL_TYPE,
+         obj_kwd(), arr[start-1].str);
+      bad = true;
+   }
 
    /*---------------------------------------------------------
     * Now process all sub-objects
@@ -265,7 +282,7 @@ ogc_image_datum * ogc_image_datum :: from_tokens(
     */
    if ( !bad )
    {
-      obj = create(name, anchor, ids, err);
+      obj = create(name, pixel_type, anchor, ids, err);
    }
 
    if ( obj == OGC_NULL )
@@ -390,9 +407,10 @@ ogc_image_datum * ogc_image_datum :: clone() const
    ogc_vector * ids    = ogc_vector :: clone( _ids    );
 
    ogc_image_datum * p = create(_name,
-                                   anchor,
-                                   ids,
-                                   OGC_NULL);
+                                _pixel_type,
+                                anchor,
+                                ids,
+                                OGC_NULL);
    if ( p == OGC_NULL )
    {
       ogc_anchor    :: destroy( anchor    );
@@ -412,7 +430,8 @@ bool ogc_image_datum :: is_equal(
    if ( p1 == OGC_NULL && p2 == OGC_NULL ) return true;
    if ( p1 == OGC_NULL || p2 == OGC_NULL ) return false;
 
-   if ( !ogc_string :: is_equal( p1->name(), p2->name() ))
+   if ( !ogc_string :: is_equal( p1->name(), p2->name() ) ||
+        p1->pixel_type() != p2->pixel_type()            )
    {
       return false;
    }
@@ -436,9 +455,10 @@ bool ogc_image_datum :: is_identical(
    if ( p1 == OGC_NULL && p2 == OGC_NULL ) return true;
    if ( p1 == OGC_NULL || p2 == OGC_NULL ) return false;
 
-   if ( !ogc_string    :: is_equal    ( p1->name(),      p2->name()      ) ||
-        !ogc_anchor    :: is_identical( p1->anchor(),    p2->anchor()    ) ||
-        !ogc_vector    :: is_identical( p1->ids(),       p2->ids()       ) )
+   if ( !ogc_string    :: is_equal    ( p1->name(),      p2->name()   ) ||
+        p1->pixel_type() != p2->pixel_type()                            ||
+        !ogc_anchor    :: is_identical( p1->anchor(),    p2->anchor() ) ||
+        !ogc_vector    :: is_identical( p1->ids(),       p2->ids()    ) )
    {
       return false;
    }
