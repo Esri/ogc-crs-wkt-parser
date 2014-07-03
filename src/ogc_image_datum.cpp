@@ -192,6 +192,7 @@ ogc_image_datum * ogc_image_datum :: from_tokens(
     * They come first and are syntactically fixed.
     */
    name = arr[start++].str;
+
    pixel_type = ogc_utils::pixel_kwd_to_type( arr[start++].str );
    if ( !ogc_utils::pixel_type_valid(pixel_type) )
    {
@@ -363,8 +364,8 @@ bool ogc_image_datum :: to_wkt(
    rc &= ogc_anchor :: to_wkt(_anchor, buf_anchor, opts, OGC_TBUF_MAX);
 
    ogc_string::escape_str(buf_name, _name, OGC_UTF8_NAME_MAX);
-   sprintf(buf_hdr, "%s%s\"%s\"",
-      kwd, opn, buf_name);
+   sprintf(buf_hdr, "%s%s\"%s\",%s",
+      kwd, opn, buf_name, ogc_utils::pixel_type_to_kwd(_pixel_type));
 
    OGC_CPY_TO_BUF( buf_hdr       );
    OGC_ADD_TO_BUF( buf_anchor    );
