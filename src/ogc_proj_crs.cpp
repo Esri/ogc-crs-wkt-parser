@@ -33,9 +33,7 @@ ogc_proj_crs * ogc_proj_crs :: create(
    const char *         name,
    ogc_geod_crs *       base_crs,
    ogc_conversion *     conversion,
-   ogc_method *         method,
    ogc_cs *             cs,
-   ogc_vector *         parameters,
    ogc_axis *           axis_1,
    ogc_axis *           axis_2,
    ogc_lenunit *        lenunit,
@@ -77,12 +75,6 @@ ogc_proj_crs * ogc_proj_crs :: create(
       bad = true;
    }
 
-   if ( method == OGC_NULL )
-   {
-      ogc_error::set(err, OGC_ERR_MISSING_METHOD, obj_kwd());
-      bad = true;
-   }
-
    if ( cs == OGC_NULL )
    {
       ogc_error::set(err, OGC_ERR_MISSING_CS, obj_kwd());
@@ -112,8 +104,6 @@ ogc_proj_crs * ogc_proj_crs :: create(
       p->_cs         = cs;
       p->_base_crs   = base_crs;
       p->_conversion = conversion;
-      p->_method     = method;
-      p->_parameters = parameters;
       p->_axis_1     = axis_1;
       p->_axis_2     = axis_2;
       p->_axis_3     = OGC_NULL;
@@ -134,8 +124,6 @@ ogc_proj_crs :: ~ogc_proj_crs()
 {
    ogc_geod_crs   :: destroy( _base_crs   );
    ogc_conversion :: destroy( _conversion );
-   ogc_method     :: destroy( _method     );
-   ogc_vector     :: destroy( _parameters );
 }
 
 void ogc_proj_crs :: destroy(
@@ -167,10 +155,7 @@ ogc_proj_crs * ogc_proj_crs :: from_tokens(
    ogc_proj_crs *        obj        = OGC_NULL;
    ogc_geod_crs *        base_crs   = OGC_NULL;
    ogc_conversion *      conversion = OGC_NULL;
-   ogc_method *          method     = OGC_NULL;
    ogc_cs *              cs         = OGC_NULL;
-   ogc_vector *          parameters = OGC_NULL;
-   ogc_parameter *       param      = OGC_NULL;
    ogc_axis *            axis       = OGC_NULL;
    ogc_axis *            axis_1     = OGC_NULL;
    ogc_axis *            axis_2     = OGC_NULL;
@@ -289,23 +274,6 @@ ogc_proj_crs * ogc_proj_crs :: from_tokens(
          continue;
       }
 
-      if ( ogc_string::is_equal(arr[i].str, ogc_method::obj_kwd()) ||
-           ogc_string::is_equal(arr[i].str, ogc_method::alt_kwd()) )
-      {
-         if ( method != OGC_NULL )
-         {
-            ogc_error::set(err, OGC_ERR_WKT_DUPLICATE_METHOD, obj_kwd());
-            bad = true;
-         }
-         else
-         {
-            method = ogc_method::from_tokens(t, i, &next, err);
-            if ( method == OGC_NULL )
-               bad = true;
-         }
-         continue;
-      }
-
       if ( ogc_string::is_equal(arr[i].str, ogc_cs::obj_kwd()) )
       {
          if ( cs != OGC_NULL )
@@ -318,53 +286,6 @@ ogc_proj_crs * ogc_proj_crs :: from_tokens(
             cs = ogc_cs::from_tokens(t, i, &next, err);
             if ( cs == OGC_NULL )
                bad = true;
-         }
-         continue;
-      }
-
-      if ( ogc_string::is_equal(arr[i].str, ogc_parameter::obj_kwd()) )
-      {
-         param = ogc_parameter::from_tokens(t, i, &next, err);
-         if ( param == OGC_NULL )
-         {
-            bad = true;
-         }
-         else
-         {
-            if ( parameters == OGC_NULL )
-            {
-               parameters = ogc_vector::create(1, 1);
-               if ( parameters == OGC_NULL )
-               {
-                  ogc_error::set(err, OGC_ERR_NO_MEMORY, obj_kwd());
-                  delete param;
-                  bad = true;
-               }
-            }
-
-            if ( parameters != OGC_NULL )
-            {
-               void * p = parameters->find(
-                             param,
-                             false,
-                             ogc_utils::compare_parameter);
-               if ( p != OGC_NULL )
-               {
-                  ogc_error::set(err, OGC_ERR_WKT_DUPLICATE_PARAMETER,
-                     obj_kwd(), param->name());
-                  delete param;
-                  bad = true;
-               }
-               else
-               {
-                  if ( parameters->add( param ) < 0 )
-                  {
-                     ogc_error::set(err, OGC_ERR_NO_MEMORY, obj_kwd());
-                     delete param;
-                     bad = true;
-                  }
-               }
-            }
          }
          continue;
       }
@@ -548,8 +469,8 @@ ogc_proj_crs * ogc_proj_crs :: from_tokens(
     */
    if ( !bad )
    {
-      obj = create(name, base_crs, conversion, method, cs,
-                   parameters, axis_1, axis_2, unit,
+      obj = create(name, base_crs, conversion, cs,
+                   axis_1, axis_2, unit,
                    scope, extents, ids, remark, err);
    }
 
@@ -557,9 +478,7 @@ ogc_proj_crs * ogc_proj_crs :: from_tokens(
    {
       ogc_geod_crs     :: destroy( base_crs   );
       ogc_conversion   :: destroy( conversion );
-      ogc_method       :: destroy( method     );
       ogc_cs           :: destroy( cs         );
-      ogc_vector       :: destroy( parameters );
       ogc_axis         :: destroy( axis_1     );
       ogc_axis         :: destroy( axis_2     );
       ogc_unit         :: destroy( unit       );
@@ -619,11 +538,9 @@ bool ogc_proj_crs :: to_wkt(
    OGC_BUFF      buf_base_crs;
    OGC_TBUF      buf_cs;
    OGC_TBUF      buf_conversion;
-   OGC_TBUF      buf_method;
    OGC_TBUF      buf_axis_1;
    OGC_TBUF      buf_axis_2;
    OGC_TBUF      buf_unit;
-   OGC_TBUF      buf_parameter;
    OGC_TBUF      buf_extent;
    OGC_TBUF      buf_id;
    OGC_TBUF      buf_remark;
@@ -653,8 +570,6 @@ bool ogc_proj_crs :: to_wkt(
    rc &= ogc_geod_crs   :: to_wkt(_base_crs,   buf_base_crs,   opts, OGC_TBUF_MAX);
    rc &= ogc_cs         :: to_wkt(_cs,         buf_cs,         opts, OGC_TBUF_MAX);
    rc &= ogc_conversion :: to_wkt(_conversion, buf_conversion, opts, OGC_TBUF_MAX);
-   rc &= ogc_method     :: to_wkt_projection(
-                                  _method,     buf_method,     opts, OGC_TBUF_MAX);
    rc &= ogc_axis       :: to_wkt(_axis_1,     buf_axis_1,     opts, OGC_TBUF_MAX);
    rc &= ogc_axis       :: to_wkt(_axis_2,     buf_axis_2,     opts, OGC_TBUF_MAX);
    rc &= ogc_unit       :: to_wkt(_unit,       buf_unit,       opts, OGC_TBUF_MAX);
@@ -664,19 +579,9 @@ bool ogc_proj_crs :: to_wkt(
    sprintf(buf_hdr, "%s%s\"%s\"",
       kwd, opn, buf_name);
 
-   OGC_CPY_TO_BUF(buf_hdr);
-   OGC_ADD_TO_BUF(buf_base_crs);
-   OGC_ADD_TO_BUF(buf_conversion);
-   OGC_ADD_TO_BUF(buf_method);
-
-   if ( _parameters != OGC_NULL )
-   {
-      for (int i = 0; i < parameter_count(); i++)
-      {
-         rc &= ogc_parameter :: to_wkt(parameter(i), buf_parameter, opts, OGC_TBUF_MAX);
-         OGC_ADD_TO_BUF( buf_parameter );
-      }
-   }
+   OGC_CPY_TO_BUF( buf_hdr        );
+   OGC_ADD_TO_BUF( buf_base_crs   );
+   OGC_ADD_TO_BUF( buf_conversion );
 
    OGC_ADD_TO_BUF( buf_cs     );
    OGC_ADD_TO_BUF( buf_axis_1 );
@@ -731,9 +636,7 @@ ogc_proj_crs * ogc_proj_crs :: clone() const
 
    ogc_geod_crs *   base_crs   = ogc_geod_crs   :: clone( _base_crs   );
    ogc_conversion * conversion = ogc_conversion :: clone( _conversion );
-   ogc_method *     method     = ogc_method     :: clone( _method     );
    ogc_cs *         cs         = ogc_cs         :: clone( _cs         );
-   ogc_vector *     parameters = ogc_vector     :: clone( _parameters );
    ogc_axis *       axis_1     = ogc_axis       :: clone( _axis_1     );
    ogc_axis *       axis_2     = ogc_axis       :: clone( _axis_2     );
    ogc_lenunit *    lenunit    = ogc_lenunit    :: clone( u           );
@@ -745,9 +648,7 @@ ogc_proj_crs * ogc_proj_crs :: clone() const
    ogc_proj_crs * p = create(_name,
                                   base_crs,
                                   conversion,
-                                  method,
                                   cs,
-                                  parameters,
                                   axis_1,
                                   axis_2,
                                   lenunit,
@@ -760,9 +661,7 @@ ogc_proj_crs * ogc_proj_crs :: clone() const
    {
       ogc_geod_crs   :: destroy( base_crs   );
       ogc_conversion :: destroy( conversion );
-      ogc_method     :: destroy( method     );
       ogc_cs         :: destroy( cs         );
-      ogc_vector     :: destroy( parameters );
       ogc_axis       :: destroy( axis_1     );
       ogc_axis       :: destroy( axis_2     );
       ogc_lenunit    :: destroy( lenunit    );
@@ -787,12 +686,10 @@ bool ogc_proj_crs :: is_equal(
 
    if ( !ogc_string     :: is_equal( p1->name(),       p2->name()       ) ||
         !ogc_geod_crs   :: is_equal( p1->base_crs(),   p2->base_crs()   ) ||
-        !ogc_method     :: is_equal( p1->method(),     p2->method()     ) ||
         !ogc_cs         :: is_equal( p1->cs(),         p2->cs()         ) ||
         !ogc_axis       :: is_equal( p1->axis_1(),     p2->axis_1()     ) ||
         !ogc_axis       :: is_equal( p1->axis_2(),     p2->axis_2()     ) ||
-        !ogc_lenunit    :: is_equal( p1->lenunit(),    p2->lenunit()    ) ||
-        !ogc_vector     :: is_equal( p1->parameters(), p2->parameters() ) )
+        !ogc_lenunit    :: is_equal( p1->lenunit(),    p2->lenunit()    ) )
    {
       return false;
    }
@@ -818,12 +715,10 @@ bool ogc_proj_crs :: is_identical(
 
    if ( !ogc_string     :: is_equal    ( p1->name(),       p2->name()       ) ||
         !ogc_geod_crs   :: is_identical( p1->base_crs(),   p2->base_crs()   ) ||
-        !ogc_method     :: is_identical( p1->method(),     p2->method()     ) ||
         !ogc_cs         :: is_identical( p1->cs(),         p2->cs()         ) ||
         !ogc_axis       :: is_identical( p1->axis_1(),     p2->axis_1()     ) ||
         !ogc_axis       :: is_identical( p1->axis_2(),     p2->axis_2()     ) ||
         !ogc_lenunit    :: is_identical( p1->lenunit(),    p2->lenunit()    ) ||
-        !ogc_vector     :: is_identical( p1->parameters(), p2->parameters() ) ||
         !ogc_scope      :: is_identical( p1->scope(),      p2->scope()      ) ||
         !ogc_vector     :: is_identical( p1->extents(),    p2->extents()    ) ||
         !ogc_vector     :: is_identical( p1->ids(),        p2->ids()        ) ||
@@ -839,24 +734,6 @@ bool ogc_proj_crs :: is_identical(
    const ogc_proj_crs * p) const
 {
    return is_identical(this, p);
-}
-
-/*------------------------------------------------------------------------
- * get parameter count
- */
-int ogc_proj_crs :: parameter_count() const
-{
-   return (_parameters == OGC_NULL) ? 0 : _parameters->length();
-}
-
-/*------------------------------------------------------------------------
- * get the nth parameter
- */
-ogc_parameter * ogc_proj_crs :: parameter(int n) const
-{
-   return (_parameters == OGC_NULL) ? OGC_NULL :
-                                      reinterpret_cast<ogc_parameter *>(
-                                         _parameters->get(n) );
 }
 
 } /* namespace OGC */

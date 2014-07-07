@@ -29,6 +29,8 @@ const char * ogc_conversion :: obj_kwd() { return OGC_OBJ_KWD_CONVERSION; }
  */
 ogc_conversion * ogc_conversion :: create(
    const char * name,
+   ogc_method * method,
+   ogc_vector * parameters,
    ogc_vector * ids,
    ogc_error *  err)
 {
@@ -52,6 +54,12 @@ ogc_conversion * ogc_conversion :: create(
       }
    }
 
+   if ( method == OGC_NULL )
+   {
+      ogc_error::set(err, OGC_ERR_MISSING_METHOD, obj_kwd());
+      bad = true;
+   }
+
    /*---------------------------------------------------------
     * create the object
     */
@@ -65,8 +73,10 @@ ogc_conversion * ogc_conversion :: create(
       }
 
       ogc_string::unescape_str(p->_name, name, OGC_NAME_MAX);
-      p->_obj_type = OGC_OBJ_TYPE_METHOD;
-      p->_ids      = ids;
+      p->_obj_type   = OGC_OBJ_TYPE_METHOD;
+      p->_method     = method;
+      p->_parameters = parameters;
+      p->_ids        = ids;
    }
 
    return p;
@@ -77,7 +87,9 @@ ogc_conversion * ogc_conversion :: create(
  */
 ogc_conversion :: ~ogc_conversion()
 {
-   ogc_vector :: destroy( _ids );
+   ogc_method :: destroy( _method     );
+   ogc_vector :: destroy( _parameters );
+   ogc_vector :: destroy( _ids        );
 }
 
 void ogc_conversion :: destroy(
@@ -106,9 +118,12 @@ ogc_conversion * ogc_conversion :: from_tokens(
    int  same;
    int  num;
 
-   ogc_conversion * obj = OGC_NULL;
-   ogc_id *         id  = OGC_NULL;
-   ogc_vector *     ids = OGC_NULL;
+   ogc_conversion * obj        = OGC_NULL;
+   ogc_id *         id         = OGC_NULL;
+   ogc_method *     method     = OGC_NULL;
+   ogc_vector *     parameters = OGC_NULL;
+   ogc_parameter *  param      = OGC_NULL;
+   ogc_vector *     ids        = OGC_NULL;
    const char * name;
 
    /*---------------------------------------------------------
@@ -185,6 +200,70 @@ ogc_conversion * ogc_conversion :: from_tokens(
    int  next = 0;
    for (int i = start; i < end; i = next)
    {
+      if ( ogc_string::is_equal(arr[i].str, ogc_method::obj_kwd()) ||
+           ogc_string::is_equal(arr[i].str, ogc_method::alt_kwd()) )
+      {
+         if ( method != OGC_NULL )
+         {
+            ogc_error::set(err, OGC_ERR_WKT_DUPLICATE_METHOD, obj_kwd());
+            bad = true;
+         }
+         else
+         {
+            method = ogc_method::from_tokens(t, i, &next, err);
+            if ( method == OGC_NULL )
+               bad = true;
+         }
+         continue;
+      }
+
+      if ( ogc_string::is_equal(arr[i].str, ogc_parameter::obj_kwd()) )
+      {
+         param = ogc_parameter::from_tokens(t, i, &next, err);
+         if ( param == OGC_NULL )
+         {
+            bad = true;
+         }
+         else
+         {
+            if ( parameters == OGC_NULL )
+            {
+               parameters = ogc_vector::create(1, 1);
+               if ( parameters == OGC_NULL )
+               {
+                  ogc_error::set(err, OGC_ERR_NO_MEMORY, obj_kwd());
+                  delete param;
+                  bad = true;
+               }
+            }
+
+            if ( parameters != OGC_NULL )
+            {
+               void * p = parameters->find(
+                             param,
+                             false,
+                             ogc_utils::compare_parameter);
+               if ( p != OGC_NULL )
+               {
+                  ogc_error::set(err, OGC_ERR_WKT_DUPLICATE_PARAMETER,
+                     obj_kwd(), param->name());
+                  delete param;
+                  bad = true;
+               }
+               else
+               {
+                  if ( parameters->add( param ) < 0 )
+                  {
+                     ogc_error::set(err, OGC_ERR_NO_MEMORY, obj_kwd());
+                     delete param;
+                     bad = true;
+                  }
+               }
+            }
+         }
+         continue;
+      }
+
       if ( ogc_string::is_equal(arr[i].str, ogc_id::obj_kwd()) )
       {
          id = ogc_id::from_tokens(t, i, &next, err);
@@ -249,12 +328,14 @@ ogc_conversion * ogc_conversion :: from_tokens(
     */
    if ( !bad )
    {
-      obj = create(name, ids, err);
+      obj = create(name, method, parameters, ids, err);
    }
 
    if ( obj == OGC_NULL )
    {
-      ogc_vector :: destroy( ids );
+      ogc_method :: destroy( method     );
+      ogc_vector :: destroy( parameters );
+      ogc_vector :: destroy( ids        );
    }
 
    return obj;
@@ -304,6 +385,8 @@ bool ogc_conversion :: to_wkt(
 {
    OGC_UTF8_NAME buf_name;
    OGC_TBUF      buf_hdr;
+   OGC_TBUF      buf_method;
+   OGC_TBUF      buf_parameter;
    OGC_TBUF      buf_id;
    int           opts  =  (options | OGC_WKT_OPT_INTERNAL);
    size_t        len   = 0;
@@ -328,11 +411,23 @@ bool ogc_conversion :: to_wkt(
    if ( (options & OGC_WKT_OPT_OLD_SYNTAX) != 0 )
       return true;
 
+   rc &= ogc_method :: to_wkt(_method, buf_method, opts, OGC_TBUF_MAX);
+
    ogc_string::escape_str(buf_name, _name, OGC_UTF8_NAME_MAX);
    sprintf(buf_hdr, "%s%s\"%s\"",
       kwd, opn, buf_name);
 
-   OGC_CPY_TO_BUF( buf_hdr );
+   OGC_CPY_TO_BUF( buf_hdr    );
+   OGC_ADD_TO_BUF( buf_method );
+
+   if ( _parameters != OGC_NULL )
+   {
+      for (int i = 0; i < parameter_count(); i++)
+      {
+         rc &= ogc_parameter :: to_wkt(parameter(i), buf_parameter, opts, OGC_TBUF_MAX);
+         OGC_ADD_TO_BUF( buf_parameter );
+      }
+   }
 
    if ( _ids != OGC_NULL && (options & OGC_WKT_OPT_NO_IDS) == 0 )
    {
@@ -368,14 +463,21 @@ ogc_conversion * ogc_conversion :: clone(const ogc_conversion * obj)
 
 ogc_conversion * ogc_conversion :: clone() const
 {
-   ogc_vector * ids = ogc_vector :: clone( _ids );
+   ogc_method * method     = ogc_method :: clone( _method     );
+   ogc_vector * parameters = ogc_vector :: clone( _parameters );
+   ogc_vector * ids        = ogc_vector :: clone( _ids        );
 
    ogc_conversion * p = create(_name,
+                               method,
+                               parameters,
                                ids,
                                OGC_NULL);
    if ( p == OGC_NULL )
    {
-      ogc_vector :: destroy( ids );
+;
+      ogc_method :: destroy( method     );
+      ogc_vector :: destroy( parameters );
+      ogc_vector :: destroy( ids        );
    }
 
    return p;
@@ -391,7 +493,9 @@ bool ogc_conversion :: is_equal(
    if ( p1 == OGC_NULL && p2 == OGC_NULL ) return true;
    if ( p1 == OGC_NULL || p2 == OGC_NULL ) return false;
 
-   if ( !ogc_string :: is_equal( p1->name(), p2->name() ) )
+   if ( !ogc_string :: is_equal( p1->name(),       p2->name()       ) ||
+        !ogc_method :: is_equal( p1->method(),     p2->method()     ) ||
+        !ogc_vector :: is_equal( p1->parameters(), p2->parameters() ) )
    {
       return false;
    }
@@ -415,8 +519,10 @@ bool ogc_conversion :: is_identical(
    if ( p1 == OGC_NULL && p2 == OGC_NULL ) return true;
    if ( p1 == OGC_NULL || p2 == OGC_NULL ) return false;
 
-   if ( !ogc_string :: is_equal    ( p1->name(), p2->name() ) ||
-        !ogc_vector :: is_identical( p1->ids(),  p2->ids()  ) )
+   if ( !ogc_string :: is_equal    ( p1->name(),       p2->name()       ) ||
+        !ogc_method :: is_identical( p1->method(),     p2->method()     ) ||
+        !ogc_vector :: is_identical( p1->parameters(), p2->parameters() ) ||
+        !ogc_vector :: is_identical( p1->ids(),        p2->ids()        ) )
    {
       return false;
    }
@@ -428,6 +534,24 @@ bool ogc_conversion :: is_identical(
    const ogc_conversion * p) const
 {
    return is_identical(this, p);
+}
+
+/*------------------------------------------------------------------------
+ * get parameter count
+ */
+int ogc_conversion :: parameter_count() const
+{
+   return (_parameters == OGC_NULL) ? 0 : _parameters->length();
+}
+
+/*------------------------------------------------------------------------
+ * get the nth parameter
+ */
+ogc_parameter * ogc_conversion :: parameter(int n) const
+{
+   return (_parameters == OGC_NULL) ? OGC_NULL :
+                                      reinterpret_cast<ogc_parameter *>(
+                                         _parameters->get(n) );
 }
 
 /*------------------------------------------------------------------------

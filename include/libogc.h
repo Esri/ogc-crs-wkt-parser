@@ -2991,68 +2991,6 @@ public:
 };
 
 /* ------------------------------------------------------------------------- */
-/* Conversion                                                                */
-/* ------------------------------------------------------------------------- */
-
-class OGC_EXPORT ogc_conversion : public ogc_object
-{
-private:
-   OGC_NAME     _name;
-   ogc_vector * _ids;
-
-   ogc_conversion() {}
-
-public:
-   static const char * obj_kwd();
-
-   static ogc_conversion * create(
-      const char * name,
-      ogc_vector * ids,
-      ogc_error *  err = OGC_NULL);
-
-   virtual ~ogc_conversion();
-   static void destroy(ogc_conversion * obj);
-
-   static ogc_conversion * from_tokens(
-      const ogc_token * t,
-      int               start,
-      int *             pend,
-      ogc_error *       err = OGC_NULL);
-
-   static ogc_conversion * from_wkt(
-      const char * wkt,
-      ogc_error *  err = OGC_NULL);
-
-   static bool to_wkt(
-      const ogc_conversion * obj,
-      char     buffer[],
-      int      options = OGC_WKT_OPT_NONE,
-      size_t   buflen  = OGC_BUFF_MAX);
-
-   bool to_wkt(
-      char     buffer[],
-      int      options = OGC_WKT_OPT_NONE,
-      size_t   buflen  = OGC_BUFF_MAX) const;
-
-   static ogc_conversion * clone(const ogc_conversion * obj);
-          ogc_conversion * clone() const;
-
-   static bool is_equal    (const ogc_conversion * p1,
-                            const ogc_conversion * p2);
-          bool is_equal    (const ogc_conversion * p) const;
-
-   static bool is_identical(const ogc_conversion * p1,
-                            const ogc_conversion * p2);
-          bool is_identical(const ogc_conversion * p) const;
-
-   const char * name()     const { return _name; }
-   ogc_vector * ids()      const { return _ids;  }
-
-   int          id_count() const;
-   ogc_id *     id(int n)  const;
-};
-
-/* ------------------------------------------------------------------------- */
 /* Method                                                                    */
 /* ------------------------------------------------------------------------- */
 
@@ -3126,6 +3064,77 @@ public:
       char     buffer[],
       int      options = OGC_WKT_OPT_NONE,
       size_t   buflen  = OGC_BUFF_MAX) const;
+};
+
+/* ------------------------------------------------------------------------- */
+/* Conversion                                                                */
+/* ------------------------------------------------------------------------- */
+
+class OGC_EXPORT ogc_conversion : public ogc_object
+{
+private:
+   OGC_NAME     _name;
+   ogc_method * _method;
+   ogc_vector * _parameters;
+   ogc_vector * _ids;
+
+   ogc_conversion() {}
+
+public:
+   static const char * obj_kwd();
+
+   static ogc_conversion * create(
+      const char * name,
+      ogc_method * method,
+      ogc_vector * parameters,
+      ogc_vector * ids,
+      ogc_error *  err = OGC_NULL);
+
+   virtual ~ogc_conversion();
+   static void destroy(ogc_conversion * obj);
+
+   static ogc_conversion * from_tokens(
+      const ogc_token * t,
+      int               start,
+      int *             pend,
+      ogc_error *       err = OGC_NULL);
+
+   static ogc_conversion * from_wkt(
+      const char * wkt,
+      ogc_error *  err = OGC_NULL);
+
+   static bool to_wkt(
+      const ogc_conversion * obj,
+      char     buffer[],
+      int      options = OGC_WKT_OPT_NONE,
+      size_t   buflen  = OGC_BUFF_MAX);
+
+   bool to_wkt(
+      char     buffer[],
+      int      options = OGC_WKT_OPT_NONE,
+      size_t   buflen  = OGC_BUFF_MAX) const;
+
+   static ogc_conversion * clone(const ogc_conversion * obj);
+          ogc_conversion * clone() const;
+
+   static bool is_equal    (const ogc_conversion * p1,
+                            const ogc_conversion * p2);
+          bool is_equal    (const ogc_conversion * p) const;
+
+   static bool is_identical(const ogc_conversion * p1,
+                            const ogc_conversion * p2);
+          bool is_identical(const ogc_conversion * p) const;
+
+   const char *     name()       const { return _name;       }
+   ogc_method *     method()     const { return _method;     }
+   ogc_vector *     parameters() const { return _parameters; }
+   ogc_vector *     ids()        const { return _ids;        }
+
+   int              parameter_count() const;
+   ogc_parameter *  parameter(int n)  const;
+
+   int             id_count() const;
+   ogc_id *        id(int n)  const;
 };
 
 /* ------------------------------------------------------------------------- */
@@ -3287,8 +3296,6 @@ class OGC_EXPORT ogc_proj_crs : public ogc_crs
 private:
    ogc_geod_crs *     _base_crs;
    ogc_conversion *   _conversion;
-   ogc_method *       _method;
-   ogc_vector *       _parameters;
 
    ogc_proj_crs() {}
 
@@ -3301,9 +3308,7 @@ public:
       const char *         name,
       ogc_geod_crs *       base_crs,
       ogc_conversion *     conversion,
-      ogc_method *         method,
       ogc_cs *             cs,
-      ogc_vector *         parameters,
       ogc_axis *           axis_1,
       ogc_axis *           axis_2,
       ogc_lenunit *        lenunit,
@@ -3350,12 +3355,7 @@ public:
 
    ogc_geod_crs *   base_crs()        const { return _base_crs;            }
    ogc_conversion * conversion()      const { return _conversion;          }
-   ogc_method *     method()          const { return _method;              }
-   ogc_vector *     parameters()      const { return _parameters;          }
    ogc_lenunit *    lenunit()         const { return (ogc_lenunit *)_unit; }
-
-   int              parameter_count() const;
-   ogc_parameter *  parameter(int n)  const;
 };
 
 /* ------------------------------------------------------------------------- */
