@@ -1,5 +1,5 @@
-<?xml version="1.0" encoding="utf-8"?>
-<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="12.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup Label="Output Macros">
     <TOP_DIR>../..</TOP_DIR>
   </PropertyGroup>
@@ -22,32 +22,32 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectName>libogc</ProjectName>
-    <ProjectGuid>{060E331A-499F-4033-AC49-C129C2FFF5D4}</ProjectGuid>
-    <RootNamespace>libogc</RootNamespace>
+    <ProjectName>parse</ProjectName>
+    <ProjectGuid>{A5AE38A2-6AAF-4CC2-AA19-416CA525FC12}</ProjectGuid>
+    <RootNamespace>OGC</RootNamespace>
     <Keyword>Win32Proj</Keyword>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
-    <ConfigurationType>DynamicLibrary</ConfigurationType>
-    <PlatformToolset>v110</PlatformToolset>
+    <ConfigurationType>Application</ConfigurationType>
+    <PlatformToolset>v120</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
     <WholeProgramOptimization>true</WholeProgramOptimization>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
-    <ConfigurationType>DynamicLibrary</ConfigurationType>
-    <PlatformToolset>v110</PlatformToolset>
+    <ConfigurationType>Application</ConfigurationType>
+    <PlatformToolset>v120</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
-    <ConfigurationType>DynamicLibrary</ConfigurationType>
-    <PlatformToolset>v110</PlatformToolset>
+    <ConfigurationType>Application</ConfigurationType>
+    <PlatformToolset>v120</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
     <WholeProgramOptimization>true</WholeProgramOptimization>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
-    <ConfigurationType>DynamicLibrary</ConfigurationType>
-    <PlatformToolset>v110</PlatformToolset>
+    <ConfigurationType>Application</ConfigurationType>
+    <PlatformToolset>v120</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
@@ -71,29 +71,29 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <OutDir>$(TOP_DIR)\debug32\</OutDir>
-    <IntDir>$(TOP_DIR)\src\debug32\</IntDir>
+    <IntDir>$(TOP_DIR)\etc\debug32\</IntDir>
     <LinkIncremental>false</LinkIncremental>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <OutDir>$(TOP_DIR)\debug64\</OutDir>
-    <IntDir>$(TOP_DIR)\src\debug64\</IntDir>
+    <IntDir>$(TOP_DIR)\etc\debug64\</IntDir>
     <LinkIncremental>false</LinkIncremental>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <OutDir>$(TOP_DIR)\release32\</OutDir>
-    <IntDir>$(TOP_DIR)\src\release32\</IntDir>
+    <IntDir>$(TOP_DIR)\etc\release32\</IntDir>
     <LinkIncremental>false</LinkIncremental>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <OutDir>$(TOP_DIR)\release64\</OutDir>
-    <IntDir>$(TOP_DIR)\src\release64\</IntDir>
+    <IntDir>$(TOP_DIR)\etc\release64\</IntDir>
     <LinkIncremental>false</LinkIncremental>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <Optimization>Disabled</Optimization>
       <AdditionalIncludeDirectories>$(TOP_DIR)\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <StringPooling>true</StringPooling>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MinimalRebuild>true</MinimalRebuild>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
@@ -101,15 +101,13 @@
       <WarningLevel>Level4</WarningLevel>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
     </ClCompile>
-    <ResourceCompile>
-      <AdditionalIncludeDirectories>$(TOP_DIR)\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-    </ResourceCompile>
     <Link>
-      <OutputFile>$(OutDir)bin\$(ProjectName).dll</OutputFile>
+      <AdditionalDependencies>libogc.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <OutputFile>$(OutDir)bin\$(ProjectName).exe</OutputFile>
+      <AdditionalLibraryDirectories>$(OutDir)lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <ProgramDatabaseFile>$(OutDir)pdb\$(ProjectName).pdb</ProgramDatabaseFile>
-      <SubSystem>Windows</SubSystem>
-      <ImportLibrary>$(OutDir)lib\$(ProjectName).lib</ImportLibrary>
+      <SubSystem>Console</SubSystem>
       <TargetMachine>MachineX86</TargetMachine>
     </Link>
   </ItemDefinitionGroup>
@@ -117,7 +115,7 @@
     <ClCompile>
       <Optimization>Disabled</Optimization>
       <AdditionalIncludeDirectories>$(TOP_DIR)\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <StringPooling>true</StringPooling>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MinimalRebuild>true</MinimalRebuild>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
@@ -125,15 +123,13 @@
       <WarningLevel>Level4</WarningLevel>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
     </ClCompile>
-    <ResourceCompile>
-      <AdditionalIncludeDirectories>$(TOP_DIR)\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-    </ResourceCompile>
     <Link>
-      <OutputFile>$(OutDir)bin\$(ProjectName).dll</OutputFile>
+      <AdditionalDependencies>libogc.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <OutputFile>$(OutDir)bin\$(ProjectName).exe</OutputFile>
+      <AdditionalLibraryDirectories>$(OutDir)lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <ProgramDatabaseFile>$(OutDir)pdb\$(ProjectName).pdb</ProgramDatabaseFile>
-      <SubSystem>Windows</SubSystem>
-      <ImportLibrary>$(OutDir)lib\$(ProjectName).lib</ImportLibrary>
+      <SubSystem>Console</SubSystem>
       <TargetMachine>MachineX64</TargetMachine>
     </Link>
   </ItemDefinitionGroup>
@@ -142,24 +138,22 @@
       <Optimization>MaxSpeed</Optimization>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <AdditionalIncludeDirectories>$(TOP_DIR)\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <StringPooling>true</StringPooling>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <PrecompiledHeader />
       <WarningLevel>Level4</WarningLevel>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
     </ClCompile>
-    <ResourceCompile>
-      <AdditionalIncludeDirectories>$(TOP_DIR)\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-    </ResourceCompile>
     <Link>
-      <OutputFile>$(OutDir)bin\$(ProjectName).dll</OutputFile>
+      <AdditionalDependencies>libogc.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <OutputFile>$(OutDir)bin\$(ProjectName).exe</OutputFile>
+      <AdditionalLibraryDirectories>$(OutDir)lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <ProgramDatabaseFile>$(OutDir)pdb\$(ProjectName).pdb</ProgramDatabaseFile>
-      <SubSystem>Windows</SubSystem>
+      <SubSystem>Console</SubSystem>
       <OptimizeReferences>true</OptimizeReferences>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
-      <ImportLibrary>$(OutDir)lib\$(ProjectName).lib</ImportLibrary>
       <TargetMachine>MachineX86</TargetMachine>
     </Link>
   </ItemDefinitionGroup>
@@ -168,98 +162,31 @@
       <Optimization>MaxSpeed</Optimization>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <AdditionalIncludeDirectories>$(TOP_DIR)\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <StringPooling>true</StringPooling>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <PrecompiledHeader />
       <WarningLevel>Level4</WarningLevel>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
     </ClCompile>
-    <ResourceCompile>
-      <AdditionalIncludeDirectories>$(TOP_DIR)\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-    </ResourceCompile>
     <Link>
-      <OutputFile>$(OutDir)bin\$(ProjectName).dll</OutputFile>
+      <AdditionalDependencies>libogc.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <OutputFile>$(OutDir)bin\$(ProjectName).exe</OutputFile>
+      <AdditionalLibraryDirectories>$(OutDir)lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <ProgramDatabaseFile>$(OutDir)pdb\$(ProjectName).pdb</ProgramDatabaseFile>
-      <SubSystem>Windows</SubSystem>
+      <SubSystem>Console</SubSystem>
       <OptimizeReferences>true</OptimizeReferences>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
-      <ImportLibrary>$(OutDir)lib\$(ProjectName).lib</ImportLibrary>
       <TargetMachine>MachineX64</TargetMachine>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="$(TOP_DIR)\src\ogc_abrtrans.cpp" />
-    <ClCompile Include="$(TOP_DIR)\src\ogc_anchor.cpp" />
-    <ClCompile Include="$(TOP_DIR)\src\ogc_angunit.cpp" />
-    <ClCompile Include="$(TOP_DIR)\src\ogc_area_extent.cpp" />
-    <ClCompile Include="$(TOP_DIR)\src\ogc_axis.cpp" />
-    <ClCompile Include="$(TOP_DIR)\src\ogc_bbox_extent.cpp" />
-    <ClCompile Include="$(TOP_DIR)\src\ogc_bearing.cpp" />
-    <ClCompile Include="$(TOP_DIR)\src\ogc_bound_crs.cpp" />
-    <ClCompile Include="$(TOP_DIR)\src\ogc_citation.cpp" />
-    <ClCompile Include="$(TOP_DIR)\src\ogc_compound_crs.cpp" />
-    <ClCompile Include="$(TOP_DIR)\src\ogc_conversion.cpp" />
-    <ClCompile Include="$(TOP_DIR)\src\ogc_coord_op.cpp" />
-    <ClCompile Include="$(TOP_DIR)\src\ogc_crs.cpp" />
-    <ClCompile Include="$(TOP_DIR)\src\ogc_cs.cpp" />
-    <ClCompile Include="$(TOP_DIR)\src\ogc_datetime.cpp" />
-    <ClCompile Include="$(TOP_DIR)\src\ogc_datum.cpp" />
-    <ClCompile Include="$(TOP_DIR)\src\ogc_ellipsoid.cpp" />
-    <ClCompile Include="$(TOP_DIR)\src\ogc_engr_crs.cpp" />
-    <ClCompile Include="$(TOP_DIR)\src\ogc_engr_datum.cpp" />
-    <ClCompile Include="$(TOP_DIR)\src\ogc_error.cpp" />
-    <ClCompile Include="$(TOP_DIR)\src\ogc_extent.cpp" />
-    <ClCompile Include="$(TOP_DIR)\src\ogc_geod_crs.cpp" />
-    <ClCompile Include="$(TOP_DIR)\src\ogc_geod_datum.cpp" />
-    <ClCompile Include="$(TOP_DIR)\src\ogc_id.cpp" />
-    <ClCompile Include="$(TOP_DIR)\src\ogc_image_crs.cpp" />
-    <ClCompile Include="$(TOP_DIR)\src\ogc_image_datum.cpp" />
-    <ClCompile Include="$(TOP_DIR)\src\ogc_lenunit.cpp" />
-    <ClCompile Include="$(TOP_DIR)\src\ogc_macros.cpp" />
-    <ClCompile Include="$(TOP_DIR)\src\ogc_meridian.cpp" />
-    <ClCompile Include="$(TOP_DIR)\src\ogc_method.cpp" />
-    <ClCompile Include="$(TOP_DIR)\src\ogc_object.cpp" />
-    <ClCompile Include="$(TOP_DIR)\src\ogc_op_accuracy.cpp" />
-    <ClCompile Include="$(TOP_DIR)\src\ogc_order.cpp" />
-    <ClCompile Include="$(TOP_DIR)\src\ogc_parameter.cpp" />
-    <ClCompile Include="$(TOP_DIR)\src\ogc_parameter_file.cpp" />
-    <ClCompile Include="$(TOP_DIR)\src\ogc_param_crs.cpp" />
-    <ClCompile Include="$(TOP_DIR)\src\ogc_param_datum.cpp" />
-    <ClCompile Include="$(TOP_DIR)\src\ogc_paramunit.cpp" />
-    <ClCompile Include="$(TOP_DIR)\src\ogc_primem.cpp" />
-    <ClCompile Include="$(TOP_DIR)\src\ogc_proj_crs.cpp" />
-    <ClCompile Include="$(TOP_DIR)\src\ogc_remark.cpp" />
-    <ClCompile Include="$(TOP_DIR)\src\ogc_scaleunit.cpp" />
-    <ClCompile Include="$(TOP_DIR)\src\ogc_scope.cpp" />
-    <ClCompile Include="$(TOP_DIR)\src\ogc_string.cpp" />
-    <ClCompile Include="$(TOP_DIR)\src\ogc_tables.cpp" />
-    <ClCompile Include="$(TOP_DIR)\src\ogc_time_crs.cpp" />
-    <ClCompile Include="$(TOP_DIR)\src\ogc_time_datum.cpp" />
-    <ClCompile Include="$(TOP_DIR)\src\ogc_time_extent.cpp" />
-    <ClCompile Include="$(TOP_DIR)\src\ogc_time_origin.cpp" />
-    <ClCompile Include="$(TOP_DIR)\src\ogc_timeunit.cpp" />
-    <ClCompile Include="$(TOP_DIR)\src\ogc_token.cpp" />
-    <ClCompile Include="$(TOP_DIR)\src\ogc_unicode.cpp" />
-    <ClCompile Include="$(TOP_DIR)\src\ogc_unit.cpp" />
-    <ClCompile Include="$(TOP_DIR)\src\ogc_uri.cpp" />
-    <ClCompile Include="$(TOP_DIR)\src\ogc_utils.cpp" />
-    <ClCompile Include="$(TOP_DIR)\src\ogc_vector.cpp" />
-    <ClCompile Include="$(TOP_DIR)\src\ogc_vert_crs.cpp" />
-    <ClCompile Include="$(TOP_DIR)\src\ogc_vert_datum.cpp" />
-    <ClCompile Include="$(TOP_DIR)\src\ogc_vert_extent.cpp" />
+    <ClCompile Include="$(TOP_DIR)\etc\parse.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="$(TOP_DIR)\include\libogc.h" />
-    <ClInclude Include="$(TOP_DIR)\src\ogc_common.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <ResourceCompile Include="$(TOP_DIR)\src\libogc.rc" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="libogc_s_2012.vcxproj">
-      <Project>{ad62888b-e0da-40ba-8ba6-8367e33f2e3f}</Project>
+    <ProjectReference Include="libogc_2012.vcxproj">
+      <Project>{060e331a-499f-4033-ac49-c129c2fff5d4}</Project>
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
     </ProjectReference>
   </ItemGroup>

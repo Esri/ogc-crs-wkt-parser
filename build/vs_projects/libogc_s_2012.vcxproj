@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup Label="Output Macros">
+    <TOP_DIR>../..</TOP_DIR>
+  </PropertyGroup>
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
       <Configuration>Debug</Configuration>
@@ -67,25 +70,25 @@
     <_ProjectFileVersion>11.0.60315.1</_ProjectFileVersion>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <OutDir>..\..\debug32\</OutDir>
-    <IntDir>..\..\src\debug32_s\</IntDir>
+    <OutDir>$(TOP_DIR)\debug32\</OutDir>
+    <IntDir>$(TOP_DIR)\src\debug32_s\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <OutDir>..\..\debug64\</OutDir>
-    <IntDir>..\..\src\debug64_s\</IntDir>
+    <OutDir>$(TOP_DIR)\debug64\</OutDir>
+    <IntDir>$(TOP_DIR)\src\debug64_s\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <OutDir>..\..\release32\</OutDir>
-    <IntDir>..\..\src\release32_s\</IntDir>
+    <OutDir>$(TOP_DIR)\release32\</OutDir>
+    <IntDir>$(TOP_DIR)\src\release32_s\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <OutDir>..\..\release64\</OutDir>
-    <IntDir>..\..\src\release64_s\</IntDir>
+    <OutDir>$(TOP_DIR)\release64\</OutDir>
+    <IntDir>$(TOP_DIR)\src\release64_s\</IntDir>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>..\..\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(TOP_DIR)\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>OGC_USE_STATIC_LIBS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <StringPooling>true</StringPooling>
       <MinimalRebuild>true</MinimalRebuild>
@@ -105,7 +108,7 @@
     </Midl>
     <ClCompile>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>..\..\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(TOP_DIR)\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>OGC_USE_STATIC_LIBS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <StringPooling>true</StringPooling>
       <MinimalRebuild>true</MinimalRebuild>
@@ -123,7 +126,7 @@
     <ClCompile>
       <Optimization>MaxSpeed</Optimization>
       <IntrinsicFunctions>true</IntrinsicFunctions>
-      <AdditionalIncludeDirectories>..\..\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(TOP_DIR)\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>OGC_USE_STATIC_LIBS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <StringPooling>true</StringPooling>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
@@ -143,7 +146,7 @@
     <ClCompile>
       <Optimization>MaxSpeed</Optimization>
       <IntrinsicFunctions>true</IntrinsicFunctions>
-      <AdditionalIncludeDirectories>..\..\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(TOP_DIR)\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>OGC_USE_STATIC_LIBS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <StringPooling>true</StringPooling>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
@@ -157,69 +160,69 @@
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\src\ogc_abrtrans.cpp" />
-    <ClCompile Include="..\..\src\ogc_anchor.cpp" />
-    <ClCompile Include="..\..\src\ogc_angunit.cpp" />
-    <ClCompile Include="..\..\src\ogc_area_extent.cpp" />
-    <ClCompile Include="..\..\src\ogc_axis.cpp" />
-    <ClCompile Include="..\..\src\ogc_bbox_extent.cpp" />
-    <ClCompile Include="..\..\src\ogc_bearing.cpp" />
-    <ClCompile Include="..\..\src\ogc_bound_crs.cpp" />
-    <ClCompile Include="..\..\src\ogc_citation.cpp" />
-    <ClCompile Include="..\..\src\ogc_compound_crs.cpp" />
-    <ClCompile Include="..\..\src\ogc_conversion.cpp" />
-    <ClCompile Include="..\..\src\ogc_coord_op.cpp" />
-    <ClCompile Include="..\..\src\ogc_crs.cpp" />
-    <ClCompile Include="..\..\src\ogc_cs.cpp" />
-    <ClCompile Include="..\..\src\ogc_datetime.cpp" />
-    <ClCompile Include="..\..\src\ogc_datum.cpp" />
-    <ClCompile Include="..\..\src\ogc_ellipsoid.cpp" />
-    <ClCompile Include="..\..\src\ogc_engr_crs.cpp" />
-    <ClCompile Include="..\..\src\ogc_engr_datum.cpp" />
-    <ClCompile Include="..\..\src\ogc_error.cpp" />
-    <ClCompile Include="..\..\src\ogc_extent.cpp" />
-    <ClCompile Include="..\..\src\ogc_geod_crs.cpp" />
-    <ClCompile Include="..\..\src\ogc_geod_datum.cpp" />
-    <ClCompile Include="..\..\src\ogc_id.cpp" />
-    <ClCompile Include="..\..\src\ogc_image_crs.cpp" />
-    <ClCompile Include="..\..\src\ogc_image_datum.cpp" />
-    <ClCompile Include="..\..\src\ogc_lenunit.cpp" />
-    <ClCompile Include="..\..\src\ogc_macros.cpp" />
-    <ClCompile Include="..\..\src\ogc_meridian.cpp" />
-    <ClCompile Include="..\..\src\ogc_method.cpp" />
-    <ClCompile Include="..\..\src\ogc_object.cpp" />
-    <ClCompile Include="..\..\src\ogc_opaccuracy.cpp" />
-    <ClCompile Include="..\..\src\ogc_order.cpp" />
-    <ClCompile Include="..\..\src\ogc_parameter.cpp" />
-    <ClCompile Include="..\..\src\ogc_parameter_file.cpp" />
-    <ClCompile Include="..\..\src\ogc_param_crs.cpp" />
-    <ClCompile Include="..\..\src\ogc_param_datum.cpp" />
-    <ClCompile Include="..\..\src\ogc_paramunit.cpp" />
-    <ClCompile Include="..\..\src\ogc_primem.cpp" />
-    <ClCompile Include="..\..\src\ogc_proj_crs.cpp" />
-    <ClCompile Include="..\..\src\ogc_remark.cpp" />
-    <ClCompile Include="..\..\src\ogc_scaleunit.cpp" />
-    <ClCompile Include="..\..\src\ogc_scope.cpp" />
-    <ClCompile Include="..\..\src\ogc_string.cpp" />
-    <ClCompile Include="..\..\src\ogc_tables.cpp" />
-    <ClCompile Include="..\..\src\ogc_time_crs.cpp" />
-    <ClCompile Include="..\..\src\ogc_time_datum.cpp" />
-    <ClCompile Include="..\..\src\ogc_time_extent.cpp" />
-    <ClCompile Include="..\..\src\ogc_time_origin.cpp" />
-    <ClCompile Include="..\..\src\ogc_timeunit.cpp" />
-    <ClCompile Include="..\..\src\ogc_token.cpp" />
-    <ClCompile Include="..\..\src\ogc_unicode.cpp" />
-    <ClCompile Include="..\..\src\ogc_unit.cpp" />
-    <ClCompile Include="..\..\src\ogc_uri.cpp" />
-    <ClCompile Include="..\..\src\ogc_utils.cpp" />
-    <ClCompile Include="..\..\src\ogc_vector.cpp" />
-    <ClCompile Include="..\..\src\ogc_vert_crs.cpp" />
-    <ClCompile Include="..\..\src\ogc_vert_datum.cpp" />
-    <ClCompile Include="..\..\src\ogc_vert_extent.cpp" />
+    <ClCompile Include="$(TOP_DIR)\src\ogc_abrtrans.cpp" />
+    <ClCompile Include="$(TOP_DIR)\src\ogc_anchor.cpp" />
+    <ClCompile Include="$(TOP_DIR)\src\ogc_angunit.cpp" />
+    <ClCompile Include="$(TOP_DIR)\src\ogc_area_extent.cpp" />
+    <ClCompile Include="$(TOP_DIR)\src\ogc_axis.cpp" />
+    <ClCompile Include="$(TOP_DIR)\src\ogc_bbox_extent.cpp" />
+    <ClCompile Include="$(TOP_DIR)\src\ogc_bearing.cpp" />
+    <ClCompile Include="$(TOP_DIR)\src\ogc_bound_crs.cpp" />
+    <ClCompile Include="$(TOP_DIR)\src\ogc_citation.cpp" />
+    <ClCompile Include="$(TOP_DIR)\src\ogc_compound_crs.cpp" />
+    <ClCompile Include="$(TOP_DIR)\src\ogc_conversion.cpp" />
+    <ClCompile Include="$(TOP_DIR)\src\ogc_coord_op.cpp" />
+    <ClCompile Include="$(TOP_DIR)\src\ogc_crs.cpp" />
+    <ClCompile Include="$(TOP_DIR)\src\ogc_cs.cpp" />
+    <ClCompile Include="$(TOP_DIR)\src\ogc_datetime.cpp" />
+    <ClCompile Include="$(TOP_DIR)\src\ogc_datum.cpp" />
+    <ClCompile Include="$(TOP_DIR)\src\ogc_ellipsoid.cpp" />
+    <ClCompile Include="$(TOP_DIR)\src\ogc_engr_crs.cpp" />
+    <ClCompile Include="$(TOP_DIR)\src\ogc_engr_datum.cpp" />
+    <ClCompile Include="$(TOP_DIR)\src\ogc_error.cpp" />
+    <ClCompile Include="$(TOP_DIR)\src\ogc_extent.cpp" />
+    <ClCompile Include="$(TOP_DIR)\src\ogc_geod_crs.cpp" />
+    <ClCompile Include="$(TOP_DIR)\src\ogc_geod_datum.cpp" />
+    <ClCompile Include="$(TOP_DIR)\src\ogc_id.cpp" />
+    <ClCompile Include="$(TOP_DIR)\src\ogc_image_crs.cpp" />
+    <ClCompile Include="$(TOP_DIR)\src\ogc_image_datum.cpp" />
+    <ClCompile Include="$(TOP_DIR)\src\ogc_lenunit.cpp" />
+    <ClCompile Include="$(TOP_DIR)\src\ogc_macros.cpp" />
+    <ClCompile Include="$(TOP_DIR)\src\ogc_meridian.cpp" />
+    <ClCompile Include="$(TOP_DIR)\src\ogc_method.cpp" />
+    <ClCompile Include="$(TOP_DIR)\src\ogc_object.cpp" />
+    <ClCompile Include="$(TOP_DIR)\src\ogc_op_accuracy.cpp" />
+    <ClCompile Include="$(TOP_DIR)\src\ogc_order.cpp" />
+    <ClCompile Include="$(TOP_DIR)\src\ogc_parameter.cpp" />
+    <ClCompile Include="$(TOP_DIR)\src\ogc_parameter_file.cpp" />
+    <ClCompile Include="$(TOP_DIR)\src\ogc_param_crs.cpp" />
+    <ClCompile Include="$(TOP_DIR)\src\ogc_param_datum.cpp" />
+    <ClCompile Include="$(TOP_DIR)\src\ogc_paramunit.cpp" />
+    <ClCompile Include="$(TOP_DIR)\src\ogc_primem.cpp" />
+    <ClCompile Include="$(TOP_DIR)\src\ogc_proj_crs.cpp" />
+    <ClCompile Include="$(TOP_DIR)\src\ogc_remark.cpp" />
+    <ClCompile Include="$(TOP_DIR)\src\ogc_scaleunit.cpp" />
+    <ClCompile Include="$(TOP_DIR)\src\ogc_scope.cpp" />
+    <ClCompile Include="$(TOP_DIR)\src\ogc_string.cpp" />
+    <ClCompile Include="$(TOP_DIR)\src\ogc_tables.cpp" />
+    <ClCompile Include="$(TOP_DIR)\src\ogc_time_crs.cpp" />
+    <ClCompile Include="$(TOP_DIR)\src\ogc_time_datum.cpp" />
+    <ClCompile Include="$(TOP_DIR)\src\ogc_time_extent.cpp" />
+    <ClCompile Include="$(TOP_DIR)\src\ogc_time_origin.cpp" />
+    <ClCompile Include="$(TOP_DIR)\src\ogc_timeunit.cpp" />
+    <ClCompile Include="$(TOP_DIR)\src\ogc_token.cpp" />
+    <ClCompile Include="$(TOP_DIR)\src\ogc_unicode.cpp" />
+    <ClCompile Include="$(TOP_DIR)\src\ogc_unit.cpp" />
+    <ClCompile Include="$(TOP_DIR)\src\ogc_uri.cpp" />
+    <ClCompile Include="$(TOP_DIR)\src\ogc_utils.cpp" />
+    <ClCompile Include="$(TOP_DIR)\src\ogc_vector.cpp" />
+    <ClCompile Include="$(TOP_DIR)\src\ogc_vert_crs.cpp" />
+    <ClCompile Include="$(TOP_DIR)\src\ogc_vert_datum.cpp" />
+    <ClCompile Include="$(TOP_DIR)\src\ogc_vert_extent.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\include\libogc.h" />
-    <ClInclude Include="..\..\src\ogc_common.h" />
+    <ClInclude Include="$(TOP_DIR)\include\libogc.h" />
+    <ClInclude Include="$(TOP_DIR)\src\ogc_common.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
