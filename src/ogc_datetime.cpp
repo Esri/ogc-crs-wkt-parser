@@ -31,6 +31,19 @@ ogc_datetime :: ogc_datetime()
 }
 
 ogc_datetime :: ogc_datetime(int year, int month, int    day,
+                             int hour, int min,   double sec,
+                             int tz)
+{
+   _year  = year;
+   _month = month;
+   _day   = day;
+   _hour  = hour;
+   _min   = min;
+   _sec   = sec;
+   _tz    = tz;
+}
+
+ogc_datetime :: ogc_datetime(int year, int month, int    day,
                              int hour, int min,   double sec)
 {
    _year  = year;
@@ -39,6 +52,7 @@ ogc_datetime :: ogc_datetime(int year, int month, int    day,
    _hour  = hour;
    _min   = min;
    _sec   = sec;
+   _tz    = 0;
 }
 
 ogc_datetime :: ogc_datetime(int year, int month, int day)
@@ -49,6 +63,7 @@ ogc_datetime :: ogc_datetime(int year, int month, int day)
    _hour  = 0;
    _min   = 0;
    _sec   = 0.0;
+   _tz    = 0;
 }
 
 ogc_datetime :: ogc_datetime(int hour, int min, double sec)
@@ -59,6 +74,7 @@ ogc_datetime :: ogc_datetime(int hour, int min, double sec)
    _hour  = hour;
    _min   = min;
    _sec   = sec;
+   _tz    = 0;
 }
 
 /*------------------------------------------------------------------------
@@ -72,6 +88,7 @@ void ogc_datetime :: clear()
    _hour  = 0;
    _min   = 0;
    _sec   = 0.0;
+   _tz    = 0;
 }
 
 /*------------------------------------------------------------------------
@@ -80,9 +97,9 @@ void ogc_datetime :: clear()
 void ogc_datetime :: today()
 {
    now();
-   _hour = 0;
-   _min  = 0;
-   _sec  = 0.0;
+   _hour    = 0;
+   _min     = 0;
+   _sec     = 0.0;
 }
 
 /*------------------------------------------------------------------------
@@ -99,6 +116,7 @@ void ogc_datetime :: now()
    _hour  = tm->tm_hour;
    _min   = tm->tm_min;
    _sec   = tm->tm_sec;
+   _tz    = 0;
 }
 
 /*------------------------------------------------------------------------
@@ -130,9 +148,7 @@ bool ogc_datetime :: parse(
 /*------------------------------------------------------------------------
  * parse a datetime string
  *
- * String format is: "YYYY-MM-DDThh:mm:ss.sss".
- *
- * Note that we are ignoring any trailing timezone info.
+ * String format is: "YYYY-MM-DDThh:mm:ss.sss [Z|+-h[:m]]".
  */
 bool ogc_datetime :: parse_timestamp(
    const char * str)
@@ -145,6 +161,9 @@ bool ogc_datetime :: parse_timestamp(
       return false;
 
    if ( ! parse_time(T+1) )
+      return false;
+
+   if ( ! parse_timezone(T+1) )
       return false;
 
    return true;
@@ -196,9 +215,9 @@ bool ogc_datetime :: parse_date(
  * parse a time string
  *
  * String format is: "hh:mm:ss.sss".
- * Either part or both parts may be present. If both parts
  *
  * Note that we ignore the case where we may have leap seconds (60-62).
+ * Note also that this code will ignore any trailing timezone info.
  */
 bool ogc_datetime :: parse_time(
    const char * str)
@@ -231,7 +250,49 @@ bool ogc_datetime :: parse_time(
 }
 
 /*------------------------------------------------------------------------
- * number of seconds since Jan 1, 1970
+ * parse a timezone string
+ *
+ * String format is: ... "Z" | [+_hh[:mm]]"
+ */
+bool ogc_datetime :: parse_timezone(
+   const char * str)
+{
+   const char * s;
+   bool  minus = false;
+   int   h = 0;
+   int   m = 0;
+
+   s = strchr(str, 'Z');
+   if ( s != OGC_NULL )
+      return true;
+
+   s = strpbrk(str, "+-");
+   if ( s == OGC_NULL )
+      return true;
+   minus = (*s == '-');
+
+   for (s++; isdigit(*s); s++)
+      h = (10 * h) + (*s - '0');
+   if ( h > 23 )
+      return false;
+
+   if ( *s == ':' )
+   {
+      for (s++; isdigit(*s); s++)
+         m = (10 * m) + (*s - '0');
+      if ( m > 59 )
+         return false;
+   }
+
+   _tz = (h * 60) + m;
+   if ( minus )
+      _tz = -_tz;
+
+   return true;
+}
+
+/*------------------------------------------------------------------------
+ * number of seconds since Jan 1, 1970 UTC
  *
  * Note that we are ignoring the fact that years divisible by 100
  * are not leap years unless they are also divisible by 400.
@@ -251,6 +312,8 @@ time_t ogc_datetime :: unixtime() const
       secs += _hour * (60 * 60);
       secs += _min  * (60);
       secs += (int)_sec;
+
+      secs += (_tz * 60);
    }
 
    return secs;
@@ -283,7 +346,7 @@ int ogc_datetime :: yday() const
 }
 
 /*------------------------------------------------------------------------
- * create datetime string "YYYY-MM-DDThh:mm:ss.sss"
+ * create datetime string "YYYY-MM-DDThh:mm:ss.sss[Z|+-h[:m]]"
  */
 char * ogc_datetime :: timestamp_str(
    OGC_TIME timebuf,
@@ -294,6 +357,32 @@ char * ogc_datetime :: timestamp_str(
       date_str(timebuf);
       strcat  (timebuf, "T");
       time_str(timebuf+11, sec_digits);
+
+      if ( _tz == 0 )
+      {
+         strcat(timebuf, "Z");
+      }
+      else
+      {
+         char * t = timebuf + strlen(timebuf);
+         char pm = '+';
+         int  tz = _tz;
+         int  h;
+         int  m;
+
+         if ( tz < 0 )
+         {
+            pm = '-';
+            tz = -tz;
+         }
+
+         h = (tz % 60);
+         m = (tz / 60);
+
+         t += sprintf(t, "%c%d", pm, h);
+         if ( m != 0 )
+            t += sprintf(t, ":%d", m);
+      }
    }
 
    return timebuf;
@@ -332,8 +421,8 @@ char * ogc_datetime :: time_str(
          if ( sec_digits < 0 ) sec_digits = 0;
          if ( sec_digits > 9 ) sec_digits = 9;
 
-         sprintf(timebuf, "%02d:%02d:%0*.*f",
-            _hour, _min, sec_digits+3, sec_digits, _sec);
+         sprintf(timebuf, "%02d:%02d:%.*f",
+            _hour, _min, sec_digits, _sec);
       }
    }
 

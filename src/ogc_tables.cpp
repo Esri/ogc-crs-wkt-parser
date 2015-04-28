@@ -185,6 +185,9 @@ const ogc_tables::axis_tbl ogc_tables::ogc_axis_types[] =
    { OGC_AXIS_DIR_TYPE_SOUTH_WEST,        OGC_AXIS_DIR_KWD_SOUTH_WEST        },
    { OGC_AXIS_DIR_TYPE_WEST_SOUTH_WEST,   OGC_AXIS_DIR_KWD_WEST_SOUTH_WEST   },
    { OGC_AXIS_DIR_TYPE_WEST,              OGC_AXIS_DIR_KWD_WEST              },
+   { OGC_AXIS_DIR_TYPE_WEST_NORTH_WEST,   OGC_AXIS_DIR_KWD_WEST_NORTH_WEST   },
+   { OGC_AXIS_DIR_TYPE_NORTH_WEST,        OGC_AXIS_DIR_KWD_NORTH_WEST        },
+   { OGC_AXIS_DIR_TYPE_NORTH_NORTH_WEST,  OGC_AXIS_DIR_KWD_NORTH_NORTH_WEST  },
 
    { OGC_AXIS_DIR_TYPE_GEOCENTRIC_X,      OGC_AXIS_DIR_KWD_GEOCENTRIC_X      },
    { OGC_AXIS_DIR_TYPE_GEOCENTRIC_Y,      OGC_AXIS_DIR_KWD_GEOCENTRIC_Y      },
@@ -197,9 +200,6 @@ const ogc_tables::axis_tbl ogc_tables::ogc_axis_types[] =
    { OGC_AXIS_DIR_TYPE_AFT,               OGC_AXIS_DIR_KWD_AFT               },
    { OGC_AXIS_DIR_TYPE_STARBOARD,         OGC_AXIS_DIR_KWD_STARBOARD         },
    { OGC_AXIS_DIR_TYPE_PORT,              OGC_AXIS_DIR_KWD_PORT              },
-
-   { OGC_AXIS_DIR_TYPE_AWAY_FROM,         OGC_AXIS_DIR_KWD_AWAY_FROM         },
-   { OGC_AXIS_DIR_TYPE_TOWARDS,           OGC_AXIS_DIR_KWD_TOWARDS           },
 
    { OGC_AXIS_DIR_TYPE_CLOCKWISE,         OGC_AXIS_DIR_KWD_CLOCKWISE         },
    { OGC_AXIS_DIR_TYPE_COUNTER_CLOCKWISE, OGC_AXIS_DIR_KWD_COUNTER_CLOCKWISE },
@@ -216,6 +216,9 @@ const ogc_tables::axis_tbl ogc_tables::ogc_axis_types[] =
 
    { OGC_AXIS_DIR_TYPE_FUTURE,            OGC_AXIS_DIR_KWD_FUTURE            },
    { OGC_AXIS_DIR_TYPE_PAST,              OGC_AXIS_DIR_KWD_PAST              },
+
+   { OGC_AXIS_DIR_TYPE_TOWARDS,           OGC_AXIS_DIR_KWD_TOWARDS           },
+   { OGC_AXIS_DIR_TYPE_AWAY_FROM,         OGC_AXIS_DIR_KWD_AWAY_FROM         },
 
    { OGC_AXIS_DIR_TYPE_UNSPECIFIED,       OGC_AXIS_DIR_KWD_UNSPECIFIED       },
 

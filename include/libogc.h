@@ -448,6 +448,9 @@ enum ogc_axis_direction
      OGC_AXIS_DIR_TYPE_SOUTH_WEST,
      OGC_AXIS_DIR_TYPE_WEST_SOUTH_WEST,
      OGC_AXIS_DIR_TYPE_WEST,
+     OGC_AXIS_DIR_TYPE_WEST_NORTH_WEST,
+     OGC_AXIS_DIR_TYPE_NORTH_WEST,
+     OGC_AXIS_DIR_TYPE_NORTH_NORTH_WEST,
 
      OGC_AXIS_DIR_TYPE_GEOCENTRIC_X       = 200,
      OGC_AXIS_DIR_TYPE_GEOCENTRIC_Y,
@@ -461,24 +464,24 @@ enum ogc_axis_direction
      OGC_AXIS_DIR_TYPE_STARBOARD,
      OGC_AXIS_DIR_TYPE_PORT,
 
-     OGC_AXIS_DIR_TYPE_AWAY_FROM          = 500,
-     OGC_AXIS_DIR_TYPE_TOWARDS,
-
-     OGC_AXIS_DIR_TYPE_CLOCKWISE          = 600,
+     OGC_AXIS_DIR_TYPE_CLOCKWISE          = 500,
      OGC_AXIS_DIR_TYPE_COUNTER_CLOCKWISE,
 
-     OGC_AXIS_DIR_TYPE_COLUMN_POSITIVE    = 700,
+     OGC_AXIS_DIR_TYPE_COLUMN_POSITIVE    = 600,
      OGC_AXIS_DIR_TYPE_COLUMN_NEGATIVE,
      OGC_AXIS_DIR_TYPE_ROW_POSITIVE,
      OGC_AXIS_DIR_TYPE_ROW_NEGATIVE,
 
-     OGC_AXIS_DIR_TYPE_DISPLAY_RIGHT      = 800,
+     OGC_AXIS_DIR_TYPE_DISPLAY_RIGHT      = 700,
      OGC_AXIS_DIR_TYPE_DISPLAY_LEFT,
      OGC_AXIS_DIR_TYPE_DISPLAY_UP,
      OGC_AXIS_DIR_TYPE_DISPLAY_DOWN,
 
-     OGC_AXIS_DIR_TYPE_FUTURE             = 900,
+     OGC_AXIS_DIR_TYPE_FUTURE             = 800,
      OGC_AXIS_DIR_TYPE_PAST,
+
+     OGC_AXIS_DIR_TYPE_TOWARDS,
+     OGC_AXIS_DIR_TYPE_AWAY_FROM          = 900,
 
      OGC_AXIS_DIR_TYPE_UNSPECIFIED        = 1000
 };
@@ -497,6 +500,9 @@ enum ogc_axis_direction
 #define OGC_AXIS_DIR_KWD_SOUTH_WEST         "southWest"
 #define OGC_AXIS_DIR_KWD_WEST_SOUTH_WEST    "westSouthWest"
 #define OGC_AXIS_DIR_KWD_WEST               "west"
+#define OGC_AXIS_DIR_KWD_WEST_NORTH_WEST    "westNorthWest"
+#define OGC_AXIS_DIR_KWD_NORTH_WEST         "northWest"
+#define OGC_AXIS_DIR_KWD_NORTH_NORTH_WEST   "northNorthWest"
 
 #define OGC_AXIS_DIR_KWD_GEOCENTRIC_X       "geocentricX"
 #define OGC_AXIS_DIR_KWD_GEOCENTRIC_Y       "geocentricY"
@@ -509,9 +515,6 @@ enum ogc_axis_direction
 #define OGC_AXIS_DIR_KWD_AFT                "aft"
 #define OGC_AXIS_DIR_KWD_STARBOARD          "starboard"
 #define OGC_AXIS_DIR_KWD_PORT               "port"
-
-#define OGC_AXIS_DIR_KWD_AWAY_FROM          "awayFrom"
-#define OGC_AXIS_DIR_KWD_TOWARDS            "towards"
 
 #define OGC_AXIS_DIR_KWD_CLOCKWISE          "clockwise"
 #define OGC_AXIS_DIR_KWD_COUNTER_CLOCKWISE  "counterClockwise"
@@ -528,6 +531,9 @@ enum ogc_axis_direction
 
 #define OGC_AXIS_DIR_KWD_FUTURE             "future"
 #define OGC_AXIS_DIR_KWD_PAST               "past"
+
+#define OGC_AXIS_DIR_KWD_TOWARDS            "towards"
+#define OGC_AXIS_DIR_KWD_AWAY_FROM          "awayFrom"
 
 #define OGC_AXIS_DIR_KWD_UNSPECIFIED        "unspecified"
 
@@ -4230,19 +4236,25 @@ public:
 class OGC_EXPORT ogc_datetime
 {
 private:
-   int    _year;    /* CE year number           (0001-9999)      */
-   int    _month;   /* month number             (1-12)           */
-   int    _day;     /* day of the month         (1-31)           */
-   int    _hour;    /* hour since midnight      (0-23)           */
-   int    _min;     /* minutes after the hour   (0-59)           */
-   double _sec;     /* seconds after the minute (0-59.999999999) */
+   int    _year;    /* CE year number             (0001-9999)      */
+   int    _month;   /* month number               (1-12)           */
+   int    _day;     /* day of the month           (1-31)           */
+   int    _hour;    /* hour since midnight        (0-23)           */
+   int    _min;     /* minutes after the hour     (0-59)           */
+   double _sec;     /* seconds after the minute   (0-59.999999999) */
+   int    _tz;      /* TZ offset from UTC in mins (-1439 to +1439) */
 
    bool parse_timestamp(const char * str); /* "YYYY-MM-DDThh:mm:ss.sss" */
    bool parse_date     (const char * str); /* "YYYY-MM-DD"              */
    bool parse_time     (const char * str); /* "hh:mm:ss.sss"            */
+   bool parse_timezone (const char * str); /* "Z" | "+-hh[:mm]"         */
 
 public:
    ogc_datetime();
+
+   ogc_datetime(int year, int month, int    day,
+                int hour, int min,   double sec,
+                int tz);
 
    ogc_datetime(int year, int month, int    day,
                 int hour, int min,   double sec);
@@ -4264,13 +4276,13 @@ public:
    /* parse a date and/or time string */
    bool parse(const char * str);
 
-   /* number of seconds since Jan 1, 1970 */
+   /* number of seconds since Jan 1, 1970 UTC */
    time_t unixtime() const;
 
-   /* days since Jan 1 (0-365) */
+   /* days since Jan 1 (0-366) */
    int yday() const;
 
-   /* create timestamp string "YYYY-MM-DDThh:mm:ss.sss" */
+   /* create timestamp string "YYYY-MM-DDThh:mm:ss.sss[Z|+-hh[:mm]]" */
    char * timestamp_str(OGC_TIME timebuf, int sec_digits = 0) const;
 
    /* create date string "YYYY-MM-DD" */
@@ -4285,6 +4297,7 @@ public:
    int    hour()  const { return _hour;  }
    int    min()   const { return _min;   }
    double sec()   const { return _sec;   }
+   int    tz()    const { return _tz;    }
 };
 
 /* ------------------------------------------------------------------------- */

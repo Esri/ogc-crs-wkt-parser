@@ -171,6 +171,17 @@ int main(int argc, const char **argv)
          printf("hour  = %d\n",            t.hour () );
          printf("min   = %d\n",            t.min  () );
          printf("sec   = %.*f\n", ndigits, t.sec  () );
+
+         int  tz = t.tz();
+         bool minus = (tz < 0 );
+         if ( minus )
+            tz = -tz;
+
+         int h = (tz / 60);
+         int m = (tz % 60);
+
+         printf("tz    = %c%d.%d\n",
+            (minus ? '-' : '+'), h, m);
       }
 
       t.timestamp_str(out_buf, ndigits);
