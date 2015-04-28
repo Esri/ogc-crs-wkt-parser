@@ -356,6 +356,7 @@
 			<File RelativePath="..\..\src\ogc_cs.cpp" />
 			<File RelativePath="..\..\src\ogc_datetime.cpp" />
 			<File RelativePath="..\..\src\ogc_datum.cpp" />
+			<File RelativePath="..\..\src\ogc_derived_conv.cpp" />
 			<File RelativePath="..\..\src\ogc_ellipsoid.cpp" />
 			<File RelativePath="..\..\src\ogc_engr_crs.cpp" />
 			<File RelativePath="..\..\src\ogc_engr_datum.cpp" />
@@ -374,7 +375,7 @@
 			<File RelativePath="..\..\src\ogc_opaccuracy.cpp" />
 			<File RelativePath="..\..\src\ogc_order.cpp" />
 			<File RelativePath="..\..\src\ogc_parameter.cpp" />
-			<File RelativePath="..\..\src\ogc_parameter_file.cpp" />
+			<File RelativePath="..\..\src\ogc_param_file.cpp" />
 			<File RelativePath="..\..\src\ogc_param_crs.cpp" />
 			<File RelativePath="..\..\src\ogc_param_datum.cpp" />
 			<File RelativePath="..\..\src\ogc_paramunit.cpp" />

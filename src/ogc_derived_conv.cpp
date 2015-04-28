@@ -15,30 +15,27 @@
 /* ------------------------------------------------------------------------- */
 
 /* ------------------------------------------------------------------------- */
-/* ABTRANS (Abridged transformation) object                                  */
+/* DERIVED-CONVERSION object                                                 */
 /* ------------------------------------------------------------------------- */
 
 #include "ogc_common.h"
 
 namespace OGC {
 
-const char * ogc_abrtrans :: obj_kwd() { return OGC_OBJ_KWD_ABRTRANS; }
+const char * ogc_derived_conv :: obj_kwd() { return OGC_OBJ_KWD_DERIVED_CONV; }
 
 /*------------------------------------------------------------------------
  * create
  */
-ogc_abrtrans * ogc_abrtrans :: create(
-   const char *     name,
-   ogc_method *     method,
-   ogc_vector *     parameters,
-   ogc_vector *     param_files,
-   ogc_scope *      scope,
-   ogc_vector *     extents,
-   ogc_vector *     ids,
-   ogc_remark *     remark,
-   ogc_error *      err)
+ogc_derived_conv * ogc_derived_conv :: create(
+   const char * name,
+   ogc_method * method,
+   ogc_vector * parameters,
+   ogc_vector * param_files,
+   ogc_vector * ids,
+   ogc_error *  err)
 {
-   ogc_abrtrans * p = OGC_NULL;
+   ogc_derived_conv * p = OGC_NULL;
    bool bad = false;
 
    /*---------------------------------------------------------
@@ -69,7 +66,7 @@ ogc_abrtrans * ogc_abrtrans :: create(
     */
    if ( !bad )
    {
-      p = new (std::nothrow) ogc_abrtrans();
+      p = new (std::nothrow) ogc_derived_conv();
       if ( p == OGC_NULL )
       {
          ogc_error::set(err, OGC_ERR_NO_MEMORY, obj_kwd());
@@ -77,14 +74,11 @@ ogc_abrtrans * ogc_abrtrans :: create(
       }
 
       ogc_string::unescape_str(p->_name, name, OGC_NAME_MAX);
-      p->_obj_type    = OGC_OBJ_TYPE_ABRTRANS;
+      p->_obj_type    = OGC_OBJ_TYPE_DERIVED_CONV;
       p->_method      = method;
       p->_parameters  = parameters;
       p->_param_files = param_files;
-      p->_scope       = scope;
-      p->_extents     = extents;
       p->_ids         = ids;
-      p->_remark      = remark;
    }
 
    return p;
@@ -93,19 +87,16 @@ ogc_abrtrans * ogc_abrtrans :: create(
 /*------------------------------------------------------------------------
  * destroy
  */
-ogc_abrtrans :: ~ogc_abrtrans()
+ogc_derived_conv :: ~ogc_derived_conv()
 {
    ogc_method :: destroy( _method      );
    ogc_vector :: destroy( _parameters  );
    ogc_vector :: destroy( _param_files );
-   ogc_scope  :: destroy( _scope       );
-   ogc_vector :: destroy( _extents     );
    ogc_vector :: destroy( _ids         );
-   ogc_remark :: destroy( _remark      );
 }
 
-void ogc_abrtrans :: destroy(
-   ogc_abrtrans * obj)
+void ogc_derived_conv :: destroy(
+   ogc_derived_conv * obj)
 {
    if ( obj != OGC_NULL )
    {
@@ -116,7 +107,7 @@ void ogc_abrtrans :: destroy(
 /*------------------------------------------------------------------------
  * object from tokens
  */
-ogc_abrtrans * ogc_abrtrans :: from_tokens(
+ogc_derived_conv * ogc_derived_conv :: from_tokens(
    const ogc_token * t,
    int               start,
    int *             pend,
@@ -130,18 +121,14 @@ ogc_abrtrans * ogc_abrtrans :: from_tokens(
    int  same;
    int  num;
 
-   ogc_abrtrans *   obj         = OGC_NULL;
-   ogc_method *     method      = OGC_NULL;
-   ogc_vector *     parameters  = OGC_NULL;
-   ogc_vector *     param_files = OGC_NULL;
-   ogc_scope *      scope       = OGC_NULL;
-   ogc_extent *     extent      = OGC_NULL;
-   ogc_vector *     extents     = OGC_NULL;
-   ogc_id *         id          = OGC_NULL;
-   ogc_vector *     ids         = OGC_NULL;
-   ogc_remark *     remark      = OGC_NULL;
-   ogc_parameter *  param;
-   ogc_param_file * param_file;
+   ogc_derived_conv * obj         = OGC_NULL;
+   ogc_id *           id          = OGC_NULL;
+   ogc_method *       method      = OGC_NULL;
+   ogc_vector *       parameters  = OGC_NULL;
+   ogc_vector *       param_files = OGC_NULL;
+   ogc_parameter *    param       = OGC_NULL;
+   ogc_param_file *   param_file  = OGC_NULL;
+   ogc_vector *       ids         = OGC_NULL;
    const char * name;
 
    /*---------------------------------------------------------
@@ -190,7 +177,7 @@ ogc_abrtrans * ogc_abrtrans :: from_tokens(
    }
 
    /*---------------------------------------------------------
-    * There must be 1 token: ABRTRANS[ "name" ...
+    * There must be 1 token: METHOD[ "name" ...
     */
    if ( same < 1 )
    {
@@ -218,7 +205,8 @@ ogc_abrtrans * ogc_abrtrans :: from_tokens(
    int  next = 0;
    for (int i = start; i < end; i = next)
    {
-      if ( ogc_string::is_equal(arr[i].str, ogc_method::obj_kwd()) )
+      if ( ogc_string::is_equal(arr[i].str, ogc_method::obj_kwd()) ||
+           ogc_string::is_equal(arr[i].str, ogc_method::alt_kwd()) )
       {
          if ( method != OGC_NULL )
          {
@@ -296,7 +284,7 @@ ogc_abrtrans * ogc_abrtrans :: from_tokens(
                if ( param_files == OGC_NULL )
                {
                   ogc_error::set(err, OGC_ERR_NO_MEMORY, obj_kwd());
-                  delete param_file;
+                  delete param;
                   bad = true;
                }
             }
@@ -304,89 +292,22 @@ ogc_abrtrans * ogc_abrtrans :: from_tokens(
             if ( param_files != OGC_NULL )
             {
                void * p = param_files->find(
-                             param_file,
+                             param,
                              false,
                              ogc_utils::compare_param_file);
                if ( p != OGC_NULL )
                {
                   ogc_error::set(err, OGC_ERR_WKT_DUPLICATE_PARAM_FILE,
-                     obj_kwd(), param_file->name());
-                  delete param_file;
+                     obj_kwd(), param->name());
+                  delete param;
                   bad = true;
                }
                else
                {
-                  if ( param_files->add( param_file ) < 0 )
+                  if ( param_files->add( param ) < 0 )
                   {
                      ogc_error::set(err, OGC_ERR_NO_MEMORY, obj_kwd());
-                     delete param_file;
-                     bad = true;
-                  }
-               }
-            }
-         }
-         continue;
-      }
-
-      if ( ogc_string::is_equal(arr[i].str, ogc_scope::obj_kwd()) )
-      {
-         if ( scope != OGC_NULL )
-         {
-            ogc_error::set(err, OGC_ERR_WKT_DUPLICATE_SCOPE, obj_kwd());
-            bad = true;
-         }
-         else
-         {
-            scope = ogc_scope::from_tokens(t, i, &next, err);
-            if ( scope == OGC_NULL )
-               bad = true;
-         }
-         continue;
-      }
-
-      if ( ogc_string::is_equal(arr[i].str, ogc_area_extent::obj_kwd()) ||
-           ogc_string::is_equal(arr[i].str, ogc_bbox_extent::obj_kwd()) ||
-           ogc_string::is_equal(arr[i].str, ogc_time_extent::obj_kwd()) ||
-           ogc_string::is_equal(arr[i].str, ogc_vert_extent::obj_kwd()) )
-      {
-         extent = ogc_extent::from_tokens(t, i, &next, err);
-         if ( extent == OGC_NULL )
-         {
-            bad = true;
-         }
-         else
-         {
-            if ( extents == OGC_NULL )
-            {
-               extents = ogc_vector::create(1, 1);
-               if ( extents == OGC_NULL )
-               {
-                  ogc_error::set(err, OGC_ERR_NO_MEMORY, obj_kwd());
-                  delete extent;
-                  bad = true;
-               }
-            }
-
-            if ( extents != OGC_NULL )
-            {
-               void * p = extents->find(
-                             extent,
-                             false,
-                             ogc_utils::compare_extent);
-               if ( p != OGC_NULL )
-               {
-                  ogc_error::set(err, OGC_ERR_WKT_DUPLICATE_EXTENT,
-                     obj_kwd(),
-                     ogc_utils::obj_type_to_kwd(extent->obj_type()));
-                  delete extent;
-                  bad = true;
-               }
-               else
-               {
-                  if ( extents->add( extent ) < 0 )
-                  {
-                     ogc_error::set(err, OGC_ERR_NO_MEMORY, obj_kwd());
-                     delete extent;
+                     delete param;
                      bad = true;
                   }
                }
@@ -442,22 +363,6 @@ ogc_abrtrans * ogc_abrtrans :: from_tokens(
          continue;
       }
 
-      if ( ogc_string::is_equal(arr[i].str, ogc_remark::obj_kwd()) )
-      {
-         if ( remark != OGC_NULL )
-         {
-            ogc_error::set(err, OGC_ERR_WKT_DUPLICATE_REMARK, obj_kwd());
-            bad = true;
-         }
-         else
-         {
-            remark = ogc_remark::from_tokens(t, i, &next, err);
-            if ( remark == OGC_NULL )
-               bad = true;
-         }
-         continue;
-      }
-
       /* unknown object, skip over it */
       for (next = i+1; next < end; next++)
       {
@@ -467,36 +372,36 @@ ogc_abrtrans * ogc_abrtrans :: from_tokens(
    }
 
    /*---------------------------------------------------------
+    * Final checks
+    */
+
+   /*---------------------------------------------------------
     * Create the object
     */
    if ( !bad )
    {
-      obj = create(name, method, parameters, param_files,
-                   scope, extents, ids, remark, err);
+      obj = create(name, method, parameters, param_files, ids, err);
    }
 
    if ( obj == OGC_NULL )
    {
-      ogc_method     :: destroy( method      );
-      ogc_vector     :: destroy( parameters  );
-      ogc_vector     :: destroy( param_files );
-      ogc_scope      :: destroy( scope       );
-      ogc_vector     :: destroy( extents     );
-      ogc_vector     :: destroy( ids         );
-      ogc_remark     :: destroy( remark      );
+      ogc_method :: destroy( method      );
+      ogc_vector :: destroy( parameters  );
+      ogc_vector :: destroy( param_files );
+      ogc_vector :: destroy( ids         );
    }
 
    return obj;
 }
 
 /*------------------------------------------------------------------------
- * object from WKT
+ * object to WKT
  */
-ogc_abrtrans * ogc_abrtrans :: from_wkt(
+ogc_derived_conv * ogc_derived_conv :: from_wkt(
    const char * wkt,
    ogc_error *  err)
 {
-   ogc_abrtrans * obj = OGC_NULL;
+   ogc_derived_conv * obj = OGC_NULL;
    ogc_token t;
 
    if ( t.tokenize(wkt, obj_kwd(), err) )
@@ -510,8 +415,8 @@ ogc_abrtrans * ogc_abrtrans :: from_wkt(
 /*------------------------------------------------------------------------
  * object to WKT
  */
-bool ogc_abrtrans :: to_wkt(
-   const ogc_abrtrans * obj,
+bool ogc_derived_conv :: to_wkt(
+   const ogc_derived_conv * obj,
    char      buffer[],
    int       options,
    size_t    buflen)
@@ -526,7 +431,7 @@ bool ogc_abrtrans :: to_wkt(
    return obj->to_wkt(buffer, options, buflen);
 }
 
-bool ogc_abrtrans :: to_wkt(
+bool ogc_derived_conv :: to_wkt(
    char      buffer[],
    int       options,
    size_t    buflen) const
@@ -535,10 +440,7 @@ bool ogc_abrtrans :: to_wkt(
    OGC_TBUF      buf_hdr;
    OGC_TBUF      buf_method;
    OGC_TBUF      buf_parameter;
-   OGC_TBUF      buf_scope;
-   OGC_TBUF      buf_extent;
    OGC_TBUF      buf_id;
-   OGC_TBUF      buf_remark;
    int           opts  =  (options | OGC_WKT_OPT_INTERNAL);
    size_t        len   = 0;
    bool          rc    = true;
@@ -559,9 +461,10 @@ bool ogc_abrtrans :: to_wkt(
       return false;
    *buffer = 0;
 
-   rc &= ogc_method :: to_wkt(_method, buf_method,         opts, OGC_TBUF_MAX);
-   rc &= ogc_scope  :: to_wkt(_scope,  buf_scope,          opts, OGC_TBUF_MAX);
-   rc &= ogc_remark :: to_wkt(_remark, buf_remark,         opts, OGC_TBUF_MAX);
+   if ( (options & OGC_WKT_OPT_OLD_SYNTAX) != 0 )
+      return true;
+
+   rc &= ogc_method :: to_wkt(_method, buf_method, opts, OGC_TBUF_MAX);
 
    ogc_string::escape_str(buf_name, _name, OGC_UTF8_NAME_MAX);
    sprintf(buf_hdr, "%s%s\"%s\"",
@@ -574,8 +477,7 @@ bool ogc_abrtrans :: to_wkt(
    {
       for (int i = 0; i < parameter_count(); i++)
       {
-         rc &= ogc_parameter :: to_wkt(parameter(i),
-                                       buf_parameter, opts, OGC_TBUF_MAX);
+         rc &= ogc_parameter :: to_wkt(parameter(i), buf_parameter, opts, OGC_TBUF_MAX);
          OGC_ADD_TO_BUF( buf_parameter );
       }
    }
@@ -584,21 +486,8 @@ bool ogc_abrtrans :: to_wkt(
    {
       for (int i = 0; i < param_file_count(); i++)
       {
-         rc &= ogc_param_file :: to_wkt(param_file(i),
-                                        buf_parameter, opts, OGC_TBUF_MAX);
+         rc &= ogc_param_file :: to_wkt(param_file(i), buf_parameter, opts, OGC_TBUF_MAX);
          OGC_ADD_TO_BUF( buf_parameter );
-      }
-   }
-
-   OGC_ADD_TO_BUF( buf_scope );
-
-   if ( _extents != OGC_NULL )
-   {
-      for (int i = 0; i < extent_count(); i++)
-      {
-         rc &= ogc_extent :: to_wkt(extent(i),
-                                    buf_extent, opts, OGC_TBUF_MAX);
-         OGC_ADD_TO_BUF( buf_extent );
       }
    }
 
@@ -613,8 +502,7 @@ bool ogc_abrtrans :: to_wkt(
       }
    }
 
-   OGC_ADD_TO_BUF( buf_remark );
-   OGC_CPY_TO_BUF( cls        );
+   OGC_CPY_TO_BUF( cls );
 
    if ( (options & OGC_WKT_OPT_INTERNAL) == 0 &&
         (options & OGC_WKT_OPT_EXPAND)   != 0 )
@@ -628,41 +516,33 @@ bool ogc_abrtrans :: to_wkt(
 /*------------------------------------------------------------------------
  * clone
  */
-ogc_abrtrans * ogc_abrtrans :: clone(const ogc_abrtrans * obj)
+ogc_derived_conv * ogc_derived_conv :: clone(const ogc_derived_conv * obj)
 {
    if ( obj == OGC_NULL )
       return OGC_NULL;
    return obj->clone();
 }
 
-ogc_abrtrans * ogc_abrtrans :: clone() const
+ogc_derived_conv * ogc_derived_conv :: clone() const
 {
    ogc_method * method      = ogc_method :: clone( _method      );
    ogc_vector * parameters  = ogc_vector :: clone( _parameters  );
    ogc_vector * param_files = ogc_vector :: clone( _param_files );
-   ogc_scope *  scope       = ogc_scope  :: clone( _scope       );
-   ogc_vector * extents     = ogc_vector :: clone( _extents     );
    ogc_vector * ids         = ogc_vector :: clone( _ids         );
-   ogc_remark * remark      = ogc_remark :: clone( _remark      );
 
-   ogc_abrtrans * p = create(_name,
-                             method,
-                             parameters,
-                             param_files,
-                             scope,
-                             extents,
-                             ids,
-                             remark,
-                             OGC_NULL);
+   ogc_derived_conv * p = create(_name,
+                               method,
+                               parameters,
+                               param_files,
+                               ids,
+                               OGC_NULL);
    if ( p == OGC_NULL )
    {
+;
       ogc_method :: destroy( method      );
       ogc_vector :: destroy( parameters  );
       ogc_vector :: destroy( param_files );
-      ogc_scope  :: destroy( scope       );
-      ogc_vector :: destroy( extents     );
       ogc_vector :: destroy( ids         );
-      ogc_remark :: destroy( remark      );
    }
 
    return p;
@@ -671,9 +551,9 @@ ogc_abrtrans * ogc_abrtrans :: clone() const
 /*------------------------------------------------------------------------
  * compare for computational equality
  */
-bool ogc_abrtrans :: is_equal(
-   const ogc_abrtrans * p1,
-   const ogc_abrtrans * p2)
+bool ogc_derived_conv :: is_equal(
+   const ogc_derived_conv * p1,
+   const ogc_derived_conv * p2)
 {
    if ( p1 == OGC_NULL && p2 == OGC_NULL ) return true;
    if ( p1 == OGC_NULL || p2 == OGC_NULL ) return false;
@@ -689,8 +569,8 @@ bool ogc_abrtrans :: is_equal(
    return true;
 }
 
-bool ogc_abrtrans :: is_equal(
-   const ogc_abrtrans * p) const
+bool ogc_derived_conv :: is_equal(
+   const ogc_derived_conv * p) const
 {
    return is_equal(this, p);
 }
@@ -698,9 +578,9 @@ bool ogc_abrtrans :: is_equal(
 /*------------------------------------------------------------------------
  * compare
  */
-bool ogc_abrtrans :: is_identical(
-   const ogc_abrtrans * p1,
-   const ogc_abrtrans * p2)
+bool ogc_derived_conv :: is_identical(
+   const ogc_derived_conv * p1,
+   const ogc_derived_conv * p2)
 {
    if ( p1 == OGC_NULL && p2 == OGC_NULL ) return true;
    if ( p1 == OGC_NULL || p2 == OGC_NULL ) return false;
@@ -709,10 +589,7 @@ bool ogc_abrtrans :: is_identical(
         !ogc_method :: is_identical( p1->method(),      p2->method()      ) ||
         !ogc_vector :: is_identical( p1->parameters(),  p2->parameters()  ) ||
         !ogc_vector :: is_identical( p1->param_files(), p2->param_files() ) ||
-        !ogc_scope  :: is_identical( p1->scope(),           p2->scope()           ) ||
-        !ogc_vector :: is_identical( p1->extents(),         p2->extents()         ) ||
-        !ogc_vector :: is_identical( p1->ids(),             p2->ids()             ) ||
-        !ogc_remark :: is_identical( p1->remark(),          p2->remark()          ) )
+        !ogc_vector :: is_identical( p1->ids(),         p2->ids()         ) )
    {
       return false;
    }
@@ -720,8 +597,8 @@ bool ogc_abrtrans :: is_identical(
    return true;
 }
 
-bool ogc_abrtrans :: is_identical(
-   const ogc_abrtrans * p) const
+bool ogc_derived_conv :: is_identical(
+   const ogc_derived_conv * p) const
 {
    return is_identical(this, p);
 }
@@ -729,7 +606,7 @@ bool ogc_abrtrans :: is_identical(
 /*------------------------------------------------------------------------
  * get parameter count
  */
-int ogc_abrtrans :: parameter_count() const
+int ogc_derived_conv :: parameter_count() const
 {
    return (_parameters == OGC_NULL) ? 0 : _parameters->length();
 }
@@ -737,52 +614,35 @@ int ogc_abrtrans :: parameter_count() const
 /*------------------------------------------------------------------------
  * get the nth parameter
  */
-ogc_parameter * ogc_abrtrans :: parameter(int n) const
+ogc_parameter * ogc_derived_conv :: parameter(int n) const
 {
    return (_parameters == OGC_NULL) ? OGC_NULL :
-                               reinterpret_cast<ogc_parameter *>
-                                  ( _parameters->get(n) );
+                                      reinterpret_cast<ogc_parameter *>(
+                                         _parameters->get(n) );
 }
 
 /*------------------------------------------------------------------------
  * get param_file count
  */
-int ogc_abrtrans :: param_file_count() const
+int ogc_derived_conv :: param_file_count() const
 {
-   return (_param_files == OGC_NULL) ? 0 : _param_files->length();
+   return (_parameters == OGC_NULL) ? 0 : _param_files->length();
 }
 
 /*------------------------------------------------------------------------
  * get the nth param_file
  */
-ogc_param_file * ogc_abrtrans :: param_file(int n) const
+ogc_param_file * ogc_derived_conv :: param_file(int n) const
 {
    return (_param_files == OGC_NULL) ? OGC_NULL :
-                               reinterpret_cast<ogc_param_file *>
-                                  ( _param_files->get(n) );
-}
-
-/*------------------------------------------------------------------------
- * get extent count
- */
-int ogc_abrtrans :: extent_count() const
-{
-   return (_extents == OGC_NULL) ? 0 : _extents->length();
-}
-
-/*------------------------------------------------------------------------
- * get the nth extent
- */
-ogc_extent * ogc_abrtrans :: extent(int n) const
-{
-   return (_extents == OGC_NULL) ? OGC_NULL :
-                           reinterpret_cast<ogc_extent *>( _extents->get(n) );
+                                      reinterpret_cast<ogc_param_file *>(
+                                         _param_files->get(n) );
 }
 
 /*------------------------------------------------------------------------
  * get ID count
  */
-int ogc_abrtrans :: id_count() const
+int ogc_derived_conv :: id_count() const
 {
    return (_ids == OGC_NULL) ? 0 : _ids->length();
 }
@@ -790,7 +650,7 @@ int ogc_abrtrans :: id_count() const
 /*------------------------------------------------------------------------
  * get the nth ID
  */
-ogc_id * ogc_abrtrans :: id(int n) const
+ogc_id * ogc_derived_conv :: id(int n) const
 {
    return (_ids == OGC_NULL) ? OGC_NULL :
                                reinterpret_cast<ogc_id *>( _ids->get(n) );

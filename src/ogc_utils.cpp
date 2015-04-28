@@ -319,6 +319,31 @@ bool ogc_utils :: validate_cs(
 
    /* First validate the CS type against the CRS type and
       the number of dimensions.
+
+         CRS type        Permitted CS type(s)   Dimension
+                                                (# axes)
+         -------------   --------------------   ---------
+         geodetic        Cartesian                  3
+                         ellipsoidal              2 3
+                         spherical                  3
+
+         projected       Cartesian                2
+
+         vertical        vertical               1
+
+         engineering     affine                   2 3
+                         Cartesian                2 3
+                         cylindrical                3
+                         linear                 1
+                         polar                    2
+                         spherical                  3
+
+         image           affine                   2
+                         Cartesian                2
+
+         parametric      parametric             1
+
+         temporal        time                   1
    */
    switch (obj_type)
    {
@@ -654,7 +679,7 @@ bool ogc_utils :: place_axis(
  * Thus, the string:
  *   PROJCRS[...,BASECRS[...,DATUM[...,ELLIPSOID[...]],PRIMEM[...],...]]
  * becomes:
- *   PROJRCS[...,
+ *   PROJCRS[...,
  *    BASECRS[...,
  *     DATUM[...,
  *      ELLIPSOID[...]],
@@ -823,12 +848,12 @@ int _CDECL ogc_utils :: compare_parameter(
    return ogc_string::strcmp_ci( p1->name(), p2->name() );
 }
 
-int _CDECL ogc_utils :: compare_parameter_file(
+int _CDECL ogc_utils :: compare_param_file(
    const void * v1,
    const void * v2)
 {
-   const ogc_parameter_file * p1 = reinterpret_cast<const ogc_parameter_file *>( v1 );
-   const ogc_parameter_file * p2 = reinterpret_cast<const ogc_parameter_file *>( v2 );
+   const ogc_param_file * p1 = reinterpret_cast<const ogc_param_file *>( v1 );
+   const ogc_param_file * p2 = reinterpret_cast<const ogc_param_file *>( v2 );
 
    return ogc_string::strcmp_ci( p1->name(), p2->name() );
 }

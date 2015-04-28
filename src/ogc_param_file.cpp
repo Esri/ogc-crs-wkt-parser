@@ -22,18 +22,18 @@
 
 namespace OGC {
 
-const char * ogc_parameter_file :: obj_kwd() { return OGC_OBJ_KWD_PARAMETER_FILE; }
+const char * ogc_param_file :: obj_kwd() { return OGC_OBJ_KWD_PARAM_FILE; }
 
 /*------------------------------------------------------------------------
  * create
  */
-ogc_parameter_file * ogc_parameter_file :: create(
+ogc_param_file * ogc_param_file :: create(
    const char * name,
    const char * filename,
    ogc_vector * ids,
    ogc_error *  err)
 {
-   ogc_parameter_file * p = OGC_NULL;
+   ogc_param_file * p = OGC_NULL;
    bool bad = false;
 
    /*---------------------------------------------------------
@@ -74,7 +74,7 @@ ogc_parameter_file * ogc_parameter_file :: create(
     */
    if ( !bad )
    {
-      p = new (std::nothrow) ogc_parameter_file();
+      p = new (std::nothrow) ogc_param_file();
       if ( p == OGC_NULL )
       {
          ogc_error::set(err, OGC_ERR_NO_MEMORY, obj_kwd());
@@ -83,7 +83,7 @@ ogc_parameter_file * ogc_parameter_file :: create(
 
       ogc_string::unescape_str(p->_name,     name,     OGC_NAME_MAX);
       ogc_string::unescape_str(p->_filename, filename, OGC_PATH_MAX);
-      p->_obj_type = OGC_OBJ_TYPE_PARAMETER_FILE;
+      p->_obj_type = OGC_OBJ_TYPE_PARAM_FILE;
       p->_ids      = ids;
    }
 
@@ -93,13 +93,13 @@ ogc_parameter_file * ogc_parameter_file :: create(
 /*------------------------------------------------------------------------
  * destroy
  */
-ogc_parameter_file :: ~ogc_parameter_file()
+ogc_param_file :: ~ogc_param_file()
 {
    ogc_vector :: destroy( _ids );
 }
 
-void ogc_parameter_file :: destroy(
-   ogc_parameter_file * obj)
+void ogc_param_file :: destroy(
+   ogc_param_file * obj)
 {
    if ( obj != OGC_NULL )
    {
@@ -110,7 +110,7 @@ void ogc_parameter_file :: destroy(
 /*------------------------------------------------------------------------
  * object from tokens
  */
-ogc_parameter_file * ogc_parameter_file :: from_tokens(
+ogc_param_file * ogc_param_file :: from_tokens(
    const ogc_token * t,
    int               start,
    int *             pend,
@@ -124,7 +124,7 @@ ogc_parameter_file * ogc_parameter_file :: from_tokens(
    int  same;
    int  num;
 
-   ogc_parameter_file * obj = OGC_NULL;
+   ogc_param_file * obj = OGC_NULL;
    ogc_id *             id  = OGC_NULL;
    ogc_vector *         ids = OGC_NULL;
    const char * name;
@@ -279,11 +279,11 @@ ogc_parameter_file * ogc_parameter_file :: from_tokens(
 /*------------------------------------------------------------------------
  * object from WKT
  */
-ogc_parameter_file * ogc_parameter_file :: from_wkt(
+ogc_param_file * ogc_param_file :: from_wkt(
    const char * wkt,
    ogc_error *  err)
 {
-   ogc_parameter_file * obj = OGC_NULL;
+   ogc_param_file * obj = OGC_NULL;
    ogc_token t;
 
    if ( t.tokenize(wkt, obj_kwd(), err) )
@@ -297,8 +297,8 @@ ogc_parameter_file * ogc_parameter_file :: from_wkt(
 /*------------------------------------------------------------------------
  * object to WKT
  */
-bool ogc_parameter_file :: to_wkt(
-   const ogc_parameter_file * obj,
+bool ogc_param_file :: to_wkt(
+   const ogc_param_file * obj,
    char      buffer[],
    int       options,
    size_t    buflen)
@@ -313,7 +313,7 @@ bool ogc_parameter_file :: to_wkt(
    return obj->to_wkt(buffer, options, buflen);
 }
 
-bool ogc_parameter_file :: to_wkt(
+bool ogc_param_file :: to_wkt(
    char      buffer[],
    int       options,
    size_t    buflen) const
@@ -374,18 +374,18 @@ bool ogc_parameter_file :: to_wkt(
 /*------------------------------------------------------------------------
  * clone
  */
-ogc_parameter_file * ogc_parameter_file :: clone(const ogc_parameter_file * obj)
+ogc_param_file * ogc_param_file :: clone(const ogc_param_file * obj)
 {
    if ( obj == OGC_NULL )
       return OGC_NULL;
    return obj->clone();
 }
 
-ogc_parameter_file * ogc_parameter_file :: clone() const
+ogc_param_file * ogc_param_file :: clone() const
 {
    ogc_vector * ids = ogc_vector :: clone( _ids );
 
-   ogc_parameter_file * p = create(_name,
+   ogc_param_file * p = create(_name,
                                    _filename,
                                    ids,
                                    OGC_NULL);
@@ -400,9 +400,9 @@ ogc_parameter_file * ogc_parameter_file :: clone() const
 /*------------------------------------------------------------------------
  * compare for computational equality
  */
-bool ogc_parameter_file :: is_equal(
-   const ogc_parameter_file * p1,
-   const ogc_parameter_file * p2)
+bool ogc_param_file :: is_equal(
+   const ogc_param_file * p1,
+   const ogc_param_file * p2)
 {
    if ( p1 == OGC_NULL && p2 == OGC_NULL ) return true;
    if ( p1 == OGC_NULL || p2 == OGC_NULL ) return false;
@@ -416,8 +416,8 @@ bool ogc_parameter_file :: is_equal(
    return true;
 }
 
-bool ogc_parameter_file :: is_equal(
-   const ogc_parameter_file * p) const
+bool ogc_param_file :: is_equal(
+   const ogc_param_file * p) const
 {
    return is_equal(this, p);
 }
@@ -425,9 +425,9 @@ bool ogc_parameter_file :: is_equal(
 /*------------------------------------------------------------------------
  * compare
  */
-bool ogc_parameter_file :: is_identical(
-   const ogc_parameter_file * p1,
-   const ogc_parameter_file * p2)
+bool ogc_param_file :: is_identical(
+   const ogc_param_file * p1,
+   const ogc_param_file * p2)
 {
    if ( p1 == OGC_NULL && p2 == OGC_NULL ) return true;
    if ( p1 == OGC_NULL || p2 == OGC_NULL ) return false;
@@ -442,8 +442,8 @@ bool ogc_parameter_file :: is_identical(
    return true;
 }
 
-bool ogc_parameter_file :: is_identical(
-   const ogc_parameter_file * p) const
+bool ogc_param_file :: is_identical(
+   const ogc_param_file * p) const
 {
    return is_identical(this, p);
 }
@@ -451,7 +451,7 @@ bool ogc_parameter_file :: is_identical(
 /*------------------------------------------------------------------------
  * get ID count
  */
-int ogc_parameter_file :: id_count() const
+int ogc_param_file :: id_count() const
 {
    return (_ids == OGC_NULL) ? 0 : _ids->length();
 }
@@ -459,7 +459,7 @@ int ogc_parameter_file :: id_count() const
 /*------------------------------------------------------------------------
  * get the nth ID
  */
-ogc_id * ogc_parameter_file :: id(int n) const
+ogc_id * ogc_param_file :: id(int n) const
 {
    return (_ids == OGC_NULL) ? OGC_NULL :
                                reinterpret_cast<ogc_id *>( _ids->get(n) );

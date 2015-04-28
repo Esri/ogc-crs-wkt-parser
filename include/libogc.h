@@ -61,7 +61,7 @@ namespace OGC {
 /* max values that may be changed                                            */
 /* ------------------------------------------------------------------------- */
 
-/* Note that these lengths all include the terminating null character. */
+/* Note that these lengths all include a terminating null character. */
 
 #define OGC_BUFF_MAX    (1024 * 4)               /* Max WKT     length    */
 #define OGC_KEYW_MAX    24                       /* Max keyword length    */
@@ -167,7 +167,7 @@ enum ogc_obj_type
    OGC_OBJ_TYPE_REMARK,
 
    OGC_OBJ_TYPE_PARAMETER,
-   OGC_OBJ_TYPE_PARAMETER_FILE,
+   OGC_OBJ_TYPE_PARAM_FILE,
 
    OGC_OBJ_TYPE_ELLIPSOID,
 
@@ -191,6 +191,7 @@ enum ogc_obj_type
    OGC_OBJ_TYPE_CS,
 
    OGC_OBJ_TYPE_CONVERSION,
+   OGC_OBJ_TYPE_DERIVED_CONV,
    OGC_OBJ_TYPE_METHOD,
 
    OGC_OBJ_TYPE_GEOD_CRS,
@@ -232,7 +233,7 @@ enum ogc_obj_type
 #define OGC_OBJ_KWD_REMARK           "REMARK"
 
 #define OGC_OBJ_KWD_PARAMETER        "PARAMETER"
-#define OGC_OBJ_KWD_PARAMETER_FILE   "PARAMETERFILE"
+#define OGC_OBJ_KWD_PARAM_FILE       "PARAMETERFILE"
 
 #define OGC_OBJ_KWD_ELLIPSOID        "ELLIPSOID"
 
@@ -256,6 +257,7 @@ enum ogc_obj_type
 #define OGC_OBJ_KWD_CS               "CS"
 
 #define OGC_OBJ_KWD_CONVERSION       "CONVERSION"
+#define OGC_OBJ_KWD_DERIVED_CONV     "DERIVEDCONVERSION"
 #define OGC_OBJ_KWD_METHOD           "METHOD"
 
 #define OGC_OBJ_KWD_GEOD_CRS         "GEODCRS"
@@ -323,24 +325,36 @@ enum ogc_crs_type
    OGC_CRS_TYPE_UNKNOWN = 0,
 
    OGC_CRS_TYPE_GEOD,
+   OGC_CRS_TYPE_PROJ,
+   OGC_CRS_TYPE_VERT,
    OGC_CRS_TYPE_ENGR,
    OGC_CRS_TYPE_IMAGE,
    OGC_CRS_TYPE_PARAM,
-   OGC_CRS_TYPE_PROJ,
    OGC_CRS_TYPE_TIME,
-   OGC_CRS_TYPE_VERT,
+
+   OGC_CRS_TYPE_GEOD_DERIVED,
+   OGC_CRS_TYPE_VERT_DERIVED,
+   OGC_CRS_TYPE_ENGR_DERIVED,
+   OGC_CRS_TYPE_PARAM_DERIVED,
+   OGC_CRS_TYPE_TIME_DERIVED,
+
    OGC_CRS_TYPE_COMPOUND
 };
 
 #define OGC_CRS_KWD_UNKNOWN          "unknown"
 
 #define OGC_CRS_KWD_GEOD             "geodetic"
+#define OGC_CRS_KWD_PROJ             "projected"
+#define OGC_CRS_KWD_VERT             "vertical"
 #define OGC_CRS_KWD_ENGR             "engineering"
 #define OGC_CRS_KWD_IMAGE            "image"
 #define OGC_CRS_KWD_PARAM            "parametric"
-#define OGC_CRS_KWD_PROJ             "projected"
 #define OGC_CRS_KWD_TIME             "time"
-#define OGC_CRS_KWD_VERT             "vertical"
+#define OGC_CRS_KWD_GEOD_DERIVED     "derived-geodetic"
+#define OGC_CRS_KWD_VERT_DERIVED     "derived-vertical"
+#define OGC_CRS_KWD_ENGR_DERIVED     "derived-engineering"
+#define OGC_CRS_KWD_PARAM_DERIVED    "derived-parametric"
+#define OGC_CRS_KWD_TIME_DERIVED     "derived-time"
 #define OGC_CRS_KWD_COMPOUND         "compound"
 
 /* ------------------------------------------------------------------------- */
@@ -601,7 +615,7 @@ enum ogc_err_code
       OGC_ERR_WKT_DUPLICATE_OPACCURACY,
       OGC_ERR_WKT_DUPLICATE_ORDER,
       OGC_ERR_WKT_DUPLICATE_PARAMETER,
-      OGC_ERR_WKT_DUPLICATE_PARAMETER_FILE,
+      OGC_ERR_WKT_DUPLICATE_PARAM_FILE,
       OGC_ERR_WKT_DUPLICATE_PRIMEM,
       OGC_ERR_WKT_DUPLICATE_REMARK,
       OGC_ERR_WKT_DUPLICATE_SCOPE,
@@ -783,7 +797,7 @@ public:
 /* string tokenizing                                                         */
 /* ------------------------------------------------------------------------- */
 
-#define OGC_TOKENS_MAX   256
+#define OGC_TOKENS_MAX   512
 
 struct ogc_token_entry
 {
@@ -827,7 +841,7 @@ public:
 class OGC_EXPORT ogc_object
 {
 private:
-   static bool         _strict_parsing;
+   static bool  _strict_parsing;
 
 protected:
    ogc_obj_type _obj_type;
@@ -1183,7 +1197,13 @@ class OGC_EXPORT ogc_unit : public ogc_object
 protected:
    OGC_NAME      _name;
    ogc_unit_type _unit_type;
-   double        _factor;
+   double        _factor;           /* number of SI units per unit */
+                                    /* SI units are:               */
+                                    /*    angle       radians      */
+                                    /*    length      meters       */
+                                    /*    parametric  <various>    */
+                                    /*    scale       unity        */
+                                    /*    time        seconds      */
    ogc_vector *  _ids;
 
    ogc_unit() {}
@@ -1934,39 +1954,39 @@ public:
 /* File parameter                                                            */
 /* ------------------------------------------------------------------------- */
 
-class OGC_EXPORT ogc_parameter_file : public ogc_object
+class OGC_EXPORT ogc_param_file : public ogc_object
 {
 private:
    OGC_NAME     _name;
    OGC_PATH     _filename;
    ogc_vector * _ids;
 
-   ogc_parameter_file() {}
+   ogc_param_file() {}
 
 public:
    static const char * obj_kwd();
 
-   static ogc_parameter_file * create(
+   static ogc_param_file * create(
       const char * name,
       const char * filename,
       ogc_vector * ids,
       ogc_error *  err = OGC_NULL);
 
-   virtual ~ogc_parameter_file();
-   static void destroy(ogc_parameter_file * obj);
+   virtual ~ogc_param_file();
+   static void destroy(ogc_param_file * obj);
 
-   static ogc_parameter_file * from_tokens(
+   static ogc_param_file * from_tokens(
       const ogc_token * t,
       int               start,
       int *             pend,
       ogc_error *       err = OGC_NULL);
 
-   static ogc_parameter_file * from_wkt(
+   static ogc_param_file * from_wkt(
       const char * wkt,
       ogc_error *  err = OGC_NULL);
 
    static bool to_wkt(
-      const ogc_parameter_file * obj,
+      const ogc_param_file * obj,
       char     buffer[],
       int      options = OGC_WKT_OPT_NONE,
       size_t   buflen  = OGC_BUFF_MAX);
@@ -1976,16 +1996,16 @@ public:
       int      options = OGC_WKT_OPT_NONE,
       size_t   buflen  = OGC_BUFF_MAX) const;
 
-   static ogc_parameter_file * clone(const ogc_parameter_file * obj);
-          ogc_parameter_file * clone() const;
+   static ogc_param_file * clone(const ogc_param_file * obj);
+          ogc_param_file * clone() const;
 
-   static bool is_equal    (const ogc_parameter_file * p1,
-                            const ogc_parameter_file * p2);
-          bool is_equal    (const ogc_parameter_file * p) const;
+   static bool is_equal    (const ogc_param_file * p1,
+                            const ogc_param_file * p2);
+          bool is_equal    (const ogc_param_file * p) const;
 
-   static bool is_identical(const ogc_parameter_file * p1,
-                            const ogc_parameter_file * p2);
-          bool is_identical(const ogc_parameter_file * p) const;
+   static bool is_identical(const ogc_param_file * p1,
+                            const ogc_param_file * p2);
+          bool is_identical(const ogc_param_file * p) const;
 
    const char * name()     const { return _name;     }
    const char * filename() const { return _filename; }
@@ -3138,6 +3158,83 @@ public:
 };
 
 /* ------------------------------------------------------------------------- */
+/* Derived conversion                                                        */
+/* ------------------------------------------------------------------------- */
+
+class OGC_EXPORT ogc_derived_conv : public ogc_object
+{
+private:
+   OGC_NAME     _name;
+   ogc_method * _method;
+   ogc_vector * _parameters;
+   ogc_vector * _param_files;
+   ogc_vector * _ids;
+
+   ogc_derived_conv() {}
+
+public:
+   static const char * obj_kwd();
+
+   static ogc_derived_conv * create(
+      const char * name,
+      ogc_method * method,
+      ogc_vector * parameters,
+      ogc_vector * param_files,
+      ogc_vector * ids,
+      ogc_error *  err = OGC_NULL);
+
+   virtual ~ogc_derived_conv();
+   static void destroy(ogc_derived_conv * obj);
+
+   static ogc_derived_conv * from_tokens(
+      const ogc_token * t,
+      int               start,
+      int *             pend,
+      ogc_error *       err = OGC_NULL);
+
+   static ogc_derived_conv * from_wkt(
+      const char * wkt,
+      ogc_error *  err = OGC_NULL);
+
+   static bool to_wkt(
+      const ogc_derived_conv * obj,
+      char     buffer[],
+      int      options = OGC_WKT_OPT_NONE,
+      size_t   buflen  = OGC_BUFF_MAX);
+
+   bool to_wkt(
+      char     buffer[],
+      int      options = OGC_WKT_OPT_NONE,
+      size_t   buflen  = OGC_BUFF_MAX) const;
+
+   static ogc_derived_conv * clone(const ogc_derived_conv * obj);
+          ogc_derived_conv * clone() const;
+
+   static bool is_equal    (const ogc_derived_conv * p1,
+                            const ogc_derived_conv * p2);
+          bool is_equal    (const ogc_derived_conv * p) const;
+
+   static bool is_identical(const ogc_derived_conv * p1,
+                            const ogc_derived_conv * p2);
+          bool is_identical(const ogc_derived_conv * p) const;
+
+   const char *     name()        const { return _name;        }
+   ogc_method *     method()      const { return _method;      }
+   ogc_vector *     parameters()  const { return _parameters;  }
+   ogc_vector *     param_files() const { return _param_files; }
+   ogc_vector *     ids()         const { return _ids;         }
+
+   int              parameter_count() const;
+   ogc_parameter *  parameter(int n)  const;
+
+   int              param_file_count() const;
+   ogc_param_file * param_file(int n)  const;
+
+   int             id_count() const;
+   ogc_id *        id(int n)  const;
+};
+
+/* ------------------------------------------------------------------------- */
 /* Coordinate reference system                                               */
 /* ------------------------------------------------------------------------- */
 
@@ -3822,7 +3919,7 @@ private:
    ogc_crs *         _interp_crs;
    ogc_method *      _method;
    ogc_vector *      _parameters;
-   ogc_vector *      _parameter_files;
+   ogc_vector *      _param_files;
    ogc_op_accuracy * _op_accuracy;
    ogc_scope *       _scope;
    ogc_vector *      _extents;
@@ -3841,7 +3938,7 @@ public:
       ogc_crs *         interp_crs,
       ogc_method *      method,
       ogc_vector *      parameters,
-      ogc_vector *      parameter_files,
+      ogc_vector *      param_files,
       ogc_op_accuracy * op_accuracy,
       ogc_scope *       scope,
       ogc_vector *      extents,
@@ -3884,30 +3981,30 @@ public:
                             const ogc_coord_op * p2);
           bool is_identical(const ogc_coord_op * p) const;
 
-   const char *      name()            const { return _name;            }
-   ogc_crs *         source_crs()      const { return _source_crs;      }
-   ogc_crs *         target_crs()      const { return _target_crs;      }
-   ogc_crs *         interp_crs()      const { return _interp_crs;      }
-   ogc_method *      method()          const { return _method;          }
-   ogc_vector *      parameters()      const { return _parameters;      }
-   ogc_vector *      parameter_files() const { return _parameter_files; }
-   ogc_op_accuracy * op_accuracy()     const { return _op_accuracy;     }
-   ogc_scope *       scope()           const { return _scope;           }
-   ogc_vector *      extents()         const { return _extents;         }
-   ogc_vector *      ids()             const { return _ids;             }
-   ogc_remark *      remark()          const { return _remark;          }
+   const char *      name()        const { return _name;        }
+   ogc_crs *         source_crs()  const { return _source_crs;  }
+   ogc_crs *         target_crs()  const { return _target_crs;  }
+   ogc_crs *         interp_crs()  const { return _interp_crs;  }
+   ogc_method *      method()      const { return _method;      }
+   ogc_vector *      parameters()  const { return _parameters;  }
+   ogc_vector *      param_files() const { return _param_files; }
+   ogc_op_accuracy * op_accuracy() const { return _op_accuracy; }
+   ogc_scope *       scope()       const { return _scope;       }
+   ogc_vector *      extents()     const { return _extents;     }
+   ogc_vector *      ids()         const { return _ids;         }
+   ogc_remark *      remark()      const { return _remark;      }
 
-   int                  parameter_count()      const;
-   ogc_parameter *      parameter(int n)       const;
+   int                  parameter_count()  const;
+   ogc_parameter *      parameter(int n)   const;
 
-   int                  parameter_file_count() const;
-   ogc_parameter_file * parameter_file(int n)  const;
+   int                  param_file_count() const;
+   ogc_param_file *     param_file(int n)  const;
 
-   int                  extent_count()         const;
-   ogc_extent *         extent(int n)          const;
+   int                  extent_count()     const;
+   ogc_extent *         extent(int n)      const;
 
-   int                  id_count()             const;
-   ogc_id *             id(int n)              const;
+   int                  id_count()         const;
+   ogc_id *             id(int n)          const;
 };
 
 /* ------------------------------------------------------------------------- */
@@ -3920,7 +4017,7 @@ private:
    OGC_NAME     _name;
    ogc_method * _method;
    ogc_vector * _parameters;
-   ogc_vector * _parameter_files;
+   ogc_vector * _param_files;
    ogc_scope *  _scope;
    ogc_vector * _extents;
    ogc_vector * _ids;
@@ -3935,7 +4032,7 @@ public:
       const char * name,
       ogc_method * method,
       ogc_vector * parameters,
-      ogc_vector * parameter_files,
+      ogc_vector * param_files,
       ogc_scope *  scope,
       ogc_vector * extents,
       ogc_vector * ids,
@@ -3977,26 +4074,26 @@ public:
                             const ogc_abrtrans * p2);
           bool is_identical(const ogc_abrtrans * p) const;
 
-   const char * name()            const { return _name;            }
-   ogc_method * method()          const { return _method;          }
-   ogc_vector * parameters()      const { return _parameters;      }
-   ogc_vector * parameter_files() const { return _parameter_files; }
-   ogc_scope *  scope()           const { return _scope;           }
-   ogc_vector * extents()         const { return _extents;         }
-   ogc_remark * remark()          const { return _remark;          }
-   ogc_vector * ids()             const { return _ids;             }
+   const char * name()        const { return _name;        }
+   ogc_method * method()      const { return _method;      }
+   ogc_vector * parameters()  const { return _parameters;  }
+   ogc_vector * param_files() const { return _param_files; }
+   ogc_scope *  scope()       const { return _scope;       }
+   ogc_vector * extents()     const { return _extents;     }
+   ogc_remark * remark()      const { return _remark;      }
+   ogc_vector * ids()         const { return _ids;         }
 
-   int                  parameter_count()      const;
-   ogc_parameter *      parameter(int n)       const;
+   int              parameter_count()  const;
+   ogc_parameter *  parameter(int n)   const;
 
-   int                  parameter_file_count() const;
-   ogc_parameter_file * parameter_file(int n)  const;
+   int              param_file_count() const;
+   ogc_param_file * param_file(int n)  const;
 
-   int                  extent_count()         const;
-   ogc_extent *         extent(int n)          const;
+   int              extent_count()     const;
+   ogc_extent *     extent(int n)      const;
 
-   int                  id_count()             const;
-   ogc_id *             id(int n)              const;
+   int              id_count()         const;
+   ogc_id *         id(int n)          const;
 };
 
 /* ------------------------------------------------------------------------- */
@@ -4274,7 +4371,7 @@ public:
    static ogc_vector :: OGC_COMPARE_RTN compare_extent;
    static ogc_vector :: OGC_COMPARE_RTN compare_id;
    static ogc_vector :: OGC_COMPARE_RTN compare_parameter;
-   static ogc_vector :: OGC_COMPARE_RTN compare_parameter_file;
+   static ogc_vector :: OGC_COMPARE_RTN compare_param_file;
 };
 
 /* ------------------------------------------------------------------------- */

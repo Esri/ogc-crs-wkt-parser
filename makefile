@@ -42,8 +42,7 @@ OTHER  := \
   contents.txt \
   license.txt  \
   README.md    \
-  ogc_2008.sln \
-  ogc_2012.sln \
+  ogc_*.sln    \
   $(NULL)
 
 DIRSRC  = $(OTHER)

@@ -73,7 +73,7 @@ ogc_conversion * ogc_conversion :: create(
       }
 
       ogc_string::unescape_str(p->_name, name, OGC_NAME_MAX);
-      p->_obj_type   = OGC_OBJ_TYPE_METHOD;
+      p->_obj_type   = OGC_OBJ_TYPE_CONVERSION;
       p->_method     = method;
       p->_parameters = parameters;
       p->_ids        = ids;

@@ -25,10 +25,7 @@ Contents of this package
    makefile             A GNU makefile to build the OGC WKT library and
                         sample programs.
 
-   ogc_2008.sln         A Microsoft Visual Studio 2008 solution file
-                        to build the OGC WKT library and sample programs.
-
-   ogc_2012.sln         A Microsoft Visual Studio 2012 solution file
+   ogc_*.sln            Microsoft Visual Studio 2008 solution files
                         to build the OGC WKT library and sample programs.
 
    include/
@@ -42,10 +39,7 @@ Contents of this package
          make*.i        GNU make include files.
 
       vs_projects/
-         *.vcproj       Microsoft Visual Studio 2008 project files
-                        for the library and sample programs.
-
-         *.vcxproj*     Microsoft Visual Studio 2012 project files
+         *.vc*proj      Microsoft Visual Studio project files
                         for the library and sample programs.
 
    src/

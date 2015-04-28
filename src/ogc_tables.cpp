@@ -48,7 +48,7 @@ const ogc_tables::obj_tbl ogc_tables::ogc_obj_types[] =
    { OGC_OBJ_TYPE_VERT_EXTENT,            OGC_OBJ_KWD_VERT_EXTENT      },
 
    { OGC_OBJ_TYPE_PARAMETER,              OGC_OBJ_KWD_PARAMETER        },
-   { OGC_OBJ_TYPE_PARAMETER_FILE,         OGC_OBJ_KWD_PARAMETER_FILE   },
+   { OGC_OBJ_TYPE_PARAM_FILE,             OGC_OBJ_KWD_PARAM_FILE       },
 
    { OGC_OBJ_TYPE_ELLIPSOID,              OGC_OBJ_KWD_ELLIPSOID        },
 
@@ -72,6 +72,7 @@ const ogc_tables::obj_tbl ogc_tables::ogc_obj_types[] =
    { OGC_OBJ_TYPE_CS,                     OGC_OBJ_KWD_CS               },
 
    { OGC_OBJ_TYPE_CONVERSION,             OGC_OBJ_KWD_CONVERSION       },
+   { OGC_OBJ_TYPE_DERIVED_CONV,           OGC_OBJ_KWD_DERIVED_CONV     },
    { OGC_OBJ_TYPE_METHOD,                 OGC_OBJ_KWD_METHOD           },
 
    { OGC_OBJ_TYPE_ENGR_CRS,               OGC_OBJ_KWD_ENGR_CRS         },
@@ -96,12 +97,19 @@ const ogc_tables::obj_tbl ogc_tables::ogc_obj_types[] =
 const ogc_tables::crs_tbl ogc_tables::ogc_crs_types[] =
 {
    { OGC_CRS_TYPE_ENGR,                   OGC_CRS_KWD_ENGR             },
+   { OGC_CRS_TYPE_PROJ,                   OGC_CRS_KWD_PROJ             },
+   { OGC_CRS_TYPE_VERT,                   OGC_CRS_KWD_VERT             },
    { OGC_CRS_TYPE_GEOD,                   OGC_CRS_KWD_GEOD             },
    { OGC_CRS_TYPE_IMAGE,                  OGC_CRS_KWD_IMAGE            },
    { OGC_CRS_TYPE_PARAM,                  OGC_CRS_KWD_PARAM            },
-   { OGC_CRS_TYPE_PROJ,                   OGC_CRS_KWD_PROJ             },
    { OGC_CRS_TYPE_TIME,                   OGC_CRS_KWD_TIME             },
-   { OGC_CRS_TYPE_VERT,                   OGC_CRS_KWD_VERT             },
+
+   { OGC_CRS_TYPE_ENGR_DERIVED,           OGC_CRS_KWD_ENGR_DERIVED,    },
+   { OGC_CRS_TYPE_VERT_DERIVED,           OGC_CRS_KWD_VERT_DERIVED,    },
+   { OGC_CRS_TYPE_GEOD_DERIVED,           OGC_CRS_KWD_GEOD_DERIVED,    },
+   { OGC_CRS_TYPE_PARAM_DERIVED,          OGC_CRS_KWD_PARAM_DERIVED,   },
+   { OGC_CRS_TYPE_TIME_DERIVED,           OGC_CRS_KWD_TIME_DERIVED,    },
+
    { OGC_CRS_TYPE_COMPOUND,               OGC_CRS_KWD_COMPOUND         },
 
    { OGC_CRS_TYPE_UNKNOWN,                OGC_CRS_KWD_UNKNOWN          }
@@ -272,7 +280,7 @@ const ogc_tables::error_tbl ogc_tables :: ogc_errors[] =
    { OGC_ERR_WKT_DUPLICATE_MERIDIAN,        "duplicate meridian"       },
    { OGC_ERR_WKT_DUPLICATE_METHOD,          "duplicate method"         },
    { OGC_ERR_WKT_DUPLICATE_PARAMETER,       "duplicate parameter"      },
-   { OGC_ERR_WKT_DUPLICATE_PARAMETER_FILE,  "duplicate parameter file" },
+   { OGC_ERR_WKT_DUPLICATE_PARAM_FILE,      "duplicate parameter file" },
    { OGC_ERR_WKT_DUPLICATE_OPACCURACY,      "duplicate opaccuracy"     },
    { OGC_ERR_WKT_DUPLICATE_ORDER,           "duplicate order"          },
    { OGC_ERR_WKT_DUPLICATE_PRIMEM,          "duplicate primem"         },

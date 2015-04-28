@@ -176,6 +176,7 @@
     <ClCompile Include="$(TOP_DIR)\src\ogc_cs.cpp" />
     <ClCompile Include="$(TOP_DIR)\src\ogc_datetime.cpp" />
     <ClCompile Include="$(TOP_DIR)\src\ogc_datum.cpp" />
+    <ClCompile Include="$(TOP_DIR)\src\ogc_derived_conv.cpp" />
     <ClCompile Include="$(TOP_DIR)\src\ogc_ellipsoid.cpp" />
     <ClCompile Include="$(TOP_DIR)\src\ogc_engr_crs.cpp" />
     <ClCompile Include="$(TOP_DIR)\src\ogc_engr_datum.cpp" />
@@ -194,7 +195,7 @@
     <ClCompile Include="$(TOP_DIR)\src\ogc_op_accuracy.cpp" />
     <ClCompile Include="$(TOP_DIR)\src\ogc_order.cpp" />
     <ClCompile Include="$(TOP_DIR)\src\ogc_parameter.cpp" />
-    <ClCompile Include="$(TOP_DIR)\src\ogc_parameter_file.cpp" />
+    <ClCompile Include="$(TOP_DIR)\src\ogc_param_file.cpp" />
     <ClCompile Include="$(TOP_DIR)\src\ogc_param_crs.cpp" />
     <ClCompile Include="$(TOP_DIR)\src\ogc_param_datum.cpp" />
     <ClCompile Include="$(TOP_DIR)\src\ogc_paramunit.cpp" />

@@ -81,6 +81,7 @@ C_OBJS   := \
   ogc_conversion.$(OBJ_EXT)      \
   ogc_coord_op.$(OBJ_EXT)        \
   ogc_cs.$(OBJ_EXT)              \
+  ogc_derived_conv.$(OBJ_EXT)    \
   ogc_ellipsoid.$(OBJ_EXT)       \
   ogc_engr_crs.$(OBJ_EXT)        \
   ogc_engr_datum.$(OBJ_EXT)      \
@@ -95,7 +96,7 @@ C_OBJS   := \
   ogc_op_accuracy.$(OBJ_EXT)     \
   ogc_order.$(OBJ_EXT)           \
   ogc_parameter.$(OBJ_EXT)       \
-  ogc_parameter_file.$(OBJ_EXT)  \
+  ogc_param_file.$(OBJ_EXT)      \
   ogc_param_crs.$(OBJ_EXT)       \
   ogc_param_datum.$(OBJ_EXT)     \
   ogc_paramunit.$(OBJ_EXT)       \

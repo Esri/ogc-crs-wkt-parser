@@ -89,6 +89,7 @@ ogc_object * ogc_object :: from_tokens(
    CHECK( CONVERSION,      conversion      );
    CHECK( COORD_OP,        coord_op        );
    CHECK( CS,              cs              );
+   CHECK( DERIVED_CONV,    derived_conv    );
    CHECK( ELLIPSOID,       ellipsoid       );
    CHECK( ENGR_CRS,        engr_crs        );
    CHECK( ENGR_DATUM,      engr_datum      );
@@ -103,7 +104,7 @@ ogc_object * ogc_object :: from_tokens(
    CHECK( OP_ACCURACY,     op_accuracy     );
    CHECK( ORDER,           order           );
    CHECK( PARAMETER,       parameter       );
-   CHECK( PARAMETER_FILE,  parameter_file  );
+   CHECK( PARAM_FILE,      param_file      );
    CHECK( PARAM_CRS,       param_crs       );
    CHECK( PARAM_DATUM,     param_datum     );
    CHECK( PARAMUNIT,       paramunit       );
@@ -224,6 +225,7 @@ bool ogc_object :: to_wkt(
    CASE( CONVERSION,      conversion      );
    CASE( COORD_OP,        coord_op        );
    CASE( CS,              cs              );
+   CASE( DERIVED_CONV,    derived_conv    );
    CASE( ELLIPSOID,       ellipsoid       );
    CASE( ENGR_CRS,        engr_crs        );
    CASE( ENGR_DATUM,      engr_datum      );
@@ -238,7 +240,7 @@ bool ogc_object :: to_wkt(
    CASE( OP_ACCURACY,     op_accuracy     );
    CASE( ORDER,           order           );
    CASE( PARAMETER,       parameter       );
-   CASE( PARAMETER_FILE,  parameter_file  );
+   CASE( PARAM_FILE,      param_file      );
    CASE( PARAM_CRS,       param_crs       );
    CASE( PARAM_DATUM,     param_datum     );
    CASE( PARAMUNIT,       paramunit       );
@@ -297,6 +299,7 @@ ogc_object * ogc_object :: clone() const
    CASE( CONVERSION,      conversion      );
    CASE( COORD_OP,        coord_op        );
    CASE( CS,              cs              );
+   CASE( DERIVED_CONV,    derived_conv    );
    CASE( ELLIPSOID,       ellipsoid       );
    CASE( ENGR_CRS,        engr_crs        );
    CASE( ENGR_DATUM,      engr_datum      );
@@ -311,7 +314,7 @@ ogc_object * ogc_object :: clone() const
    CASE( OP_ACCURACY,     op_accuracy     );
    CASE( ORDER,           order           );
    CASE( PARAMETER,       parameter       );
-   CASE( PARAMETER_FILE,  parameter_file  );
+   CASE( PARAM_FILE,      param_file      );
    CASE( PARAM_CRS,       param_crs       );
    CASE( PARAM_DATUM,     param_datum     );
    CASE( PARAMUNIT,       paramunit       );
@@ -370,6 +373,7 @@ bool ogc_object :: is_equal(
    CASE( CONVERSION,      conversion      );
    CASE( COORD_OP,        coord_op        );
    CASE( CS,              cs              );
+   CASE( DERIVED_CONV,    derived_conv    );
    CASE( ELLIPSOID,       ellipsoid       );
    CASE( ENGR_CRS,        engr_crs        );
    CASE( ENGR_DATUM,      engr_datum      );
@@ -384,7 +388,7 @@ bool ogc_object :: is_equal(
    CASE( OP_ACCURACY,     op_accuracy     );
    CASE( ORDER,           order           );
    CASE( PARAMETER,       parameter       );
-   CASE( PARAMETER_FILE,  parameter_file  );
+   CASE( PARAM_FILE,      param_file      );
    CASE( PARAM_CRS,       param_crs       );
    CASE( PARAM_DATUM,     param_datum     );
    CASE( PARAMUNIT,       paramunit       );
@@ -449,6 +453,7 @@ bool ogc_object :: is_identical(
    CASE( CONVERSION,      conversion      );
    CASE( COORD_OP,        coord_op        );
    CASE( CS,              cs              );
+   CASE( DERIVED_CONV,    derived_conv    );
    CASE( ELLIPSOID,       ellipsoid       );
    CASE( ENGR_CRS,        engr_crs        );
    CASE( ENGR_DATUM,      engr_datum      );
@@ -463,7 +468,7 @@ bool ogc_object :: is_identical(
    CASE( OP_ACCURACY,     op_accuracy     );
    CASE( ORDER,           order           );
    CASE( PARAMETER,       parameter       );
-   CASE( PARAMETER_FILE,  parameter_file  );
+   CASE( PARAM_FILE,      param_file      );
    CASE( PARAM_CRS,       param_crs       );
    CASE( PARAM_DATUM,     param_datum     );
    CASE( PARAMUNIT,       paramunit       );
