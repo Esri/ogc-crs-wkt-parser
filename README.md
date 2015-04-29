@@ -3,24 +3,24 @@
 ### Introduction
 
 This package contains sample code for a library that implements the
-OGC WKT specification titled "Geographic information - Well known text
-for coordinate reference systems" (referred to as the WKT-SPEC).
+OGC WKT specification titled "Geographic information - Well-known text
+representation of coordinate reference systems" (referred to as the WKT-SPEC).
 This specification is for defining a Well-Known-Text (WKT) syntax
-for describing coordinate reference systems as defined in the ISO
-19111:2007 standard "Geographic Information - Spatial referencing
-by Coordinates". This package also contains some sample programs
-that use this library.
+for describing coordinate reference systems as defined in the standards
+ISO 19111:2007 and ISO 19111-2:2009.
+
+This package also contains some sample programs that use this library.
 
 This package is not an official offering from the OGC, but is provided
 by Esri as a proof-of-concept implementation of the WKT-SPEC, with
 the intent of testing the proposed specification and highlighting potential
 issues with the WKT-SPEC.
 
-Included in this package is the document ogc_wkt_crs.doc,
-which documents this proposed standard and which was approved by the OGC
-Standards Working Group for inclusion in this package during the
-meeting of July 25, 2013.  This document is being released in parallel
-by ISO and OGC for general public comment.
+Included in this package is the document ogc_wkt_crs.pdf,
+which been submitted by ISO TC211 for publication as an International
+Standard document. The version incorporates comments made during both the
+OGC Public Comment Period as well as the ISO ballot for DIS (ISO TC211
+document N3750).
 
 ### Contents
 
@@ -28,7 +28,7 @@ This package consists of a library and sample programs using the library.
 Only source code is provided; a user will have to build the package
 if he wants to try using it. To aid in building this package,
 we have included GNU makefiles as well as solution/project files
-for both Visual Studio 2008, 2012, and 2013.
+for Visual Studio versions 2008, 2012, and 2013.
 
 This code is provided to the committee charged with developing and
 approving the WKT-SPEC with the intent that they can study it to
@@ -85,39 +85,19 @@ following is a list of these areas. This list may not be complete.
              character are ignored.)
           3. Extra atomic (ie. non sub-object) tokens in an object are ignored.
 
-   4.  The WKT-SPEC says nothing about non-atomic attributes (sub-objects)
-       that contain non-recognized keywords, except in Appendix D.
-       This implementation ignores them.
-
-       This is done regardless of whether strict-parsing is enabled or not.
-
-   5.  The WKT-SPEC specifies an order for all sub-objects in a WKT string.
+   4.  The WKT-SPEC specifies an order for all sub-objects in a WKT string.
        This implementation follows that order when outputting sub-objects
        into a WKT string, but allows them to appear in any order when reading
        WKT strings.
 
        This is done regardless of whether strict-parsing is enabled or not.
 
-   6.  The WKT-SPEC says nothing about limits on the lengths of WKT strings
-       or any sub-strings such as names or text. This implementation
-       imposes the following length limitations:
+   5.  Object names are allowed to be empty, except for the following objects:
 
-          WKT string       4096 characters
-          name               80 characters
-          text              256 characters  (ANCHOR, CITATION, ID, SCOPE,
-                                             AREA, REMARK, and URI)
-          time               64 characters  (TIMEEXTENT)
-          pathnames         256 characters  (PARAMETERFILE value)
-
-       These lengths include the terminating null character. These values are
-       defined in the libogc.h header file, and may be changed.
-
-   7.  Object names are allowed to be empty, except for the following objects:
-
-          GENDATUM
           METHOD (PROJECTION)
           PARAMETER
           PARAMETERFILE
+          VDATUM
 
        Most importantly, a CONVERSION object is allowed to have an empty name,
        as without that rule an old-style WKT cannot be converted into a
@@ -125,22 +105,18 @@ following is a list of these areas. This list may not be complete.
        processing an old-style PROJCS WKT string the PROJECTION name
        is copied into the CONVERSION name.
 
-   8.  Underscores are allowed in keywords, but they are ignored.
+   6.  Underscores are allowed in keywords, but they are ignored.
 
-   9.  The following aliases defined in the WKT-SPEC are not allowed:
-
-          GEOGCS for BASECRS
-
-       However, WKT strings in the old syntax identified by the following
+   7.  WKT strings in the old syntax identified by the following
        keywords will be processed into a new-style object:
 
-          GEOGCS     -> GEOGCRS
+          GEOGCS     -> GEODCRS
           PROJCS     -> PROJCRS
-          VERT_DATUM -> GENDATUM
+          VERT_DATUM -> VDATUM
           VERT_CS    -> VERTCRS
           COMPD_CS   -> COMPOUNDCRS
 
-   10. The ability to output objects in the old (19125) syntax is provided,
+   8.  The ability to output objects in the old (19125) syntax is provided,
        although no checks are done to insure that the created WKT will be
        usable to create an equivalent object.
 
@@ -170,6 +146,7 @@ Three sample programs are provided:
                 -?   Display usage
                 -m   Process multi-line input
                 -n   Show name only
+                -o   Display in old syntax
                 -i   Don't show any ID attributes
                 -t   Show top-level ID attribute only
                 -p   Show () instead of [] in strings
@@ -207,7 +184,7 @@ Anyone and everyone is welcome to contribute.
 
 ### Licensing
 
-Copyright 2010-2013 Esri
+Copyright 2010-2015 Esri
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
