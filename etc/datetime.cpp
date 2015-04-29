@@ -41,11 +41,16 @@ static void usage(int level)
 {
    if (level)
    {
+      printf("%s: Test the parsing of date-time strings\n", pgm);
       printf("Usage: %s [options] [filename]\n", pgm);
       printf("Options:\n");
-      printf("  -?       Display usage\n");
-      printf("  -v       Verbose\n");
-      printf("  -n ndig  Specify number of digits in seconds\n");
+      printf("  -?, -help     Display usage\n");
+      printf("  -V, -version  Display version\n");
+      printf("  -v            Verbose\n");
+      printf("  -n ndig       Specify number of digits in seconds\n");
+
+      printf("Arguments:\n");
+      printf("  filename      File of date-time strings to read (default is stdin)\n");
    }
    else
    {
@@ -84,6 +89,13 @@ static int process_options (int argc, const char **argv)
                strcmp(arg, "help") == 0)
       {
          usage(1);
+         exit(EXIT_SUCCESS);
+      }
+
+      else if (strcmp(arg, "V")       == 0 ||
+               strcmp(arg, "version") == 0)
+      {
+         printf("%s: version %s\n", pgm, OGC_VERSION_STR);
          exit(EXIT_SUCCESS);
       }
 
@@ -173,15 +185,21 @@ int main(int argc, const char **argv)
          printf("sec   = %.*f\n", ndigits, t.sec  () );
 
          int  tz = t.tz();
-         bool minus = (tz < 0 );
-         if ( minus )
-            tz = -tz;
+         if ( tz == 0 )
+         {
+            printf("tz    = UTC\n");
+         }
+         else
+         {
+            bool minus = (tz < 0 );
+            if ( minus )
+               tz = -tz;
 
-         int h = (tz / 60);
-         int m = (tz % 60);
+            int h = (tz / 60);
+            int m = (tz % 60);
 
-         printf("tz    = %c%d.%d\n",
-            (minus ? '-' : '+'), h, m);
+            printf("tz    = %c%d.%d\n", (minus ? '-' : '+'), h, m);
+         }
       }
 
       t.timestamp_str(out_buf, ndigits);

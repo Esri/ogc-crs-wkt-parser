@@ -6,8 +6,12 @@ This package contains sample code for a library that implements the
 OGC WKT specification titled "Geographic information - Well-known text
 representation of coordinate reference systems" (referred to as the WKT-SPEC).
 This specification is for defining a Well-Known-Text (WKT) syntax
-for describing coordinate reference systems as defined in the standards
-ISO 19111:2007 and ISO 19111-2:2009.
+for describing coordinate reference systems as defined in the following
+standards:
+
+    ISO 19111:2007    "Geographic information -- Spatial referencing by coordinates"
+    ISO 19111-2:2009  "Geographic information -- Spatial referencing by coordinates --
+                       Part 2: Extension for parametric values".
 
 This package also contains some sample programs that use this library.
 
@@ -25,7 +29,7 @@ document N3750).
 ### Contents
 
 This package consists of a library and sample programs using the library.
-Only source code is provided; a user will have to build the package
+Only source code is provided. A user will have to build the package
 if he wants to try using it. To aid in building this package,
 we have included GNU makefiles as well as solution/project files
 for Visual Studio versions 2008, 2012, and 2013.
@@ -42,6 +46,7 @@ This library provides the following functions only:
 
 *  Convert WKT strings to internal objects.
 *  Convert internal objects to WKT strings.
+*  Create and destroy internal objects.
 *  Clone internal objects.
 *  Determine whether two internal objects are identical or are
    computationally equivalent.
@@ -55,7 +60,7 @@ where this implementation deviates from or exceeds the spec. The
 following is a list of these areas. This list may not be complete.
 
    1.  This implementation only handles WKT strings that are ASCII
-       (single-byte character) strings.  The WKT-SPEC does not specify
+       (single-byte character) strings. The WKT-SPEC does not specify
        any encoding of WKT strings. This implementation assumes that any
        encoding other than simple ASCII encoding is processed into
        ASCII prior to the calling of these routines.
@@ -128,32 +133,41 @@ Three sample programs are provided:
 
               Usage: parse [options] [filename]
               Options:
-                -?   Display usage
-                -v   Verbose
+                -?, -help     Display usage
+                -V, -version  Display version
+                -v            Verbose
+              Arguments:
+                filename      File of WKT strings to read (default is stdin)
 
     datetime  This program tests the parsing of date-time strings.
 
               Usage: datetime [options] [filename]
               Options:
-                -?       Display usage
-                -v       Verbose
-                -n ndig  Specify number of digits in seconds
+                -?, -help     Display usage
+                -V, -version  Display version
+                -v            Verbose
+                -n ndig       Specify number of digits in seconds
+              Arguments:
+                filename      File of date-time strings to read (default is stdin)
 
     wkt       This program will read and write WKT strings.
 
               Usage: wkt [options] [filename]
               Options:
-                -?   Display usage
-                -m   Process multi-line input
-                -n   Show name only
-                -o   Display in old syntax
-                -i   Don't show any ID attributes
-                -t   Show top-level ID attribute only
-                -p   Show () instead of [] in strings
-                -x   Expand with spaces
-                -X   Expand with tabs
-                -r   Relax strict parsing
-                -s   Set   strict parsing (default)
+                -?, -help     Display usage
+                -V, -version  Display version
+                -m            Process multi-line input
+                -n            Show name only
+                -o            Display in old syntax
+                -i            Don't show any ID attributes
+                -t            Show top-level ID attribute only
+                -p            Show () instead of [] in strings
+                -x            Expand with spaces
+                -X            Expand with tabs
+                -r            Relax strict parsing
+                -s            Set   strict parsing (default)
+              Arguments:
+                filename      File of WKT strings to read (default is stdin)
 
 ### To do
 
@@ -173,7 +187,7 @@ Find a bug or want to request a new feature?  Please let us know by submitting
 an issue.
 
 Comments and issues logged through this Github project will be available to
-the ISO and OGC Standards Working Group.  However, this Github project is not
+the ISO and OGC Standards Working Group. However, this Github project is not
 an official repository of public comment for the standard - you may want
 to submit comments through the formal ISO and OGC channels to ensure that they
 are logged and responded to.

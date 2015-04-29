@@ -43,30 +43,35 @@ static void usage(int level)
 {
    if (level)
    {
+      printf("%s: Read and write WKT strings\n", pgm);
       printf("Usage: %s [options] [filename]\n", pgm);
       printf("Options:\n");
-      printf("  -?   Display usage\n");
-      printf("  -m   Process multi-line input\n");
-      printf("  -n   Show name only\n");
-      printf("  -o   Display in old syntax\n");
+      printf("  -?, -help     Display usage\n");
+      printf("  -V, -version  Display version\n");
+      printf("  -m            Process multi-line input\n");
+      printf("  -n            Show name only\n");
+      printf("  -o            Display in old syntax\n");
 
-      printf("  -i   Don't show any ID attributes\n");
-      printf("  -t   Show top-level ID attribute only\n");
-      printf("  -p   Show () instead of [] in strings\n");
+      printf("  -i            Don't show any ID attributes\n");
+      printf("  -t            Show top-level ID attribute only\n");
+      printf("  -p            Show () instead of [] in strings\n");
 
-      printf("  -x   Expand with spaces\n");
-      printf("  -X   Expand with tabs\n");
+      printf("  -x            Expand with spaces\n");
+      printf("  -X            Expand with tabs\n");
 
       if ( strict )
       {
-         printf("  -r   Relax strict parsing\n");
-         printf("  -s   Set   strict parsing (default)\n");
+         printf("  -r            Relax strict parsing\n");
+         printf("  -s            Set   strict parsing (default)\n");
       }
       else
       {
-         printf("  -r   Relax strict parsing (default)\n");
-         printf("  -s   Set   strict parsing\n");
+         printf("  -r            Relax strict parsing (default)\n");
+         printf("  -s            Set   strict parsing\n");
       }
+
+      printf("Arguments:\n");
+      printf("  filename      File of WKT strings to read (default is stdin)\n");
    }
    else
    {
@@ -109,6 +114,13 @@ static int process_options (int argc, const char **argv)
                strcmp(arg, "help") == 0)
       {
          usage(1);
+         exit(EXIT_SUCCESS);
+      }
+
+      else if (strcmp(arg, "V")       == 0 ||
+               strcmp(arg, "version") == 0)
+      {
+         printf("%s: version %s\n", pgm, OGC_VERSION_STR);
          exit(EXIT_SUCCESS);
       }
 

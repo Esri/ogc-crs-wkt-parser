@@ -40,10 +40,15 @@ static void usage(int level)
 {
    if (level)
    {
+      printf("%s: Test the parsing of WKT strings\n", pgm);
       printf("Usage: %s [options] [filename]\n", pgm);
       printf("Options:\n");
-      printf("  -?   Display usage\n");
-      printf("  -v   Verbose\n");
+      printf("  -?, -help     Display usage\n");
+      printf("  -V, -version  Display version\n");
+      printf("  -v            Verbose\n");
+
+      printf("Arguments:\n");
+      printf("  filename      File of WKT strings to read (default is stdin)\n");
    }
    else
    {
@@ -82,6 +87,13 @@ static int process_options (int argc, const char **argv)
                strcmp(arg, "help") == 0)
       {
          usage(1);
+         exit(EXIT_SUCCESS);
+      }
+
+      else if (strcmp(arg, "V")       == 0 ||
+               strcmp(arg, "version") == 0)
+      {
+         printf("%s: version %s\n", pgm, OGC_VERSION_STR);
          exit(EXIT_SUCCESS);
       }
 
