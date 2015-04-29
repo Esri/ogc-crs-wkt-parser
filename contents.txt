@@ -20,7 +20,7 @@ Contents of this package
    license.txt          The license for this package.
    README.md            A readme file describing this package and its use.
 
-   ogc_wkt_crs.doc      The specification that this package implements.
+   ogc_wkt_crs.pdf      The specification that this package implements.
 
    makefile             A GNU makefile to build the OGC WKT library and
                         sample programs.

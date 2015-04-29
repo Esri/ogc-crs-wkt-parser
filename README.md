@@ -28,7 +28,7 @@ This package consists of a library and sample programs using the library.
 Only source code is provided; a user will have to build the package
 if he wants to try using it. To aid in building this package,
 we have included GNU makefiles as well as solution/project files
-for both Visual Studio 2008 and 2012.
+for both Visual Studio 2008, 2012, and 2013.
 
 This code is provided to the committee charged with developing and
 approving the WKT-SPEC with the intent that they can study it to

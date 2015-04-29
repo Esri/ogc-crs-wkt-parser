@@ -537,11 +537,11 @@ bool ogc_image_crs :: to_wkt(
       return true;
 
    rc &= ogc_image_datum :: to_wkt(_datum,  buf_datum,  opts, OGC_TBUF_MAX);
-   rc &= ogc_cs            :: to_wkt(_cs,     buf_cs,     opts, OGC_TBUF_MAX);
-   rc &= ogc_axis          :: to_wkt(_axis_1, buf_axis_1, opts, OGC_TBUF_MAX);
-   rc &= ogc_axis          :: to_wkt(_axis_2, buf_axis_2, opts, OGC_TBUF_MAX);
-   rc &= ogc_unit          :: to_wkt(_unit,   buf_unit,   opts, OGC_TBUF_MAX);
-   rc &= ogc_remark        :: to_wkt(_remark, buf_remark, opts, OGC_TBUF_MAX);
+   rc &= ogc_cs          :: to_wkt(_cs,     buf_cs,     opts, OGC_TBUF_MAX);
+   rc &= ogc_axis        :: to_wkt(_axis_1, buf_axis_1, opts, OGC_TBUF_MAX);
+   rc &= ogc_axis        :: to_wkt(_axis_2, buf_axis_2, opts, OGC_TBUF_MAX);
+   rc &= ogc_unit        :: to_wkt(_unit,   buf_unit,   opts, OGC_TBUF_MAX);
+   rc &= ogc_remark      :: to_wkt(_remark, buf_remark, opts, OGC_TBUF_MAX);
 
    ogc_string::escape_str(buf_name, _name, OGC_UTF8_NAME_MAX);
    sprintf(buf_hdr, "%s%s\"%s\"",

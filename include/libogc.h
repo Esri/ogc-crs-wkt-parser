@@ -4231,23 +4231,21 @@ public:
 /* date/time methods                                                         */
 /* ------------------------------------------------------------------------- */
 
-/* Note that all times are UTC (GMT) time. */
-
 class OGC_EXPORT ogc_datetime
 {
 private:
-   int    _year;    /* CE year number             (0001-9999)      */
-   int    _month;   /* month number               (1-12)           */
-   int    _day;     /* day of the month           (1-31)           */
-   int    _hour;    /* hour since midnight        (0-23)           */
-   int    _min;     /* minutes after the hour     (0-59)           */
-   double _sec;     /* seconds after the minute   (0-59.999999999) */
-   int    _tz;      /* TZ offset from UTC in mins (-1439 to +1439) */
+   int    _year;    /* CE year number             (0001  to 9999)         */
+   int    _month;   /* month number               (1     to 12)           */
+   int    _day;     /* day of the month           (1     to 31)           */
+   int    _hour;    /* hour since midnight        (0     to 23)           */
+   int    _min;     /* minutes after the hour     (0     to 59)           */
+   double _sec;     /* seconds after the minute   (0     to 59.999999999) */
+   int    _tz;      /* TZ offset from UTC in mins (-1439 to +1439)        */
 
-   bool parse_timestamp(const char * str); /* "YYYY-MM-DDThh:mm:ss.sss" */
-   bool parse_date     (const char * str); /* "YYYY-MM-DD"              */
-   bool parse_time     (const char * str); /* "hh:mm:ss.sss"            */
-   bool parse_timezone (const char * str); /* "Z" | "+-hh[:mm]"         */
+   bool parse_timestamp(const char * str); /* "YYYY-MM-DDThh:mm:ss.sss"   */
+   bool parse_date     (const char * str); /* "YYYY-MM-DD"                */
+   bool parse_time     (const char * str); /* "hh:mm:ss.sss"              */
+   bool parse_timezone (const char * str); /* "Z" | "+-hh[:mm]"           */
 
 public:
    ogc_datetime();
