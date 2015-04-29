@@ -1,0 +1,120 @@
+# ------------------------------------------------------------------------- #
+# Copyright 2015 Esri                                                       #
+#                                                                           #
+# Licensed under the Apache License, Version 2.0 (the "License");           #
+# you may not use this file except in compliance with the License.          #
+# You may obtain a copy of the License at                                   #
+#                                                                           #
+#     http://www.apache.org/licenses/LICENSE-2.0                            #
+#                                                                           #
+# Unless required by applicable law or agreed to in writing, software       #
+# distributed under the License is distributed on an "AS IS" BASIS,         #
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  #
+# See the License for the specific language governing permissions and       #
+# limitations under the License.                                            #
+# ------------------------------------------------------------------------- #
+
+Defined keywords & objects
+
+   Note that these objects are in the order they appear in the libogc.h header.
+
+   keyword                description               object name
+   ------------------     -----------------------   -------------------
+   <base object>          base OBJECT class         ogc_object
+
+   citation               citation                     ogc_citation
+   uri                    uri                          ogc_uri
+   id                     identifier                   ogc_id
+   remark                 remark                       ogc_remark
+
+   unit                   Base UNIT class              ogc_unit
+      angleUnit              angle      unit              ogc_angunit
+      lengthUnit             length     unit              ogc_lenunit
+      scaleUnit              scale      unit              ogc_scaleunit
+      timeUnit               temporal   unit              ogc_timeunit
+      parametricUnit         parametric unit              ogc_paramunit
+
+   scope                  scope                        ogc_scope
+
+   <base extent>          base EXTENT class            ogc_extent
+      area                   area description             ogc_area_extent
+      bBox                   geographic bounding box      ogc_bbox_extent
+      verticalExtent         vertical extent              ogc_vert_extent
+      timeExtent             temporal extent              ogc_time_extent
+
+   parameter              parameter                    ogc_parameter
+   parameterFile          parameter file               ogc_param_file
+   ellipsoid              ellipsoid                    ogc_ellipsoid
+   anchor                 datum anchor                 ogc_anchor
+   timeOrigin             temporal origin              ogc_time_origin
+
+   <base datum>           base DATUM class             ogc_datum
+      datum                  geodetic    datum            ogc_geod_datum
+      eDatum                 engineering datum            ogc_engr_datum
+      iDatum                 image       datum            ogc_image_datum
+      pDatum                 parametric  datum            ogc_param_datum
+      tDatum                 temporal    datum            ogc_time_datum
+      vDatum                 vertical    datum            ogc_vert_datum
+
+   primeM                 prime meridian               ogc_primem
+   bearing                bearing                      ogc_bearing
+   meridian               meridian                     ogc_meridian
+   order                  axis order                   ogc_order
+   axis                   axis                         ogc_axis
+   cs                     cs (coordinate system)       ogc_cs
+   method                 projection/op method         ogc_method
+   conversion             map projection               ogc_conversion
+   derivingConversion     deriving conversion          ogc_deriving_conv
+
+   <base CRS>             base CRS class               ogc_crs
+      geodCRS                geodetic    crs              ogc_geod_crs
+         baseGeodCRS            base geodetic    crs         ogc_base_geod_crs
+      projCRS                projected   crs              ogc_proj_crs
+         baseProjCRS            base projected   crs         ogc_base_proj_crs
+      vertCRS                vertical    crs              ogc_vert_crs
+         baseVertCRS            base vertical    crs         ogc_base_vert_crs
+      engCRS                 engineering crs              ogc_engr_crs
+         baseEngCRS             base engineering crs         ogc_base_engr_crs
+      imageCRS               image       crs              ogc_image_crs
+      timeCRS                temporal    crs              ogc_time_crs
+         baseTimeCRS            base temporal    crs         ogc_base_time_crs
+      parametricCRS          parametric  crs              ogc_param_crs
+         baseParamCRS           base parametric  crs         ogc_base_param_crs
+      compoundCRS            compound    crs              ogc_compound_crs
+
+   operationAccuracy      operation accuracy           ogc_op_accuracy
+   coordinateOperation    operation                    ogc_coord_op
+   abridgedTransformation abridged transformation      ogc_abrtrans
+   boundCRS               bound crs                    ogc_bound_crs
+
+Alternate keywords
+
+   alternate keyword      actual name
+   -----------------      -----------
+   engineeringCRS         engCRS
+   geodeticCRS            geodCRS
+   projectedCRS           projCRS
+   verticalCRS            vertCRS
+
+   engineeringDatum       eDatum
+   geodeticDatum          datum
+   imageDatum             iDatum
+   parametricDatum        pDatum
+   timeDatum              tDatum
+   verticalDatum          vDatum
+
+   primeMeridian          primeM
+   projection             method
+   spheroid               ellipsoid
+
+Pseudo-name keywords
+
+   keyword                description           used in
+   -----------------      -----------------     -------------------
+   interpolationCRS       interpolation crs     coordinateOperation
+
+   sourceCRS              source crs            coordinateOperation
+                                                boundCRS
+
+   targetCRS              target crs            coordinateOperation
+                                                boundCRS

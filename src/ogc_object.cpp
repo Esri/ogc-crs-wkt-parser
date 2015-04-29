@@ -34,9 +34,11 @@ bool ogc_object :: get_strict_parsing()
    return _strict_parsing;
 }
 
-void ogc_object :: set_strict_parsing(bool on_off)
+bool ogc_object :: set_strict_parsing(bool on_off)
 {
+   bool rc = _strict_parsing;
    _strict_parsing = on_off;
+   return rc;
 }
 
 /*------------------------------------------------------------------------

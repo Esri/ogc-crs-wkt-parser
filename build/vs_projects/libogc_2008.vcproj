@@ -372,7 +372,7 @@
 			<File RelativePath="..\..\src\ogc_meridian.cpp" />
 			<File RelativePath="..\..\src\ogc_method.cpp" />
 			<File RelativePath="..\..\src\ogc_object.cpp" />
-			<File RelativePath="..\..\src\ogc_opaccuracy.cpp" />
+			<File RelativePath="..\..\src\ogc_op_accuracy.cpp" />
 			<File RelativePath="..\..\src\ogc_order.cpp" />
 			<File RelativePath="..\..\src\ogc_parameter.cpp" />
 			<File RelativePath="..\..\src\ogc_param_file.cpp" />
@@ -400,6 +400,12 @@
 			<File RelativePath="..\..\src\ogc_vert_crs.cpp" />
 			<File RelativePath="..\..\src\ogc_vert_datum.cpp" />
 			<File RelativePath="..\..\src\ogc_vert_extent.cpp" />
+			<File RelativePath="..\..\src\ogc_base_engr_crs.cpp" />
+			<File RelativePath="..\..\src\ogc_base_geod_crs.cpp" />
+			<File RelativePath="..\..\src\ogc_base_param_crs.cpp" />
+			<File RelativePath="..\..\src\ogc_base_proj_crs.cpp" />
+			<File RelativePath="..\..\src\ogc_base_time_crs.cpp" />
+			<File RelativePath="..\..\src\ogc_base_vert_crs.cpp" />
 		</Filter>
 		<Filter
 			Name="Header Files"

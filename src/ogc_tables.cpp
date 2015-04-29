@@ -84,6 +84,13 @@ const ogc_tables::obj_tbl ogc_tables::ogc_obj_types[] =
    { OGC_OBJ_TYPE_VERT_CRS,               OGC_OBJ_KWD_VERT_CRS         },
    { OGC_OBJ_TYPE_COMPOUND_CRS,           OGC_OBJ_KWD_COMPOUND_CRS     },
 
+   { OGC_OBJ_TYPE_BASE_ENGR_CRS,          OGC_OBJ_KWD_BASE_ENGR_CRS    },
+   { OGC_OBJ_TYPE_BASE_GEOD_CRS,          OGC_OBJ_KWD_BASE_GEOD_CRS    },
+   { OGC_OBJ_TYPE_BASE_PARAM_CRS,         OGC_OBJ_KWD_BASE_PARAM_CRS   },
+   { OGC_OBJ_TYPE_BASE_PROJ_CRS,          OGC_OBJ_KWD_BASE_PROJ_CRS    },
+   { OGC_OBJ_TYPE_BASE_TIME_CRS,          OGC_OBJ_KWD_BASE_TIME_CRS    },
+   { OGC_OBJ_TYPE_BASE_VERT_CRS,          OGC_OBJ_KWD_BASE_VERT_CRS    },
+
    { OGC_OBJ_TYPE_OP_ACCURACY,            OGC_OBJ_KWD_OP_ACCURACY      },
    { OGC_OBJ_TYPE_COORD_OP,               OGC_OBJ_KWD_COORD_OP         },
 

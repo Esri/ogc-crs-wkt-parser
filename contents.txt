@@ -1,5 +1,5 @@
 # ------------------------------------------------------------------------- #
-# Copyright 2014 Esri                                                       #
+# Copyright 2015 Esri                                                       #
 #                                                                           #
 # Licensed under the Apache License, Version 2.0 (the "License");           #
 # you may not use this file except in compliance with the License.          #
@@ -16,40 +16,42 @@
 
 Contents of this package
 
-   contents.txt         This file.
-   license.txt          The license for this package.
-   README.md            A readme file describing this package and its use.
+   contents.txt            This file.
+   license.txt             The license for this package.
+   README.md               A readme file describing this package and its use.
 
-   ogc_wkt_crs.pdf      The specification that this package implements.
+   ogc_object_summary.txt  A text file summarizing all the objects used.
 
-   makefile             A GNU makefile to build the OGC WKT library and
-                        sample programs.
+   ogc_wkt_crs.pdf         The specification that this package implements.
 
-   ogc_*.sln            Microsoft Visual Studio 2008 solution files
-                        to build the OGC WKT library and sample programs.
+   makefile                A GNU makefile to build the OGC WKT library and
+                           sample programs.
+
+   ogc_*.sln               Microsoft Visual Studio 2008 solution files
+                           to build the OGC WKT library and sample programs.
 
    include/
-      makefile          A GNU makefile for this directory.
-      libogc.h          Public header for this library.
+      makefile             A GNU makefile for this directory.
+      libogc.h             Public header for this library.
 
    build/
-      makefile          A GNU makefile for this directory.
+      makefile             A GNU makefile for this directory.
 
       make_includes/
-         make*.i        GNU make include files.
+         make*.i           GNU make include files.
 
       vs_projects/
-         *.vc*proj      Microsoft Visual Studio project files
-                        for the library and sample programs.
+         *.vc*proj         Microsoft Visual Studio project files
+                           for the library and sample programs.
 
    src/
-      makefile          A GNU makefile for the OGC library.
-      *.h               Internal header files.
-      *.cpp             Library source files.
-      *.rc              Windows resource files.
+      makefile             A GNU makefile for the OGC library.
+      *.h                  Internal header files.
+      *.cpp                Library source files.
+      *.rc                 Windows resource files.
 
    etc/
-      makefile          A GNU makefile for the sample programs.
-      parse.cpp         A sample program to test WKT token parsing.
-      datetime.cpp      A sample program to test date/time parsing.
-      wkt.cpp           A sample program to read and write WKT strings.
+      makefile             A GNU makefile for the sample programs.
+      parse.cpp            A sample program to test WKT token parsing.
+      datetime.cpp         A sample program to test date/time parsing.
+      wkt.cpp              A sample program to read and write WKT strings.

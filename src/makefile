@@ -115,6 +115,13 @@ C_OBJS   := \
   ogc_vert_crs.$(OBJ_EXT)        \
   ogc_vert_datum.$(OBJ_EXT)      \
   ogc_vert_extent.$(OBJ_EXT)     \
+  \
+  ogc_base_engr_crs.$(OBJ_EXT)   \
+  ogc_base_geod_crs.$(OBJ_EXT)   \
+  ogc_base_param_crs.$(OBJ_EXT)  \
+  ogc_base_proj_crs.$(OBJ_EXT)   \
+  ogc_base_time_crs.$(OBJ_EXT)   \
+  ogc_base_vert_crs.$(OBJ_EXT)   \
   $(NULL)
 
 LIB_OBJS := $(C_OBJS)

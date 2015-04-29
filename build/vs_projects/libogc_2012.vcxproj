@@ -250,6 +250,12 @@
     <ClCompile Include="$(TOP_DIR)\src\ogc_vert_crs.cpp" />
     <ClCompile Include="$(TOP_DIR)\src\ogc_vert_datum.cpp" />
     <ClCompile Include="$(TOP_DIR)\src\ogc_vert_extent.cpp" />
+    <ClCompile Include="$(TOP_DIR)\src\ogc_base_engr_crs.cpp" />
+    <ClCompile Include="$(TOP_DIR)\src\ogc_base_geod_crs.cpp" />
+    <ClCompile Include="$(TOP_DIR)\src\ogc_base_param_crs.cpp" />
+    <ClCompile Include="$(TOP_DIR)\src\ogc_base_proj_crs.cpp" />
+    <ClCompile Include="$(TOP_DIR)\src\ogc_base_time_crs.cpp" />
+    <ClCompile Include="$(TOP_DIR)\src\ogc_base_vert_crs.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="$(TOP_DIR)\include\libogc.h" />

@@ -76,7 +76,7 @@ BEGIN
             VALUE "FileDescription",  "OGC WKT parser"
             VALUE "FileVersion",      BUILD_STR
             VALUE "InternalName",     "OGC-WKT"
-            VALUE "LegalCopyright",   "Copyright Esri 2013"
+            VALUE "LegalCopyright",   "Copyright Esri 2015"
             VALUE "ProductName",      "libogc"
         END
     END
