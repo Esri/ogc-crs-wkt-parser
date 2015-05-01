@@ -242,7 +242,7 @@ ogc_proj_crs * ogc_proj_crs :: from_tokens(
    int  next = 0;
    for (int i = start; i < end; i = next)
    {
-      if ( ogc_string::is_equal(arr[i].str, ogc_geod_crs::obj_kwd()) )
+      if ( ogc_string::is_equal(arr[i].str, ogc_base_geod_crs::obj_kwd()) )
       {
          if ( base_crs != OGC_NULL )
          {
@@ -251,7 +251,7 @@ ogc_proj_crs * ogc_proj_crs :: from_tokens(
          }
          else
          {
-            base_crs = ogc_geod_crs::from_tokens(t, i, &next, err);
+            base_crs = ogc_base_geod_crs::from_tokens(t, i, &next, err);
             if ( base_crs == OGC_NULL )
                bad = true;
          }
@@ -567,7 +567,8 @@ bool ogc_proj_crs :: to_wkt(
    if ( (opts & OGC_WKT_OPT_OLD_SYNTAX) != 0 )
       kwd = old_kwd();
 
-   rc &= ogc_geod_crs   :: to_wkt(_base_crs,   buf_base_crs,   opts, OGC_TBUF_MAX);
+   rc &= ogc_base_geod_crs :: to_wkt(static_cast<ogc_base_geod_crs *>(_base_crs),
+                                               buf_base_crs,   opts, OGC_TBUF_MAX);
    rc &= ogc_cs         :: to_wkt(_cs,         buf_cs,         opts, OGC_TBUF_MAX);
    rc &= ogc_conversion :: to_wkt(_conversion, buf_conversion, opts, OGC_TBUF_MAX);
    rc &= ogc_axis       :: to_wkt(_axis_1,     buf_axis_1,     opts, OGC_TBUF_MAX);

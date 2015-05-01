@@ -22,12 +22,12 @@
 
 namespace OGC {
 
-const char * ogc_derived_conv :: obj_kwd() { return OGC_OBJ_KWD_DERIVED_CONV; }
+const char * ogc_deriving_conv :: obj_kwd() { return OGC_OBJ_KWD_DERIVING_CONV; }
 
 /*------------------------------------------------------------------------
  * create
  */
-ogc_derived_conv * ogc_derived_conv :: create(
+ogc_deriving_conv * ogc_deriving_conv :: create(
    const char * name,
    ogc_method * method,
    ogc_vector * parameters,
@@ -35,7 +35,7 @@ ogc_derived_conv * ogc_derived_conv :: create(
    ogc_vector * ids,
    ogc_error *  err)
 {
-   ogc_derived_conv * p = OGC_NULL;
+   ogc_deriving_conv * p = OGC_NULL;
    bool bad = false;
 
    /*---------------------------------------------------------
@@ -66,7 +66,7 @@ ogc_derived_conv * ogc_derived_conv :: create(
     */
    if ( !bad )
    {
-      p = new (std::nothrow) ogc_derived_conv();
+      p = new (std::nothrow) ogc_deriving_conv();
       if ( p == OGC_NULL )
       {
          ogc_error::set(err, OGC_ERR_NO_MEMORY, obj_kwd());
@@ -74,7 +74,7 @@ ogc_derived_conv * ogc_derived_conv :: create(
       }
 
       ogc_string::unescape_str(p->_name, name, OGC_NAME_MAX);
-      p->_obj_type    = OGC_OBJ_TYPE_DERIVED_CONV;
+      p->_obj_type    = OGC_OBJ_TYPE_DERIVING_CONV;
       p->_method      = method;
       p->_parameters  = parameters;
       p->_param_files = param_files;
@@ -87,7 +87,7 @@ ogc_derived_conv * ogc_derived_conv :: create(
 /*------------------------------------------------------------------------
  * destroy
  */
-ogc_derived_conv :: ~ogc_derived_conv()
+ogc_deriving_conv :: ~ogc_deriving_conv()
 {
    ogc_method :: destroy( _method      );
    ogc_vector :: destroy( _parameters  );
@@ -95,8 +95,8 @@ ogc_derived_conv :: ~ogc_derived_conv()
    ogc_vector :: destroy( _ids         );
 }
 
-void ogc_derived_conv :: destroy(
-   ogc_derived_conv * obj)
+void ogc_deriving_conv :: destroy(
+   ogc_deriving_conv * obj)
 {
    if ( obj != OGC_NULL )
    {
@@ -107,7 +107,7 @@ void ogc_derived_conv :: destroy(
 /*------------------------------------------------------------------------
  * object from tokens
  */
-ogc_derived_conv * ogc_derived_conv :: from_tokens(
+ogc_deriving_conv * ogc_deriving_conv :: from_tokens(
    const ogc_token * t,
    int               start,
    int *             pend,
@@ -121,14 +121,14 @@ ogc_derived_conv * ogc_derived_conv :: from_tokens(
    int  same;
    int  num;
 
-   ogc_derived_conv * obj         = OGC_NULL;
-   ogc_id *           id          = OGC_NULL;
-   ogc_method *       method      = OGC_NULL;
-   ogc_vector *       parameters  = OGC_NULL;
-   ogc_vector *       param_files = OGC_NULL;
-   ogc_parameter *    param       = OGC_NULL;
-   ogc_param_file *   param_file  = OGC_NULL;
-   ogc_vector *       ids         = OGC_NULL;
+   ogc_deriving_conv * obj         = OGC_NULL;
+   ogc_id *            id          = OGC_NULL;
+   ogc_method *        method      = OGC_NULL;
+   ogc_vector *        parameters  = OGC_NULL;
+   ogc_vector *        param_files = OGC_NULL;
+   ogc_parameter *     param       = OGC_NULL;
+   ogc_param_file *    param_file  = OGC_NULL;
+   ogc_vector *        ids         = OGC_NULL;
    const char * name;
 
    /*---------------------------------------------------------
@@ -177,7 +177,7 @@ ogc_derived_conv * ogc_derived_conv :: from_tokens(
    }
 
    /*---------------------------------------------------------
-    * There must be 1 token: METHOD[ "name" ...
+    * There must be 1 token: DERIVINGCONVERSION[ "name" ...
     */
    if ( same < 1 )
    {
@@ -397,11 +397,11 @@ ogc_derived_conv * ogc_derived_conv :: from_tokens(
 /*------------------------------------------------------------------------
  * object to WKT
  */
-ogc_derived_conv * ogc_derived_conv :: from_wkt(
+ogc_deriving_conv * ogc_deriving_conv :: from_wkt(
    const char * wkt,
    ogc_error *  err)
 {
-   ogc_derived_conv * obj = OGC_NULL;
+   ogc_deriving_conv * obj = OGC_NULL;
    ogc_token t;
 
    if ( t.tokenize(wkt, obj_kwd(), err) )
@@ -415,8 +415,8 @@ ogc_derived_conv * ogc_derived_conv :: from_wkt(
 /*------------------------------------------------------------------------
  * object to WKT
  */
-bool ogc_derived_conv :: to_wkt(
-   const ogc_derived_conv * obj,
+bool ogc_deriving_conv :: to_wkt(
+   const ogc_deriving_conv * obj,
    char      buffer[],
    int       options,
    size_t    buflen)
@@ -431,7 +431,7 @@ bool ogc_derived_conv :: to_wkt(
    return obj->to_wkt(buffer, options, buflen);
 }
 
-bool ogc_derived_conv :: to_wkt(
+bool ogc_deriving_conv :: to_wkt(
    char      buffer[],
    int       options,
    size_t    buflen) const
@@ -516,21 +516,21 @@ bool ogc_derived_conv :: to_wkt(
 /*------------------------------------------------------------------------
  * clone
  */
-ogc_derived_conv * ogc_derived_conv :: clone(const ogc_derived_conv * obj)
+ogc_deriving_conv * ogc_deriving_conv :: clone(const ogc_deriving_conv * obj)
 {
    if ( obj == OGC_NULL )
       return OGC_NULL;
    return obj->clone();
 }
 
-ogc_derived_conv * ogc_derived_conv :: clone() const
+ogc_deriving_conv * ogc_deriving_conv :: clone() const
 {
    ogc_method * method      = ogc_method :: clone( _method      );
    ogc_vector * parameters  = ogc_vector :: clone( _parameters  );
    ogc_vector * param_files = ogc_vector :: clone( _param_files );
    ogc_vector * ids         = ogc_vector :: clone( _ids         );
 
-   ogc_derived_conv * p = create(_name,
+   ogc_deriving_conv * p = create(_name,
                                method,
                                parameters,
                                param_files,
@@ -551,9 +551,9 @@ ogc_derived_conv * ogc_derived_conv :: clone() const
 /*------------------------------------------------------------------------
  * compare for computational equality
  */
-bool ogc_derived_conv :: is_equal(
-   const ogc_derived_conv * p1,
-   const ogc_derived_conv * p2)
+bool ogc_deriving_conv :: is_equal(
+   const ogc_deriving_conv * p1,
+   const ogc_deriving_conv * p2)
 {
    if ( p1 == OGC_NULL && p2 == OGC_NULL ) return true;
    if ( p1 == OGC_NULL || p2 == OGC_NULL ) return false;
@@ -569,8 +569,8 @@ bool ogc_derived_conv :: is_equal(
    return true;
 }
 
-bool ogc_derived_conv :: is_equal(
-   const ogc_derived_conv * p) const
+bool ogc_deriving_conv :: is_equal(
+   const ogc_deriving_conv * p) const
 {
    return is_equal(this, p);
 }
@@ -578,9 +578,9 @@ bool ogc_derived_conv :: is_equal(
 /*------------------------------------------------------------------------
  * compare
  */
-bool ogc_derived_conv :: is_identical(
-   const ogc_derived_conv * p1,
-   const ogc_derived_conv * p2)
+bool ogc_deriving_conv :: is_identical(
+   const ogc_deriving_conv * p1,
+   const ogc_deriving_conv * p2)
 {
    if ( p1 == OGC_NULL && p2 == OGC_NULL ) return true;
    if ( p1 == OGC_NULL || p2 == OGC_NULL ) return false;
@@ -597,8 +597,8 @@ bool ogc_derived_conv :: is_identical(
    return true;
 }
 
-bool ogc_derived_conv :: is_identical(
-   const ogc_derived_conv * p) const
+bool ogc_deriving_conv :: is_identical(
+   const ogc_deriving_conv * p) const
 {
    return is_identical(this, p);
 }
@@ -606,7 +606,7 @@ bool ogc_derived_conv :: is_identical(
 /*------------------------------------------------------------------------
  * get parameter count
  */
-int ogc_derived_conv :: parameter_count() const
+int ogc_deriving_conv :: parameter_count() const
 {
    return (_parameters == OGC_NULL) ? 0 : _parameters->length();
 }
@@ -614,7 +614,7 @@ int ogc_derived_conv :: parameter_count() const
 /*------------------------------------------------------------------------
  * get the nth parameter
  */
-ogc_parameter * ogc_derived_conv :: parameter(int n) const
+ogc_parameter * ogc_deriving_conv :: parameter(int n) const
 {
    return (_parameters == OGC_NULL) ? OGC_NULL :
                                       reinterpret_cast<ogc_parameter *>(
@@ -624,7 +624,7 @@ ogc_parameter * ogc_derived_conv :: parameter(int n) const
 /*------------------------------------------------------------------------
  * get param_file count
  */
-int ogc_derived_conv :: param_file_count() const
+int ogc_deriving_conv :: param_file_count() const
 {
    return (_parameters == OGC_NULL) ? 0 : _param_files->length();
 }
@@ -632,7 +632,7 @@ int ogc_derived_conv :: param_file_count() const
 /*------------------------------------------------------------------------
  * get the nth param_file
  */
-ogc_param_file * ogc_derived_conv :: param_file(int n) const
+ogc_param_file * ogc_deriving_conv :: param_file(int n) const
 {
    return (_param_files == OGC_NULL) ? OGC_NULL :
                                       reinterpret_cast<ogc_param_file *>(
@@ -642,7 +642,7 @@ ogc_param_file * ogc_derived_conv :: param_file(int n) const
 /*------------------------------------------------------------------------
  * get ID count
  */
-int ogc_derived_conv :: id_count() const
+int ogc_deriving_conv :: id_count() const
 {
    return (_ids == OGC_NULL) ? 0 : _ids->length();
 }
@@ -650,7 +650,7 @@ int ogc_derived_conv :: id_count() const
 /*------------------------------------------------------------------------
  * get the nth ID
  */
-ogc_id * ogc_derived_conv :: id(int n) const
+ogc_id * ogc_deriving_conv :: id(int n) const
 {
    return (_ids == OGC_NULL) ? OGC_NULL :
                                reinterpret_cast<ogc_id *>( _ids->get(n) );

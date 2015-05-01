@@ -72,7 +72,7 @@ const ogc_tables::obj_tbl ogc_tables::ogc_obj_types[] =
    { OGC_OBJ_TYPE_CS,                     OGC_OBJ_KWD_CS               },
 
    { OGC_OBJ_TYPE_CONVERSION,             OGC_OBJ_KWD_CONVERSION       },
-   { OGC_OBJ_TYPE_DERIVED_CONV,           OGC_OBJ_KWD_DERIVED_CONV     },
+   { OGC_OBJ_TYPE_DERIVING_CONV,          OGC_OBJ_KWD_DERIVING_CONV    },
    { OGC_OBJ_TYPE_METHOD,                 OGC_OBJ_KWD_METHOD           },
 
    { OGC_OBJ_TYPE_ENGR_CRS,               OGC_OBJ_KWD_ENGR_CRS         },

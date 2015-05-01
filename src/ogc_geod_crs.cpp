@@ -303,8 +303,8 @@ ogc_geod_crs * ogc_geod_crs :: from_tokens(
          continue;
       }
 
-      if ( ogc_string::is_equal(arr[i].str, ogc_lenunit::obj_kwd()) ||
-           ogc_string::is_equal(arr[i].str, ogc_lenunit::alt_kwd()) )
+      if ( ogc_string::is_equal(arr[i].str, ogc_angunit::obj_kwd()) ||
+           ogc_string::is_equal(arr[i].str, ogc_angunit::alt_kwd()) )
       {
          if ( unit != OGC_NULL )
          {

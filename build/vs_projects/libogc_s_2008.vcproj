@@ -302,7 +302,7 @@
 			<File RelativePath="..\..\src\ogc_cs.cpp" />
 			<File RelativePath="..\..\src\ogc_datetime.cpp" />
 			<File RelativePath="..\..\src\ogc_datum.cpp" />
-			<File RelativePath="..\..\src\ogc_derived_conv.cpp" />
+			<File RelativePath="..\..\src\ogc_deriving_conv.cpp" />
 			<File RelativePath="..\..\src\ogc_ellipsoid.cpp" />
 			<File RelativePath="..\..\src\ogc_engr_crs.cpp" />
 			<File RelativePath="..\..\src\ogc_engr_datum.cpp" />

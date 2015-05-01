@@ -191,7 +191,7 @@ enum ogc_obj_type
    OGC_OBJ_TYPE_CS,
 
    OGC_OBJ_TYPE_CONVERSION,
-   OGC_OBJ_TYPE_DERIVED_CONV,
+   OGC_OBJ_TYPE_DERIVING_CONV,
    OGC_OBJ_TYPE_METHOD,
 
    OGC_OBJ_TYPE_GEOD_CRS,
@@ -264,7 +264,7 @@ enum ogc_obj_type
 #define OGC_OBJ_KWD_CS               "CS"
 
 #define OGC_OBJ_KWD_CONVERSION       "CONVERSION"
-#define OGC_OBJ_KWD_DERIVED_CONV     "DERIVEDCONVERSION"
+#define OGC_OBJ_KWD_DERIVING_CONV    "DERIVINGCONVERSION"
 #define OGC_OBJ_KWD_METHOD           "METHOD"
 
 #define OGC_OBJ_KWD_GEOD_CRS         "GEODCRS"
@@ -3178,10 +3178,10 @@ public:
 };
 
 /* ------------------------------------------------------------------------- */
-/* Derived conversion                                                        */
+/* Deriving conversion                                                       */
 /* ------------------------------------------------------------------------- */
 
-class OGC_EXPORT ogc_derived_conv : public ogc_object
+class OGC_EXPORT ogc_deriving_conv : public ogc_object
 {
 private:
    OGC_NAME     _name;
@@ -3190,12 +3190,12 @@ private:
    ogc_vector * _param_files;
    ogc_vector * _ids;
 
-   ogc_derived_conv() {}
+   ogc_deriving_conv() {}
 
 public:
    static const char * obj_kwd();
 
-   static ogc_derived_conv * create(
+   static ogc_deriving_conv * create(
       const char * name,
       ogc_method * method,
       ogc_vector * parameters,
@@ -3203,21 +3203,21 @@ public:
       ogc_vector * ids,
       ogc_error *  err = OGC_NULL);
 
-   virtual ~ogc_derived_conv();
-   static void destroy(ogc_derived_conv * obj);
+   virtual ~ogc_deriving_conv();
+   static void destroy(ogc_deriving_conv * obj);
 
-   static ogc_derived_conv * from_tokens(
+   static ogc_deriving_conv * from_tokens(
       const ogc_token * t,
       int               start,
       int *             pend,
       ogc_error *       err = OGC_NULL);
 
-   static ogc_derived_conv * from_wkt(
+   static ogc_deriving_conv * from_wkt(
       const char * wkt,
       ogc_error *  err = OGC_NULL);
 
    static bool to_wkt(
-      const ogc_derived_conv * obj,
+      const ogc_deriving_conv * obj,
       char     buffer[],
       int      options = OGC_WKT_OPT_NONE,
       size_t   buflen  = OGC_BUFF_MAX);
@@ -3227,16 +3227,16 @@ public:
       int      options = OGC_WKT_OPT_NONE,
       size_t   buflen  = OGC_BUFF_MAX) const;
 
-   static ogc_derived_conv * clone(const ogc_derived_conv * obj);
-          ogc_derived_conv * clone() const;
+   static ogc_deriving_conv * clone(const ogc_deriving_conv * obj);
+          ogc_deriving_conv * clone() const;
 
-   static bool is_equal    (const ogc_derived_conv * p1,
-                            const ogc_derived_conv * p2);
-          bool is_equal    (const ogc_derived_conv * p) const;
+   static bool is_equal    (const ogc_deriving_conv * p1,
+                            const ogc_deriving_conv * p2);
+          bool is_equal    (const ogc_deriving_conv * p) const;
 
-   static bool is_identical(const ogc_derived_conv * p1,
-                            const ogc_derived_conv * p2);
-          bool is_identical(const ogc_derived_conv * p) const;
+   static bool is_identical(const ogc_deriving_conv * p1,
+                            const ogc_deriving_conv * p2);
+          bool is_identical(const ogc_deriving_conv * p) const;
 
    const char *     name()        const { return _name;        }
    ogc_method *     method()      const { return _method;      }
@@ -3420,15 +3420,7 @@ public:
       const char *     name,
       ogc_geod_datum * datum,
       ogc_primem *     primem,
-      ogc_cs *         cs,
-      ogc_axis *       axis_1,
-      ogc_axis *       axis_2,
-      ogc_axis *       axis_3,
       ogc_unit *       unit,
-      ogc_scope *      scope,
-      ogc_vector *     extents,
-      ogc_vector *     ids,
-      ogc_remark *     remark,
       ogc_error *      err = OGC_NULL);
 
    virtual ~ogc_base_geod_crs();

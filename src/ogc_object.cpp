@@ -97,7 +97,7 @@ ogc_object * ogc_object :: from_tokens(
    CHECK( CONVERSION,      conversion      );
    CHECK( COORD_OP,        coord_op        );
    CHECK( CS,              cs              );
-   CHECK( DERIVED_CONV,    derived_conv    );
+   CHECK( DERIVING_CONV,   deriving_conv   );
    CHECK( ELLIPSOID,       ellipsoid       );
    CHECK( ENGR_CRS,        engr_crs        );
    CHECK( ENGR_DATUM,      engr_datum      );
@@ -240,7 +240,7 @@ bool ogc_object :: to_wkt(
       CASE( CONVERSION,      conversion      );
       CASE( COORD_OP,        coord_op        );
       CASE( CS,              cs              );
-      CASE( DERIVED_CONV,    derived_conv    );
+      CASE( DERIVING_CONV,   deriving_conv   );
       CASE( ELLIPSOID,       ellipsoid       );
       CASE( ENGR_CRS,        engr_crs        );
       CASE( ENGR_DATUM,      engr_datum      );
@@ -321,7 +321,7 @@ ogc_object * ogc_object :: clone() const
       CASE( CONVERSION,      conversion      );
       CASE( COORD_OP,        coord_op        );
       CASE( CS,              cs              );
-      CASE( DERIVED_CONV,    derived_conv    );
+      CASE( DERIVING_CONV,   deriving_conv   );
       CASE( ELLIPSOID,       ellipsoid       );
       CASE( ENGR_CRS,        engr_crs        );
       CASE( ENGR_DATUM,      engr_datum      );
@@ -402,7 +402,7 @@ bool ogc_object :: is_equal(
       CASE( CONVERSION,      conversion      );
       CASE( COORD_OP,        coord_op        );
       CASE( CS,              cs              );
-      CASE( DERIVED_CONV,    derived_conv    );
+      CASE( DERIVING_CONV,   deriving_conv   );
       CASE( ELLIPSOID,       ellipsoid       );
       CASE( ENGR_CRS,        engr_crs        );
       CASE( ENGR_DATUM,      engr_datum      );
@@ -489,7 +489,7 @@ bool ogc_object :: is_identical(
       CASE( CONVERSION,      conversion      );
       CASE( COORD_OP,        coord_op        );
       CASE( CS,              cs              );
-      CASE( DERIVED_CONV,    derived_conv    );
+      CASE( DERIVING_CONV,   deriving_conv   );
       CASE( ELLIPSOID,       ellipsoid       );
       CASE( ENGR_CRS,        engr_crs        );
       CASE( ENGR_DATUM,      engr_datum      );
