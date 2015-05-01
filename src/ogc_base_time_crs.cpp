@@ -111,7 +111,6 @@ ogc_base_time_crs * ogc_base_time_crs :: create(
  */
 ogc_base_time_crs :: ~ogc_base_time_crs()
 {
-   ogc_time_datum :: destroy( _datum    );
 }
 
 void ogc_base_time_crs :: destroy(

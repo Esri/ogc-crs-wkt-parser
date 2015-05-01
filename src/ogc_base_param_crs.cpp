@@ -111,7 +111,6 @@ ogc_base_param_crs * ogc_base_param_crs :: create(
  */
 ogc_base_param_crs :: ~ogc_base_param_crs()
 {
-   ogc_param_datum :: destroy( _datum );
 }
 
 void ogc_base_param_crs :: destroy(

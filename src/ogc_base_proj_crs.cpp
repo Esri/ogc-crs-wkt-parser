@@ -120,8 +120,6 @@ ogc_base_proj_crs * ogc_base_proj_crs :: create(
  */
 ogc_base_proj_crs :: ~ogc_base_proj_crs()
 {
-   ogc_geod_crs   :: destroy( _base_crs   );
-   ogc_conversion :: destroy( _conversion );
 }
 
 void ogc_base_proj_crs :: destroy(

@@ -113,7 +113,6 @@ ogc_base_engr_crs * ogc_base_engr_crs :: create(
  */
 ogc_base_engr_crs :: ~ogc_base_engr_crs()
 {
-   ogc_engr_datum :: destroy( _datum );
 }
 
 void ogc_base_engr_crs :: destroy(

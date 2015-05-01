@@ -111,7 +111,6 @@ ogc_base_vert_crs * ogc_base_vert_crs :: create(
  */
 ogc_base_vert_crs :: ~ogc_base_vert_crs()
 {
-   ogc_vert_datum :: destroy( _datum );
 }
 
 void ogc_base_vert_crs :: destroy(

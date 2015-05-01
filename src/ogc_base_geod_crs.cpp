@@ -96,7 +96,6 @@ ogc_base_geod_crs * ogc_base_geod_crs :: create(
  */
 ogc_base_geod_crs :: ~ogc_base_geod_crs()
 {
-   ogc_geod_datum :: destroy( _datum );
 }
 
 void ogc_base_geod_crs :: destroy(
