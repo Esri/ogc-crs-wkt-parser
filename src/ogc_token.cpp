@@ -91,9 +91,10 @@ bool ogc_token :: pass1(
          return false;
       }
 
-      /* deal with escape chars */
+#if 0 /* reverse-solidus (\) is a valid text character */
       if ( c == '\\' )
       {
+         /* deal with escape chars */
          if ( *s == 0 )
          {
             pos = static_cast<int>(s-ubeg);
@@ -103,6 +104,7 @@ bool ogc_token :: pass1(
          *b++ = *s++;
          continue;
       }
+#endif
 
       /* fix delimiters */
       if ( !in_quotes )
@@ -152,7 +154,17 @@ bool ogc_token :: pass1(
       /* convert any quoted whitespace to a space */
       if ( in_quotes )
       {
-         *b++ = (isspace(c) ? ' ' : c);
+         if ( isspace(c) )
+         {
+            /* convert multiple WS to single space */
+            *b++ = ' ';
+            for (; isspace(*s); s++)
+               ;
+         }
+         else
+         {
+            *b++ = c;
+         }
          continue;
       }
 

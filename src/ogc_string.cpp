@@ -40,6 +40,19 @@ char ogc_string :: decimal_point_char()
 }
 
 /*------------------------------------------------------------------------
+ * check if a string is all numeric chars
+ */
+bool ogc_string :: is_numeric(const char * str)
+{
+   for (; *str; str++)
+   {
+      if ( !isdigit(*str) )
+         return false;
+   }
+   return true;
+}
+
+/*------------------------------------------------------------------------
  * convert a string to an integer
  */
 int ogc_string :: atoi(const char * str)

@@ -111,11 +111,12 @@ const ogc_tables::crs_tbl ogc_tables::ogc_crs_types[] =
    { OGC_CRS_TYPE_PARAM,                  OGC_CRS_KWD_PARAM            },
    { OGC_CRS_TYPE_TIME,                   OGC_CRS_KWD_TIME             },
 
-   { OGC_CRS_TYPE_ENGR_DERIVED,           OGC_CRS_KWD_ENGR_DERIVED,    },
-   { OGC_CRS_TYPE_VERT_DERIVED,           OGC_CRS_KWD_VERT_DERIVED,    },
-   { OGC_CRS_TYPE_GEOD_DERIVED,           OGC_CRS_KWD_GEOD_DERIVED,    },
-   { OGC_CRS_TYPE_PARAM_DERIVED,          OGC_CRS_KWD_PARAM_DERIVED,   },
-   { OGC_CRS_TYPE_TIME_DERIVED,           OGC_CRS_KWD_TIME_DERIVED,    },
+   { OGC_CRS_TYPE_BASE_ENGR,              OGC_CRS_KWD_BASE_ENGR,       },
+   { OGC_CRS_TYPE_BASE_PROJ,              OGC_CRS_KWD_BASE_PROJ,       },
+   { OGC_CRS_TYPE_BASE_VERT,              OGC_CRS_KWD_BASE_VERT,       },
+   { OGC_CRS_TYPE_BASE_GEOD,              OGC_CRS_KWD_BASE_GEOD,       },
+   { OGC_CRS_TYPE_BASE_PARAM,             OGC_CRS_KWD_BASE_PARAM,      },
+   { OGC_CRS_TYPE_BASE_TIME,              OGC_CRS_KWD_BASE_TIME,       },
 
    { OGC_CRS_TYPE_COMPOUND,               OGC_CRS_KWD_COMPOUND         },
 

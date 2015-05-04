@@ -63,6 +63,7 @@ C_OBJS   := \
   ogc_utils.$(OBJ_EXT)           \
   ogc_vector.$(OBJ_EXT)          \
   \
+  ogc_base_crs.$(OBJ_EXT)        \
   ogc_crs.$(OBJ_EXT)             \
   ogc_datum.$(OBJ_EXT)           \
   ogc_extent.$(OBJ_EXT)          \
@@ -73,6 +74,12 @@ C_OBJS   := \
   ogc_angunit.$(OBJ_EXT)         \
   ogc_area_extent.$(OBJ_EXT)     \
   ogc_axis.$(OBJ_EXT)            \
+  ogc_base_engr_crs.$(OBJ_EXT)   \
+  ogc_base_geod_crs.$(OBJ_EXT)   \
+  ogc_base_param_crs.$(OBJ_EXT)  \
+  ogc_base_proj_crs.$(OBJ_EXT)   \
+  ogc_base_time_crs.$(OBJ_EXT)   \
+  ogc_base_vert_crs.$(OBJ_EXT)   \
   ogc_bbox_extent.$(OBJ_EXT)     \
   ogc_bearing.$(OBJ_EXT)         \
   ogc_bound_crs.$(OBJ_EXT)       \
@@ -115,13 +122,6 @@ C_OBJS   := \
   ogc_vert_crs.$(OBJ_EXT)        \
   ogc_vert_datum.$(OBJ_EXT)      \
   ogc_vert_extent.$(OBJ_EXT)     \
-  \
-  ogc_base_engr_crs.$(OBJ_EXT)   \
-  ogc_base_geod_crs.$(OBJ_EXT)   \
-  ogc_base_param_crs.$(OBJ_EXT)  \
-  ogc_base_proj_crs.$(OBJ_EXT)   \
-  ogc_base_time_crs.$(OBJ_EXT)   \
-  ogc_base_vert_crs.$(OBJ_EXT)   \
   $(NULL)
 
 LIB_OBJS := $(C_OBJS)

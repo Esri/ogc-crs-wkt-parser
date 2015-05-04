@@ -31,7 +31,7 @@ const char * ogc_proj_crs :: old_kwd() { return OGC_OLD_KWD_PROJCS;   }
  */
 ogc_proj_crs * ogc_proj_crs :: create(
    const char *         name,
-   ogc_geod_crs *       base_crs,
+   ogc_base_geod_crs *  base_crs,
    ogc_conversion *     conversion,
    ogc_cs *             cs,
    ogc_axis *           axis_1,
@@ -122,8 +122,8 @@ ogc_proj_crs * ogc_proj_crs :: create(
  */
 ogc_proj_crs :: ~ogc_proj_crs()
 {
-   ogc_geod_crs   :: destroy( _base_crs   );
-   ogc_conversion :: destroy( _conversion );
+   ogc_base_geod_crs :: destroy( _base_crs   );
+   ogc_conversion    :: destroy( _conversion );
 }
 
 void ogc_proj_crs :: destroy(
@@ -153,7 +153,7 @@ ogc_proj_crs * ogc_proj_crs :: from_tokens(
    int  num;
 
    ogc_proj_crs *        obj        = OGC_NULL;
-   ogc_geod_crs *        base_crs   = OGC_NULL;
+   ogc_base_geod_crs *   base_crs   = OGC_NULL;
    ogc_conversion *      conversion = OGC_NULL;
    ogc_cs *              cs         = OGC_NULL;
    ogc_axis *            axis       = OGC_NULL;
@@ -476,16 +476,16 @@ ogc_proj_crs * ogc_proj_crs :: from_tokens(
 
    if ( obj == OGC_NULL )
    {
-      ogc_geod_crs     :: destroy( base_crs   );
-      ogc_conversion   :: destroy( conversion );
-      ogc_cs           :: destroy( cs         );
-      ogc_axis         :: destroy( axis_1     );
-      ogc_axis         :: destroy( axis_2     );
-      ogc_unit         :: destroy( unit       );
-      ogc_scope        :: destroy( scope      );
-      ogc_vector       :: destroy( extents    );
-      ogc_vector       :: destroy( ids        );
-      ogc_remark       :: destroy( remark     );
+      ogc_base_geod_crs :: destroy( base_crs   );
+      ogc_conversion    :: destroy( conversion );
+      ogc_cs            :: destroy( cs         );
+      ogc_axis          :: destroy( axis_1     );
+      ogc_axis          :: destroy( axis_2     );
+      ogc_unit          :: destroy( unit       );
+      ogc_scope         :: destroy( scope      );
+      ogc_vector        :: destroy( extents    );
+      ogc_vector        :: destroy( ids        );
+      ogc_remark        :: destroy( remark     );
    }
 
    return obj;
@@ -567,14 +567,13 @@ bool ogc_proj_crs :: to_wkt(
    if ( (opts & OGC_WKT_OPT_OLD_SYNTAX) != 0 )
       kwd = old_kwd();
 
-   rc &= ogc_base_geod_crs :: to_wkt(static_cast<ogc_base_geod_crs *>(_base_crs),
-                                               buf_base_crs,   opts, OGC_TBUF_MAX);
-   rc &= ogc_cs         :: to_wkt(_cs,         buf_cs,         opts, OGC_TBUF_MAX);
-   rc &= ogc_conversion :: to_wkt(_conversion, buf_conversion, opts, OGC_TBUF_MAX);
-   rc &= ogc_axis       :: to_wkt(_axis_1,     buf_axis_1,     opts, OGC_TBUF_MAX);
-   rc &= ogc_axis       :: to_wkt(_axis_2,     buf_axis_2,     opts, OGC_TBUF_MAX);
-   rc &= ogc_unit       :: to_wkt(_unit,       buf_unit,       opts, OGC_TBUF_MAX);
-   rc &= ogc_remark     :: to_wkt(_remark,     buf_remark,     opts, OGC_TBUF_MAX);
+   rc &= ogc_base_geod_crs :: to_wkt(_base_crs,   buf_base_crs,   opts, OGC_TBUF_MAX);
+   rc &= ogc_cs            :: to_wkt(_cs,         buf_cs,         opts, OGC_TBUF_MAX);
+   rc &= ogc_conversion    :: to_wkt(_conversion, buf_conversion, opts, OGC_TBUF_MAX);
+   rc &= ogc_axis          :: to_wkt(_axis_1,     buf_axis_1,     opts, OGC_TBUF_MAX);
+   rc &= ogc_axis          :: to_wkt(_axis_2,     buf_axis_2,     opts, OGC_TBUF_MAX);
+   rc &= ogc_unit          :: to_wkt(_unit,       buf_unit,       opts, OGC_TBUF_MAX);
+   rc &= ogc_remark        :: to_wkt(_remark,     buf_remark,     opts, OGC_TBUF_MAX);
 
    ogc_string::escape_str(buf_name, _name, OGC_UTF8_NAME_MAX);
    sprintf(buf_hdr, "%s%s\"%s\"",
@@ -635,16 +634,16 @@ ogc_proj_crs * ogc_proj_crs :: clone() const
 {
    ogc_lenunit * u = reinterpret_cast<ogc_lenunit *>(_unit);
 
-   ogc_geod_crs *   base_crs   = ogc_geod_crs   :: clone( _base_crs   );
-   ogc_conversion * conversion = ogc_conversion :: clone( _conversion );
-   ogc_cs *         cs         = ogc_cs         :: clone( _cs         );
-   ogc_axis *       axis_1     = ogc_axis       :: clone( _axis_1     );
-   ogc_axis *       axis_2     = ogc_axis       :: clone( _axis_2     );
-   ogc_lenunit *    lenunit    = ogc_lenunit    :: clone( u           );
-   ogc_scope *      scope      = ogc_scope      :: clone( _scope      );
-   ogc_vector *     extents    = ogc_vector     :: clone( _extents    );
-   ogc_vector *     ids        = ogc_vector     :: clone( _ids        );
-   ogc_remark *     remark     = ogc_remark     :: clone( _remark     );
+   ogc_base_geod_crs * base_crs   = ogc_base_geod_crs :: clone( _base_crs   );
+   ogc_conversion *    conversion = ogc_conversion    :: clone( _conversion );
+   ogc_cs *            cs         = ogc_cs            :: clone( _cs         );
+   ogc_axis *          axis_1     = ogc_axis          :: clone( _axis_1     );
+   ogc_axis *          axis_2     = ogc_axis          :: clone( _axis_2     );
+   ogc_lenunit *       lenunit    = ogc_lenunit       :: clone( u           );
+   ogc_scope *         scope      = ogc_scope         :: clone( _scope      );
+   ogc_vector *        extents    = ogc_vector        :: clone( _extents    );
+   ogc_vector *        ids        = ogc_vector        :: clone( _ids        );
+   ogc_remark *        remark     = ogc_remark        :: clone( _remark     );
 
    ogc_proj_crs * p = create(_name,
                                   base_crs,
@@ -660,16 +659,16 @@ ogc_proj_crs * ogc_proj_crs :: clone() const
                                   OGC_NULL);
    if ( p == OGC_NULL )
    {
-      ogc_geod_crs   :: destroy( base_crs   );
-      ogc_conversion :: destroy( conversion );
-      ogc_cs         :: destroy( cs         );
-      ogc_axis       :: destroy( axis_1     );
-      ogc_axis       :: destroy( axis_2     );
-      ogc_lenunit    :: destroy( lenunit    );
-      ogc_scope      :: destroy( scope      );
-      ogc_vector     :: destroy( extents    );
-      ogc_vector     :: destroy( ids        );
-      ogc_remark     :: destroy( remark     );
+      ogc_base_geod_crs :: destroy( base_crs   );
+      ogc_conversion    :: destroy( conversion );
+      ogc_cs            :: destroy( cs         );
+      ogc_axis          :: destroy( axis_1     );
+      ogc_axis          :: destroy( axis_2     );
+      ogc_lenunit       :: destroy( lenunit    );
+      ogc_scope         :: destroy( scope      );
+      ogc_vector        :: destroy( extents    );
+      ogc_vector        :: destroy( ids        );
+      ogc_remark        :: destroy( remark     );
    }
 
    return p;
@@ -685,12 +684,12 @@ bool ogc_proj_crs :: is_equal(
    if ( p1 == OGC_NULL && p2 == OGC_NULL ) return true;
    if ( p1 == OGC_NULL || p2 == OGC_NULL ) return false;
 
-   if ( !ogc_string     :: is_equal( p1->name(),       p2->name()       ) ||
-        !ogc_geod_crs   :: is_equal( p1->base_crs(),   p2->base_crs()   ) ||
-        !ogc_cs         :: is_equal( p1->cs(),         p2->cs()         ) ||
-        !ogc_axis       :: is_equal( p1->axis_1(),     p2->axis_1()     ) ||
-        !ogc_axis       :: is_equal( p1->axis_2(),     p2->axis_2()     ) ||
-        !ogc_lenunit    :: is_equal( p1->lenunit(),    p2->lenunit()    ) )
+   if ( !ogc_string        :: is_equal( p1->name(),     p2->name()     ) ||
+        !ogc_base_geod_crs :: is_equal( p1->base_crs(), p2->base_crs() ) ||
+        !ogc_cs            :: is_equal( p1->cs(),       p2->cs()       ) ||
+        !ogc_axis          :: is_equal( p1->axis_1(),   p2->axis_1()   ) ||
+        !ogc_axis          :: is_equal( p1->axis_2(),   p2->axis_2()   ) ||
+        !ogc_lenunit       :: is_equal( p1->lenunit(),  p2->lenunit()  ) )
    {
       return false;
    }
@@ -714,16 +713,16 @@ bool ogc_proj_crs :: is_identical(
    if ( p1 == OGC_NULL && p2 == OGC_NULL ) return true;
    if ( p1 == OGC_NULL || p2 == OGC_NULL ) return false;
 
-   if ( !ogc_string     :: is_equal    ( p1->name(),       p2->name()       ) ||
-        !ogc_geod_crs   :: is_identical( p1->base_crs(),   p2->base_crs()   ) ||
-        !ogc_cs         :: is_identical( p1->cs(),         p2->cs()         ) ||
-        !ogc_axis       :: is_identical( p1->axis_1(),     p2->axis_1()     ) ||
-        !ogc_axis       :: is_identical( p1->axis_2(),     p2->axis_2()     ) ||
-        !ogc_lenunit    :: is_identical( p1->lenunit(),    p2->lenunit()    ) ||
-        !ogc_scope      :: is_identical( p1->scope(),      p2->scope()      ) ||
-        !ogc_vector     :: is_identical( p1->extents(),    p2->extents()    ) ||
-        !ogc_vector     :: is_identical( p1->ids(),        p2->ids()        ) ||
-        !ogc_remark     :: is_identical( p1->remark(),     p2->remark()     ) )
+   if ( !ogc_string        :: is_equal    ( p1->name(),     p2->name()     ) ||
+        !ogc_base_geod_crs :: is_identical( p1->base_crs(), p2->base_crs() ) ||
+        !ogc_cs            :: is_identical( p1->cs(),       p2->cs()       ) ||
+        !ogc_axis          :: is_identical( p1->axis_1(),   p2->axis_1()   ) ||
+        !ogc_axis          :: is_identical( p1->axis_2(),   p2->axis_2()   ) ||
+        !ogc_lenunit       :: is_identical( p1->lenunit(),  p2->lenunit()  ) ||
+        !ogc_scope         :: is_identical( p1->scope(),    p2->scope()    ) ||
+        !ogc_vector        :: is_identical( p1->extents(),  p2->extents()  ) ||
+        !ogc_vector        :: is_identical( p1->ids(),      p2->ids()      ) ||
+        !ogc_remark        :: is_identical( p1->remark(),   p2->remark()   ) )
    {
       return false;
    }

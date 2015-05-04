@@ -74,18 +74,10 @@ ogc_base_geod_crs * ogc_base_geod_crs :: create(
 
       ogc_string::unescape_str(p->_name, name, OGC_NAME_MAX);
       p->_obj_type = OGC_OBJ_TYPE_BASE_GEOD_CRS;
-      p->_crs_type = OGC_CRS_TYPE_GEOD;
+      p->_crs_type = OGC_CRS_TYPE_BASE_GEOD;
       p->_datum    = datum;
       p->_primem   = primem;
-      p->_cs       = OGC_NULL;
-      p->_axis_1   = OGC_NULL;
-      p->_axis_2   = OGC_NULL;
-      p->_axis_3   = OGC_NULL;
       p->_unit     = unit;
-      p->_scope    = OGC_NULL;
-      p->_extents  = OGC_NULL;
-      p->_ids      = OGC_NULL;
-      p->_remark   = OGC_NULL;
    }
 
    return p;
@@ -273,7 +265,6 @@ ogc_base_geod_crs * ogc_base_geod_crs :: from_tokens(
    {
       ogc_geod_datum :: destroy( datum   );
       ogc_primem     :: destroy( primem  );
-      ogc_unit       :: destroy( unit    );
    }
 
    return obj;

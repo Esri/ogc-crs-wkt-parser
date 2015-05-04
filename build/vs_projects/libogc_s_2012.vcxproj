@@ -220,6 +220,7 @@
     <ClCompile Include="$(TOP_DIR)\src\ogc_vert_crs.cpp" />
     <ClCompile Include="$(TOP_DIR)\src\ogc_vert_datum.cpp" />
     <ClCompile Include="$(TOP_DIR)\src\ogc_vert_extent.cpp" />
+    <ClCompile Include="$(TOP_DIR)\src\ogc_base_crs.cpp" />
     <ClCompile Include="$(TOP_DIR)\src\ogc_base_engr_crs.cpp" />
     <ClCompile Include="$(TOP_DIR)\src\ogc_base_geod_crs.cpp" />
     <ClCompile Include="$(TOP_DIR)\src\ogc_base_param_crs.cpp" />

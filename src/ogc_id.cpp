@@ -373,15 +373,31 @@ bool ogc_id :: to_wkt(
    }
    else
    {
-      if ( *buf_version != 0 )
+      if ( ogc_string::is_numeric(buf_identifier) )
       {
-         sprintf(buf_hdr, "%s%s\"%s\",\"%s\",\"%s\"",
-            kwd, opn, buf_name, buf_identifier, buf_version);
+         if ( *buf_version != 0 )
+         {
+            sprintf(buf_hdr, "%s%s\"%s\",%s,\"%s\"",
+               kwd, opn, buf_name, buf_identifier, buf_version);
+         }
+         else
+         {
+            sprintf(buf_hdr, "%s%s\"%s\",%s",
+               kwd, opn, buf_name, buf_identifier);
+         }
       }
       else
       {
-         sprintf(buf_hdr, "%s%s\"%s\",\"%s\"",
-            kwd, opn, buf_name, buf_identifier);
+         if ( *buf_version != 0 )
+         {
+            sprintf(buf_hdr, "%s%s\"%s\",\"%s\",\"%s\"",
+               kwd, opn, buf_name, buf_identifier, buf_version);
+         }
+         else
+         {
+            sprintf(buf_hdr, "%s%s\"%s\",\"%s\"",
+               kwd, opn, buf_name, buf_identifier);
+         }
       }
    }
 

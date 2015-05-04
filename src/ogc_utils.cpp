@@ -359,6 +359,14 @@ bool ogc_utils :: validate_cs(
                }
                break;
 
+            case OGC_CS_TYPE_ELLIPSOIDAL:
+               if ( dim != 2 && dim != 3 )
+               {
+                  ogc_error::set(err, OGC_ERR_INVALID_DIMENSION, obj_kwd, dim);
+                  return false;
+               }
+               break;
+
             default:
                ogc_error::set(err, OGC_ERR_INVALID_CS_TYPE, obj_kwd, cs_kwd);
                return false;
