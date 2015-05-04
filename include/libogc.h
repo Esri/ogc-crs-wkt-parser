@@ -624,7 +624,7 @@ enum ogc_err_code
 
       OGC_ERR_WKT_DUPLICATE_ABRTRANS,
       OGC_ERR_WKT_DUPLICATE_ANCHOR,
-      OGC_ERR_WKT_DUPLICATE_BASECRS,
+      OGC_ERR_WKT_DUPLICATE_BASE_CRS,
       OGC_ERR_WKT_DUPLICATE_BEARING,
       OGC_ERR_WKT_DUPLICATE_CITATION,
       OGC_ERR_WKT_DUPLICATE_CONVERSION,
@@ -3761,9 +3761,11 @@ public:
 
 class OGC_EXPORT ogc_geod_crs : public ogc_crs
 {
-protected:
-   ogc_geod_datum * _datum;
-   ogc_primem *     _primem;
+private:
+   ogc_base_geod_crs * _base_crs;
+   ogc_deriving_conv * _deriving_conv;
+   ogc_geod_datum *    _datum;
+   ogc_primem *        _primem;
 
    ogc_geod_crs() {}
 
@@ -3772,19 +3774,34 @@ public:
    static const char * alt_kwd();
 
    static ogc_geod_crs * create(
-      const char *     name,
-      ogc_geod_datum * datum,
-      ogc_primem *     primem,
-      ogc_cs *         cs,
-      ogc_axis *       axis_1,
-      ogc_axis *       axis_2,
-      ogc_axis *       axis_3,
-      ogc_unit *       unit,
-      ogc_scope *      scope,
-      ogc_vector *     extents,
-      ogc_vector *     ids,
-      ogc_remark *     remark,
-      ogc_error *      err = OGC_NULL);
+      const char *        name,
+      ogc_geod_datum *    datum,
+      ogc_primem *        primem,
+      ogc_cs *            cs,
+      ogc_axis *          axis_1,
+      ogc_axis *          axis_2,
+      ogc_axis *          axis_3,
+      ogc_unit *          unit,
+      ogc_scope *         scope,
+      ogc_vector *        extents,
+      ogc_vector *        ids,
+      ogc_remark *        remark,
+      ogc_error *         err = OGC_NULL);
+
+   static ogc_geod_crs * create(
+      const char *        name,
+      ogc_base_geod_crs * base_crs,
+      ogc_deriving_conv * deriving_conv,
+      ogc_cs *            cs,
+      ogc_axis *          axis_1,
+      ogc_axis *          axis_2,
+      ogc_axis *          axis_3,
+      ogc_unit *          unit,
+      ogc_scope *         scope,
+      ogc_vector *        extents,
+      ogc_vector *        ids,
+      ogc_remark *        remark,
+      ogc_error *         err = OGC_NULL);
 
    virtual ~ogc_geod_crs();
    static void destroy(ogc_geod_crs * obj);
@@ -3821,8 +3838,10 @@ public:
                             const ogc_geod_crs * p2);
           bool is_identical(const ogc_geod_crs * p) const;
 
-   ogc_geod_datum * datum()  const { return _datum;  }
-   ogc_primem *     primem() const { return _primem; }
+   ogc_geod_datum *    datum()         const { return _datum;         }
+   ogc_primem *        primem()        const { return _primem;        }
+   ogc_base_geod_crs * base_crs()      const { return _base_crs;      }
+   ogc_deriving_conv * deriving_conv() const { return _deriving_conv; }
 };
 
 /* ------------------------------------------------------------------------- */
@@ -3831,7 +3850,7 @@ public:
 
 class OGC_EXPORT ogc_proj_crs : public ogc_crs
 {
-protected:
+private:
    ogc_base_geod_crs * _base_crs;
    ogc_conversion *    _conversion;
 
@@ -3902,8 +3921,10 @@ public:
 
 class OGC_EXPORT ogc_vert_crs : public ogc_crs
 {
-protected:
-   ogc_vert_datum *  _datum;
+private:
+   ogc_vert_datum *    _datum;
+   ogc_base_vert_crs * _base_crs;
+   ogc_deriving_conv * _deriving_conv;
 
    ogc_vert_crs() {}
 
@@ -3915,6 +3936,19 @@ public:
    static ogc_vert_crs * create(
       const char *         name,
       ogc_vert_datum *     datum,
+      ogc_cs *             cs,
+      ogc_axis *           axis_1,
+      ogc_lenunit *        lenunit,
+      ogc_scope *          scope,
+      ogc_vector *         extents,
+      ogc_vector *         ids,
+      ogc_remark *         remark,
+      ogc_error *          err = OGC_NULL);
+
+   static ogc_vert_crs * create(
+      const char *         name,
+      ogc_base_vert_crs *  base_crs,
+      ogc_deriving_conv *  deriving_conv,
       ogc_cs *             cs,
       ogc_axis *           axis_1,
       ogc_lenunit *        lenunit,
@@ -3959,8 +3993,10 @@ public:
                             const ogc_vert_crs * p2);
           bool is_identical(const ogc_vert_crs * p) const;
 
-   ogc_vert_datum * datum()   const { return _datum;               }
-   ogc_lenunit *    lenunit() const { return (ogc_lenunit *)_unit; }
+   ogc_vert_datum *    datum()         const { return _datum;               }
+   ogc_base_vert_crs * base_crs()      const { return _base_crs;            }
+   ogc_deriving_conv * deriving_conv() const { return _deriving_conv;       }
+   ogc_lenunit *       lenunit()       const { return (ogc_lenunit *)_unit; }
 };
 
 /* ------------------------------------------------------------------------- */
@@ -3969,8 +4005,10 @@ public:
 
 class OGC_EXPORT ogc_engr_crs : public ogc_crs
 {
-protected:
-   ogc_engr_datum *  _datum;
+private:
+   ogc_engr_datum *    _datum;
+   ogc_base_crs *      _base_crs;
+   ogc_deriving_conv * _deriving_conv;
 
    ogc_engr_crs() {}
 
@@ -3981,6 +4019,21 @@ public:
    static ogc_engr_crs * create(
       const char *         name,
       ogc_engr_datum *     datum,
+      ogc_cs *             cs,
+      ogc_axis *           axis_1,
+      ogc_axis *           axis_2,
+      ogc_axis *           axis_3,
+      ogc_unit *           unit,
+      ogc_scope *          scope,
+      ogc_vector *         extents,
+      ogc_vector *         ids,
+      ogc_remark *         remark,
+      ogc_error *          err = OGC_NULL);
+
+   static ogc_engr_crs * create(
+      const char *         name,
+      ogc_base_crs *       base_crs,
+      ogc_deriving_conv *  deriving_conv,
       ogc_cs *             cs,
       ogc_axis *           axis_1,
       ogc_axis *           axis_2,
@@ -4027,7 +4080,10 @@ public:
                             const ogc_engr_crs * p2);
           bool is_identical(const ogc_engr_crs * p) const;
 
-   ogc_engr_datum * datum() const { return _datum; }
+   ogc_engr_datum *    datum()         const { return _datum;               }
+   ogc_base_crs *      base_crs()      const { return _base_crs;            }
+   ogc_deriving_conv * deriving_conv() const { return _deriving_conv;       }
+   ogc_lenunit *       lenunit()       const { return (ogc_lenunit *)_unit; }
 };
 
 /* ------------------------------------------------------------------------- */
@@ -4101,8 +4157,10 @@ public:
 
 class OGC_EXPORT ogc_time_crs : public ogc_crs
 {
-protected:
-   ogc_time_datum *   _datum;
+private:
+   ogc_time_datum *    _datum;
+   ogc_base_time_crs * _base_crs;
+   ogc_deriving_conv * _deriving_conv;
 
    ogc_time_crs() {}
 
@@ -4111,7 +4169,20 @@ public:
 
    static ogc_time_crs * create(
       const char *         name,
-      ogc_time_datum *  datum,
+      ogc_time_datum *     datum,
+      ogc_cs *             cs,
+      ogc_axis *           axis_1,
+      ogc_timeunit *       timeunit,
+      ogc_scope *          scope,
+      ogc_vector *         extents,
+      ogc_vector *         ids,
+      ogc_remark *         remark,
+      ogc_error *          err = OGC_NULL);
+
+   static ogc_time_crs * create(
+      const char *         name,
+      ogc_base_time_crs *  base_crs,
+      ogc_deriving_conv *  deriving_conv,
       ogc_cs *             cs,
       ogc_axis *           axis_1,
       ogc_timeunit *       timeunit,
@@ -4156,8 +4227,10 @@ public:
                             const ogc_time_crs * p2);
           bool is_identical(const ogc_time_crs * p) const;
 
-   ogc_time_datum * datum()    const { return _datum;                }
-   ogc_timeunit *   timeunit() const { return (ogc_timeunit *)_unit; }
+   ogc_time_datum *    datum()         const { return _datum;                }
+   ogc_base_time_crs * base_crs()      const { return _base_crs;             }
+   ogc_deriving_conv * deriving_conv() const { return _deriving_conv;        }
+   ogc_timeunit *      timeunit()      const { return (ogc_timeunit *)_unit; }
 };
 
 /* ------------------------------------------------------------------------- */
@@ -4166,8 +4239,10 @@ public:
 
 class OGC_EXPORT ogc_param_crs : public ogc_crs
 {
-protected:
-   ogc_param_datum *   _datum;
+private:
+   ogc_param_datum *    _datum;
+   ogc_base_param_crs * _base_crs;
+   ogc_deriving_conv *  _deriving_conv;
 
    ogc_param_crs() {}
 
@@ -4177,6 +4252,19 @@ public:
    static ogc_param_crs * create(
       const char *         name,
       ogc_param_datum *    datum,
+      ogc_cs *             cs,
+      ogc_axis *           axis_1,
+      ogc_paramunit *      paramunit,
+      ogc_scope *          scope,
+      ogc_vector *         extents,
+      ogc_vector *         ids,
+      ogc_remark *         remark,
+      ogc_error *          err = OGC_NULL);
+
+   static ogc_param_crs * create(
+      const char *         name,
+      ogc_base_param_crs * base_crs,
+      ogc_deriving_conv *  deriving_conv,
       ogc_cs *             cs,
       ogc_axis *           axis_1,
       ogc_paramunit *      paramunit,
@@ -4221,8 +4309,10 @@ public:
                             const ogc_param_crs * p2);
           bool is_identical(const ogc_param_crs * p) const;
 
-   ogc_param_datum * datum()     const { return _datum;                 }
-   ogc_paramunit *   paramunit() const { return (ogc_paramunit *)_unit; }
+   ogc_param_datum *    datum()         const { return _datum;                 }
+   ogc_base_param_crs * base_crs()      const { return _base_crs;              }
+   ogc_deriving_conv *  deriving_conv() const { return _deriving_conv;         }
+   ogc_paramunit *      paramunit()     const { return (ogc_paramunit *)_unit; }
 };
 
 /* ------------------------------------------------------------------------- */

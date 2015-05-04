@@ -277,7 +277,7 @@ const ogc_tables::error_tbl ogc_tables :: ogc_errors[] =
 
    { OGC_ERR_WKT_DUPLICATE_ABRTRANS,        "duplicate abrtrans"       },
    { OGC_ERR_WKT_DUPLICATE_ANCHOR,          "duplicate anchor"         },
-   { OGC_ERR_WKT_DUPLICATE_BASECRS,         "duplicate basecrs"        },
+   { OGC_ERR_WKT_DUPLICATE_BASE_CRS,        "duplicate basecrs"        },
    { OGC_ERR_WKT_DUPLICATE_BEARING,         "duplicate bearing"        },
    { OGC_ERR_WKT_DUPLICATE_CONVERSION,      "duplicate conversion"     },
    { OGC_ERR_WKT_DUPLICATE_CS,              "duplicate cs"             },

@@ -306,12 +306,12 @@ ogc_axis * ogc_axis :: from_tokens(
          continue;
       }
 
-      if ( ogc_string::is_equal(arr[0].str, ogc_unit     ::obj_kwd()) ||
-           ogc_string::is_equal(arr[0].str, ogc_angunit  ::obj_kwd()) ||
-           ogc_string::is_equal(arr[0].str, ogc_lenunit  ::obj_kwd()) ||
-           ogc_string::is_equal(arr[0].str, ogc_paramunit::obj_kwd()) ||
-           ogc_string::is_equal(arr[0].str, ogc_scaleunit::obj_kwd()) ||
-           ogc_string::is_equal(arr[0].str, ogc_timeunit ::obj_kwd()) )
+      if ( ogc_string::is_equal(arr[i].str, ogc_unit     ::obj_kwd()) ||
+           ogc_string::is_equal(arr[i].str, ogc_angunit  ::obj_kwd()) ||
+           ogc_string::is_equal(arr[i].str, ogc_lenunit  ::obj_kwd()) ||
+           ogc_string::is_equal(arr[i].str, ogc_paramunit::obj_kwd()) ||
+           ogc_string::is_equal(arr[i].str, ogc_scaleunit::obj_kwd()) ||
+           ogc_string::is_equal(arr[i].str, ogc_timeunit ::obj_kwd()) )
       {
          if ( unit != OGC_NULL )
          {

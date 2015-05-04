@@ -66,20 +66,22 @@ Defined keywords & objects
    conversion              map projection               ogc_conversion
    derivingConversion      deriving conversion          ogc_deriving_conv
 
+   <base BASE_CRS>         base BASE_CRS class          ogc_base_crs
+      baseGeodCRS             base geodetic crs            ogc_base_geod_crs
+      baseProjCRS             base projected crs           ogc_base_proj_crs
+      baseVertCRS             base vertical crs            ogc_base_vert_crs
+      baseEngCRS              base engineering crs         ogc_base_engr_crs
+      baseTimeCRS             base temporal crs            ogc_base_time_crs
+      baseParamCRS            base parametric crs          ogc_base_param_crs
+
    <base CRS>              base CRS class               ogc_crs
       geodCRS                 geodetic crs                 ogc_geod_crs
-         baseGeodCRS             base geodetic crs            ogc_base_geod_crs
       projCRS                 projected crs                ogc_proj_crs
-         baseProjCRS             base projected crs           ogc_base_proj_crs
       vertCRS                 vertical crs                 ogc_vert_crs
-         baseVertCRS             base vertical crs            ogc_base_vert_crs
       engCRS                  engineering crs              ogc_engr_crs
-         baseEngCRS              base engineering crs         ogc_base_engr_crs
       imageCRS                image crs                    ogc_image_crs
       timeCRS                 temporal crs                 ogc_time_crs
-         baseTimeCRS             base temporal crs            ogc_base_time_crs
       parametricCRS           parametric crs               ogc_param_crs
-         baseParamCRS            base parametric crs          ogc_base_param_crs
       compoundCRS             compound crs                 ogc_compound_crs
 
    operationAccuracy       operation accuracy           ogc_op_accuracy

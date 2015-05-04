@@ -109,7 +109,7 @@ public:
 /* internal WKT output processing                                            */
 /* ------------------------------------------------------------------------- */
 
-#define OGC_TBUF_MAX          1024    /* temp WKT buffer for sub-objects */
+#define OGC_TBUF_MAX          2048    /* temp WKT buffer for sub-objects */
 typedef char                  OGC_TBUF [OGC_TBUF_MAX];
 
 #define OGC_WKT_OPT_INTERNAL  0x8000  /* internal call */

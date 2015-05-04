@@ -246,7 +246,7 @@ ogc_proj_crs * ogc_proj_crs :: from_tokens(
       {
          if ( base_crs != OGC_NULL )
          {
-            ogc_error::set(err, OGC_ERR_WKT_DUPLICATE_BASECRS, obj_kwd());
+            ogc_error::set(err, OGC_ERR_WKT_DUPLICATE_BASE_CRS, obj_kwd());
             bad = true;
          }
          else
