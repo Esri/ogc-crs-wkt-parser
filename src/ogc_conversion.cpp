@@ -412,17 +412,21 @@ bool ogc_conversion :: to_wkt(
       return false;
    *buffer = 0;
 
-   if ( (options & OGC_WKT_OPT_OLD_SYNTAX) != 0 )
-      return true;
-
    rc &= ogc_method :: to_wkt(_method, buf_method, opts, OGC_TBUF_MAX);
 
-   ogc_string::escape_str(buf_name, _name, OGC_UTF8_NAME_MAX);
-   sprintf(buf_hdr, "%s%s\"%s\"",
-      kwd, opn, buf_name);
+   if ( (options & OGC_WKT_OPT_OLD_SYNTAX) == 0 )
+   {
+      ogc_string::escape_str(buf_name, _name, OGC_UTF8_NAME_MAX);
+      sprintf(buf_hdr, "%s%s\"%s\"",
+         kwd, opn, buf_name);
 
-   OGC_CPY_TO_BUF( buf_hdr    );
-   OGC_ADD_TO_BUF( buf_method );
+      OGC_CPY_TO_BUF( buf_hdr    );
+      OGC_ADD_TO_BUF( buf_method );
+   }
+   else
+   {
+      OGC_CPY_TO_BUF( buf_method );
+   }
 
    if ( _parameters != OGC_NULL )
    {
@@ -435,16 +439,18 @@ bool ogc_conversion :: to_wkt(
 
    if ( _ids != OGC_NULL && (options & OGC_WKT_OPT_NO_IDS) == 0 )
    {
-      for (int i = 0; i < id_count(); i++)
+      if ( (options & OGC_WKT_OPT_OLD_SYNTAX) == 0 )
       {
-         rc &= ogc_id :: to_wkt(id(i), buf_id, opts, OGC_TBUF_MAX);
-         OGC_ADD_TO_BUF( buf_id );
-         if ( (options & OGC_WKT_OPT_OLD_SYNTAX) != 0 )
-            break;
+         for (int i = 0; i < id_count(); i++)
+         {
+            rc &= ogc_id :: to_wkt(id(i), buf_id, opts, OGC_TBUF_MAX);
+            OGC_ADD_TO_BUF( buf_id );
+         }
       }
    }
 
-   OGC_CPY_TO_BUF( cls );
+   if ( (options & OGC_WKT_OPT_OLD_SYNTAX) == 0 )
+      OGC_CPY_TO_BUF( cls );
 
    if ( (options & OGC_WKT_OPT_INTERNAL) == 0 &&
         (options & OGC_WKT_OPT_EXPAND)   != 0 )

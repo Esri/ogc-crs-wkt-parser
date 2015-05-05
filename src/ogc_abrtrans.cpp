@@ -561,6 +561,9 @@ bool ogc_abrtrans :: to_wkt(
       return false;
    *buffer = 0;
 
+   if ( (options & OGC_WKT_OPT_OLD_SYNTAX) != 0 )
+      return true;
+
    rc &= ogc_method :: to_wkt(_method, buf_method,         opts, OGC_TBUF_MAX);
    rc &= ogc_scope  :: to_wkt(_scope,  buf_scope,          opts, OGC_TBUF_MAX);
    rc &= ogc_remark :: to_wkt(_remark, buf_remark,         opts, OGC_TBUF_MAX);
@@ -610,8 +613,6 @@ bool ogc_abrtrans :: to_wkt(
       {
          rc &= ogc_id :: to_wkt(id(i), buf_id, opts, OGC_TBUF_MAX);
          OGC_ADD_TO_BUF( buf_id );
-         if ( (options & OGC_WKT_OPT_OLD_SYNTAX) != 0 )
-            break;
       }
    }
 

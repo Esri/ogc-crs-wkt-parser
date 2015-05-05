@@ -315,7 +315,7 @@ bool ogc_utils :: validate_cs(
    ogc_cs_type  cs_type = cs->cs_type();
    int          dim     = cs->dimension();
    const char * obj_kwd = ogc_utils::obj_type_to_kwd(obj_type);
-   const char * cs_kwd  = ogc_utils::cs_type_to_kwd (cs_type);
+   const char * cs_kwd  = ogc_utils:: cs_type_to_kwd( cs_type);
 
    /* First validate the CS type against the CRS type and
       the number of dimensions.

@@ -373,8 +373,16 @@ bool ogc_id :: to_wkt(
 
    if ( (options & OGC_WKT_OPT_OLD_SYNTAX) != 0 )
    {
-      sprintf(buf_hdr, "%s%s\"%s\",%d",
-         kwd, opn, buf_name, ogc_string::atoi(_identifier));
+      if ( ogc_string::is_numeric(buf_identifier) )
+      {
+         sprintf(buf_hdr, "%s%s\"%s\",%s",
+            kwd, opn, buf_name, _identifier);
+      }
+      else
+      {
+         sprintf(buf_hdr, "%s%s\"%s\",\"%s\"",
+            kwd, opn, buf_name, _identifier);
+      }
    }
    else
    {

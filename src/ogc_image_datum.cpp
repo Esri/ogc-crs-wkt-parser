@@ -367,6 +367,9 @@ bool ogc_image_datum :: to_wkt(
       return false;
    *buffer = 0;
 
+   if ( (options & OGC_WKT_OPT_OLD_SYNTAX) != 0 )
+      return true;
+
    rc &= ogc_anchor :: to_wkt(_anchor, buf_anchor, opts, OGC_TBUF_MAX);
 
    ogc_string::escape_str(buf_name, _name, OGC_UTF8_NAME_MAX);
@@ -382,8 +385,6 @@ bool ogc_image_datum :: to_wkt(
       {
          rc &= ogc_id :: to_wkt(id(i), buf_id, opts, OGC_TBUF_MAX);
          OGC_ADD_TO_BUF( buf_id );
-         if ( (options & OGC_WKT_OPT_OLD_SYNTAX) != 0 )
-            break;
       }
    }
 

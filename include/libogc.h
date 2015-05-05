@@ -3818,6 +3818,7 @@ private:
 public:
    static const char * obj_kwd();
    static const char * alt_kwd();
+   static const char * old_kwd();
    static bool is_kwd(const char * kwd);
 
    static ogc_geod_crs * create(

@@ -329,6 +329,9 @@ bool ogc_method :: to_wkt(
       return false;
    *buffer = 0;
 
+   if ( (options & OGC_WKT_OPT_OLD_SYNTAX) != 0 )
+      kwd = alt_kwd();
+
    ogc_string::escape_str(buf_name, _name, OGC_UTF8_NAME_MAX);
    sprintf(buf_hdr, "%s%s\"%s\"",
       kwd, opn, buf_name);

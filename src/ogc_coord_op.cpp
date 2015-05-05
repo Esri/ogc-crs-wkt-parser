@@ -666,6 +666,9 @@ bool ogc_coord_op :: to_wkt(
       return false;
    *buffer = 0;
 
+   if ( (options & OGC_WKT_OPT_OLD_SYNTAX) != 0 )
+      return true;
+
    rc &= ogc_crs    :: to_wkt(_source_crs, buf_source_crs, opts, OGC_BUFF_MAX-8);
    rc &= ogc_crs    :: to_wkt(_target_crs, buf_target_crs, opts, OGC_BUFF_MAX-8);
    rc &= ogc_crs    :: to_wkt(_interp_crs, buf_interp_crs, opts, OGC_BUFF_MAX-8);
@@ -739,8 +742,6 @@ bool ogc_coord_op :: to_wkt(
       {
          rc &= ogc_id :: to_wkt(id(i), buf_id, opts, OGC_TBUF_MAX);
          OGC_ADD_TO_BUF( buf_id );
-         if ( (options & OGC_WKT_OPT_OLD_SYNTAX) != 0 )
-            break;
       }
    }
 

@@ -485,7 +485,7 @@ bool ogc_axis :: to_wkt(
    rc &= ogc_meridian :: to_wkt(_meridian, buf_meridian, opts, OGC_TBUF_MAX);
    rc &= ogc_order    :: to_wkt(_order,    buf_order,    opts, OGC_TBUF_MAX);
 
-   if ( (opts & OGC_WKT_OPT_OLD_SYNTAX) != 0 )
+   if ( (opts & OGC_WKT_OPT_OLD_SYNTAX) == 0 )
       rc &= ogc_unit :: to_wkt(_unit, buf_unit, opts, OGC_TBUF_MAX);
    else
       *buf_unit = 0;

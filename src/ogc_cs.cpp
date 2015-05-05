@@ -355,8 +355,6 @@ bool ogc_cs :: to_wkt(
       {
          rc &= ogc_id :: to_wkt(id(i), buf_id, opts, OGC_TBUF_MAX);
          OGC_ADD_TO_BUF( buf_id );
-         if ( (options & OGC_WKT_OPT_OLD_SYNTAX) != 0 )
-            break;
       }
    }
 
