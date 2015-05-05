@@ -310,12 +310,15 @@ bool ogc_utils :: validate_cs(
    ogc_axis *   axis_2,
    ogc_axis *   axis_3,
    ogc_unit *   unit,
+   ogc_vector * parameters,
    ogc_error *  err)
 {
    ogc_cs_type  cs_type = cs->cs_type();
    int          dim     = cs->dimension();
    const char * obj_kwd = ogc_utils::obj_type_to_kwd(obj_type);
    const char * cs_kwd  = ogc_utils:: cs_type_to_kwd( cs_type);
+
+   (void)(parameters);
 
    /* First validate the CS type against the CRS type and
       the number of dimensions.
@@ -587,6 +590,9 @@ bool ogc_utils :: place_axis(
    const char * obj_kwd,
    ogc_error *  err)
 {
+   if ( axis == OGC_NULL )
+      return true;
+
    ogc_order * order = axis->order();
 
    /* If no order was specified, then

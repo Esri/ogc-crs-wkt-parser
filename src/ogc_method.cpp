@@ -74,6 +74,7 @@ ogc_method * ogc_method :: create(
 
       ogc_string::unescape_str(p->_name, name, OGC_NAME_MAX);
       p->_obj_type = OGC_OBJ_TYPE_METHOD;
+      p->_visible  = true;
       p->_ids      = ids;
    }
 
@@ -328,6 +329,9 @@ bool ogc_method :: to_wkt(
    if ( buffer == OGC_NULL )
       return false;
    *buffer = 0;
+
+   if ( !is_visible() )
+      return true;
 
    if ( (options & OGC_WKT_OPT_OLD_SYNTAX) != 0 )
       kwd = alt_kwd();

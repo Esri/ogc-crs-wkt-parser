@@ -70,6 +70,7 @@ ogc_cs * ogc_cs :: create(
       }
 
       p->_obj_type  = OGC_OBJ_TYPE_CS;
+      p->_visible   = true;
       p->_cs_type   = cs_type;
       p->_dimension = dimension;
       p->_ids       = ids;
@@ -337,6 +338,9 @@ bool ogc_cs :: to_wkt(
    if ( buffer == OGC_NULL )
       return false;
    *buffer = 0;
+
+   if ( !is_visible() )
+      return true;
 
    if ( (options & OGC_WKT_OPT_OLD_SYNTAX) != 0 )
       return true;

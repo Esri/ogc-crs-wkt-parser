@@ -870,6 +870,7 @@ private:
 
 protected:
    ogc_obj_type _obj_type;
+   bool         _visible;
 
    ogc_object() {}
 
@@ -924,8 +925,11 @@ public:
                             const ogc_object * p2);
           bool is_identical(const ogc_object * p) const;
 
-   ogc_obj_type         obj_type() const { return _obj_type; }
-   virtual const char * name()     const { return "";        }
+   ogc_obj_type         obj_type()   const { return _obj_type; }
+   virtual const char * name()       const { return "";        }
+   bool                 is_visible() const { return _visible;  }
+
+   void                 set_visible(bool val) { _visible = val; }
 };
 
 /* ------------------------------------------------------------------------- */
@@ -4942,6 +4946,7 @@ public:
       ogc_axis *   axis_2,
       ogc_axis *   axis_3,
       ogc_unit *   unit,
+      ogc_vector * parameters,
       ogc_error *  err = OGC_NULL);
 
    /* place an axis in the proper location */

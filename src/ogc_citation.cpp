@@ -70,6 +70,7 @@ ogc_citation * ogc_citation :: create(
 
       ogc_string::unescape_str(p->_text, text, OGC_TEXT_MAX);
       p->_obj_type = OGC_OBJ_TYPE_CITATION;
+      p->_visible  = true;
    }
 
    return p;
@@ -269,6 +270,9 @@ bool ogc_citation :: to_wkt(
    if ( buffer == OGC_NULL )
       return false;
    *buffer = 0;
+
+   if ( !is_visible() )
+      return true;
 
    if ( (options & OGC_WKT_OPT_OLD_SYNTAX) != 0 )
       return true;

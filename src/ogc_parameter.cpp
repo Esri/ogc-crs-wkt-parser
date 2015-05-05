@@ -74,6 +74,7 @@ ogc_parameter * ogc_parameter :: create(
 
       ogc_string::unescape_str(p->_name, name, OGC_NAME_MAX);
       p->_obj_type = OGC_OBJ_TYPE_PARAMETER;
+      p->_visible  = true;
       p->_value    = value;
       p->_unit     = unit;
       p->_ids      = ids;
@@ -358,6 +359,9 @@ bool ogc_parameter :: to_wkt(
    if ( buffer == OGC_NULL )
       return false;
    *buffer = 0;
+
+   if ( !is_visible() )
+      return true;
 
    ogc_string :: dtoa(_value, buf_value);
 

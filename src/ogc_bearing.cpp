@@ -62,6 +62,7 @@ ogc_bearing * ogc_bearing :: create(
       }
 
       p->_obj_type = OGC_OBJ_TYPE_BEARING;
+      p->_visible  = true;
       p->_value    = value;
       p->_angunit  = angunit;
    }
@@ -285,6 +286,9 @@ bool ogc_bearing :: to_wkt(
    if ( buffer == OGC_NULL )
       return false;
    *buffer = 0;
+
+   if ( !is_visible() )
+      return true;
 
    if ( (options & OGC_WKT_OPT_OLD_SYNTAX) != 0 )
       return true;

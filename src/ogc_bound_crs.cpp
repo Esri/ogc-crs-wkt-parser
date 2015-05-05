@@ -77,6 +77,7 @@ ogc_bound_crs * ogc_bound_crs :: create(
       }
 
       p->_obj_type   = OGC_OBJ_TYPE_BOUND_CRS;
+      p->_visible    = true;
       p->_source_crs = source_crs;
       p->_target_crs = target_crs;
       p->_abrtrans   = abrtrans;
@@ -414,6 +415,9 @@ bool ogc_bound_crs :: to_wkt(
    if ( buffer == OGC_NULL )
       return false;
    *buffer = 0;
+
+   if ( !is_visible() )
+      return true;
 
    if ( (options & OGC_WKT_OPT_OLD_SYNTAX) != 0 )
       return true;

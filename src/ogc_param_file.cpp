@@ -89,6 +89,7 @@ ogc_param_file * ogc_param_file :: create(
       ogc_string::unescape_str(p->_name,     name,     OGC_NAME_MAX);
       ogc_string::unescape_str(p->_filename, filename, OGC_PATH_MAX);
       p->_obj_type = OGC_OBJ_TYPE_PARAM_FILE;
+      p->_visible  = true;
       p->_ids      = ids;
    }
 
@@ -346,6 +347,9 @@ bool ogc_param_file :: to_wkt(
    if ( buffer == OGC_NULL )
       return false;
    *buffer = 0;
+
+   if ( !is_visible() )
+      return true;
 
    ogc_string::escape_str(buf_name,     _name,     OGC_UTF8_NAME_MAX);
    ogc_string::escape_str(buf_filename, _filename, OGC_UTF8_PATH_MAX);

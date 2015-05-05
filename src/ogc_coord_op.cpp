@@ -99,6 +99,7 @@ ogc_coord_op * ogc_coord_op :: create(
 
       ogc_string::unescape_str(p->_name, name, OGC_NAME_MAX);
       p->_obj_type        = OGC_OBJ_TYPE_COORD_OP;
+      p->_visible         = true;
       p->_source_crs      = source_crs;
       p->_target_crs      = target_crs;
       p->_interp_crs      = interp_crs;
@@ -665,6 +666,9 @@ bool ogc_coord_op :: to_wkt(
    if ( buffer == OGC_NULL )
       return false;
    *buffer = 0;
+
+   if ( !is_visible() )
+      return true;
 
    if ( (options & OGC_WKT_OPT_OLD_SYNTAX) != 0 )
       return true;

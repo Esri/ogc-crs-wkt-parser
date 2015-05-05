@@ -105,6 +105,7 @@ ogc_id * ogc_id :: create(
       ogc_string::unescape_str(p->_identifier, identifier, OGC_TEXT_MAX);
       ogc_string::unescape_str(p->_version,    version,    OGC_TEXT_MAX);
       p->_obj_type = OGC_OBJ_TYPE_ID;
+      p->_visible  = true;
       p->_citation = citation;
       p->_uri      = uri;
    }
@@ -360,6 +361,9 @@ bool ogc_id :: to_wkt(
    if ( buffer == OGC_NULL )
       return false;
    *buffer = 0;
+
+   if ( !is_visible() )
+      return true;
 
    if ( (options & OGC_WKT_OPT_OLD_SYNTAX) != 0 )
       kwd = old_kwd();

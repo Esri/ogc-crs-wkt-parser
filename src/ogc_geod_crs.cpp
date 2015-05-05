@@ -82,7 +82,7 @@ ogc_geod_crs * ogc_geod_crs :: create(
       bad = true;
    }
    else if ( !ogc_utils::validate_cs(OGC_OBJ_TYPE_GEOD_CRS, cs,
-                                     axis_1, axis_2, axis_3, unit, err) )
+                            axis_1, axis_2, axis_3, unit, OGC_NULL, err) )
    {
       bad = true;
    }
@@ -101,6 +101,7 @@ ogc_geod_crs * ogc_geod_crs :: create(
 
       ogc_string::unescape_str(p->_name, name, OGC_NAME_MAX);
       p->_obj_type      = OGC_OBJ_TYPE_GEOD_CRS;
+      p->_visible       = true;
       p->_crs_type      = OGC_CRS_TYPE_GEOD;
       p->_base_crs      = OGC_NULL;
       p->_deriving_conv = OGC_NULL;
@@ -173,7 +174,7 @@ ogc_geod_crs * ogc_geod_crs :: create(
       bad = true;
    }
    else if ( !ogc_utils::validate_cs(OGC_OBJ_TYPE_GEOD_CRS, cs,
-                                     axis_1, axis_2, axis_3, unit, err) )
+                            axis_1, axis_2, axis_3, unit, OGC_NULL, err) )
    {
       bad = true;
    }
@@ -192,6 +193,7 @@ ogc_geod_crs * ogc_geod_crs :: create(
 
       ogc_string::unescape_str(p->_name, name, OGC_NAME_MAX);
       p->_obj_type      = OGC_OBJ_TYPE_GEOD_CRS;
+      p->_visible       = true;
       p->_crs_type      = OGC_CRS_TYPE_GEOD;
       p->_base_crs      = base_crs;
       p->_deriving_conv = deriving_conv;
@@ -715,6 +717,9 @@ bool ogc_geod_crs :: to_wkt(
    if ( buffer == OGC_NULL )
       return false;
    *buffer = 0;
+
+   if ( !is_visible() )
+      return true;
 
    if ( (opts & OGC_WKT_OPT_OLD_SYNTAX) != 0 )
    {

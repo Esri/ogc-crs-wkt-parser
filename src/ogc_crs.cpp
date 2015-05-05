@@ -139,6 +139,9 @@ bool ogc_crs :: to_wkt(
       return false;
    *buffer = 0;
 
+   if ( !is_visible() )
+      return true;
+
    switch (_obj_type)
    {
 #  define CASE(o,n) \

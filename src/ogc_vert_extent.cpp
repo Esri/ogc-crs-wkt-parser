@@ -58,6 +58,7 @@ ogc_vert_extent * ogc_vert_extent :: create(
       }
 
       p->_obj_type = OGC_OBJ_TYPE_VERT_EXTENT;
+      p->_visible  = true;
       p->_min_ht   = min_ht;
       p->_max_ht   = max_ht;
       p->_lenunit  = lenunit;
@@ -282,6 +283,9 @@ bool ogc_vert_extent :: to_wkt(
    if ( buffer == OGC_NULL )
       return false;
    *buffer = 0;
+
+   if ( !is_visible() )
+      return true;
 
    if ( (options & OGC_WKT_OPT_OLD_SYNTAX) == 0 )
       return true;

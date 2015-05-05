@@ -100,6 +100,7 @@ ogc_axis * ogc_axis :: create(
       ogc_string::unescape_str(p->_name, name, OGC_NAME_MAX);
       ogc_string::unescape_str(p->_abbr, abbr, OGC_NAME_MAX);
       p->_obj_type  = OGC_OBJ_TYPE_AXIS;
+      p->_visible   = true;
       p->_direction = direction;
       p->_bearing   = bearing;
       p->_meridian  = meridian;
@@ -477,6 +478,9 @@ bool ogc_axis :: to_wkt(
    if ( buffer == OGC_NULL )
       return false;
    *buffer = 0;
+
+   if ( !is_visible() )
+      return true;
 
    name_and_abbr(buf_name);
    axis_dir = ogc_utils::axis_direction_to_kwd(_direction);

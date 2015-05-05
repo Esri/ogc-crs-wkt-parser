@@ -80,7 +80,7 @@ ogc_engr_crs * ogc_engr_crs :: create(
       bad = true;
    }
    else if ( !ogc_utils::validate_cs(OGC_OBJ_TYPE_ENGR_CRS, cs,
-                                     axis_1, axis_2, axis_3, unit, err) )
+                            axis_1, axis_2, axis_3, unit, OGC_NULL, err) )
    {
       bad = true;
    }
@@ -99,6 +99,7 @@ ogc_engr_crs * ogc_engr_crs :: create(
 
       ogc_string::unescape_str(p->_name, name, OGC_NAME_MAX);
       p->_obj_type      = OGC_OBJ_TYPE_ENGR_CRS;
+      p->_visible       = true;
       p->_crs_type      = OGC_CRS_TYPE_ENGR;
       p->_datum         = datum;
       p->_base_crs      = OGC_NULL;
@@ -170,7 +171,7 @@ ogc_engr_crs * ogc_engr_crs :: create(
       bad = true;
    }
    else if ( !ogc_utils::validate_cs(OGC_OBJ_TYPE_ENGR_CRS, cs,
-                                     axis_1, axis_2, axis_3, unit, err) )
+                            axis_1, axis_2, axis_3, unit, OGC_NULL, err) )
    {
       bad = true;
    }
@@ -189,6 +190,7 @@ ogc_engr_crs * ogc_engr_crs :: create(
 
       ogc_string::unescape_str(p->_name, name, OGC_NAME_MAX);
       p->_obj_type      = OGC_OBJ_TYPE_ENGR_CRS;
+      p->_visible       = true;
       p->_crs_type      = OGC_CRS_TYPE_ENGR;
       p->_datum         = OGC_NULL;
       p->_base_crs      = base_crs;
@@ -724,6 +726,9 @@ bool ogc_engr_crs :: to_wkt(
    if ( buffer == OGC_NULL )
       return false;
    *buffer = 0;
+
+   if ( !is_visible() )
+      return true;
 
    if ( (opts & OGC_WKT_OPT_OLD_SYNTAX) != 0 )
       return true;

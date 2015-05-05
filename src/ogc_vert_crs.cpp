@@ -79,7 +79,7 @@ ogc_vert_crs * ogc_vert_crs :: create(
       bad = true;
    }
    else if ( !ogc_utils::validate_cs(OGC_OBJ_TYPE_VERT_CRS, cs,
-                                     axis_1, OGC_NULL, OGC_NULL, lenunit, err) )
+                            axis_1, OGC_NULL, OGC_NULL, lenunit, OGC_NULL, err) )
    {
       bad = true;
    }
@@ -98,6 +98,7 @@ ogc_vert_crs * ogc_vert_crs :: create(
 
       ogc_string::unescape_str(p->_name, name, OGC_NAME_MAX);
       p->_obj_type      = OGC_OBJ_TYPE_VERT_CRS;
+      p->_visible       = true;
       p->_crs_type      = OGC_CRS_TYPE_VERT;
       p->_cs            = cs;
       p->_datum         = datum;
@@ -167,7 +168,7 @@ ogc_vert_crs * ogc_vert_crs :: create(
       bad = true;
    }
    else if ( !ogc_utils::validate_cs(OGC_OBJ_TYPE_VERT_CRS, cs,
-                                     axis_1, OGC_NULL, OGC_NULL, lenunit, err) )
+                            axis_1, OGC_NULL, OGC_NULL, lenunit, OGC_NULL, err) )
    {
       bad = true;
    }
@@ -186,6 +187,7 @@ ogc_vert_crs * ogc_vert_crs :: create(
 
       ogc_string::unescape_str(p->_name, name, OGC_NAME_MAX);
       p->_obj_type      = OGC_OBJ_TYPE_VERT_CRS;
+      p->_visible       = true;
       p->_crs_type      = OGC_CRS_TYPE_VERT;
       p->_cs            = cs;
       p->_datum         = OGC_NULL;
@@ -681,6 +683,9 @@ bool ogc_vert_crs :: to_wkt(
    if ( buffer == OGC_NULL )
       return false;
    *buffer = 0;
+
+   if ( !is_visible() )
+      return true;
 
    if ( (opts & OGC_WKT_OPT_OLD_SYNTAX) != 0 )
       kwd = old_kwd();

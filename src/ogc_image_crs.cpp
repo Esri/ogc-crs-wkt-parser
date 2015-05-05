@@ -77,7 +77,7 @@ ogc_image_crs * ogc_image_crs :: create(
       bad = true;
    }
    else if ( !ogc_utils::validate_cs(OGC_OBJ_TYPE_IMAGE_CRS, cs,
-                                     axis_1, axis_2, OGC_NULL, unit, err) )
+                            axis_1, axis_2, OGC_NULL, unit, OGC_NULL, err) )
    {
       bad = true;
    }
@@ -96,6 +96,7 @@ ogc_image_crs * ogc_image_crs :: create(
 
       ogc_string::unescape_str(p->_name, name, OGC_NAME_MAX);
       p->_obj_type = OGC_OBJ_TYPE_IMAGE_CRS;
+      p->_visible  = true;
       p->_crs_type = OGC_CRS_TYPE_IMAGE;
       p->_cs       = cs;
       p->_datum    = datum;
@@ -534,6 +535,9 @@ bool ogc_image_crs :: to_wkt(
    if ( buffer == OGC_NULL )
       return false;
    *buffer = 0;
+
+   if ( !is_visible() )
+      return true;
 
    if ( (opts & OGC_WKT_OPT_OLD_SYNTAX) != 0 )
       return true;

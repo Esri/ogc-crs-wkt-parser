@@ -125,6 +125,7 @@ ogc_compound_crs * ogc_compound_crs :: create(
 
       ogc_string::unescape_str(p->_name, name, OGC_NAME_MAX);
       p->_obj_type   = OGC_OBJ_TYPE_COMPOUND_CRS;
+      p->_visible    = true;
       p->_crs_type   = OGC_CRS_TYPE_COMPOUND;
       p->_cs         = OGC_NULL;
       p->_axis_1     = OGC_NULL;
@@ -482,6 +483,9 @@ bool ogc_compound_crs :: to_wkt(
    if ( buffer == OGC_NULL )
       return false;
    *buffer = 0;
+
+   if ( !is_visible() )
+      return true;
 
    if ( (opts & OGC_WKT_OPT_OLD_SYNTAX) != 0 )
       kwd = old_kwd();

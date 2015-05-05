@@ -78,6 +78,7 @@ ogc_unit * ogc_unit :: create(
 
       ogc_string::unescape_str(p->_name, name, OGC_NAME_MAX);
       p->_obj_type  = OGC_OBJ_TYPE_UNIT;
+      p->_visible   = true;
       p->_unit_type = OGC_UNIT_TYPE_GENERIC;
       p->_factor    = factor;
       p->_ids       = ids;
@@ -352,6 +353,9 @@ bool ogc_unit :: to_wkt(
    if ( buffer == OGC_NULL )
       return false;
    *buffer = 0;
+
+   if ( !is_visible() )
+      return true;
 
    ogc_string :: dtoa(_factor, buf_factor);
 

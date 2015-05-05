@@ -85,6 +85,7 @@ ogc_base_proj_crs * ogc_base_proj_crs :: create(
 
       ogc_string::unescape_str(p->_name, name, OGC_NAME_MAX);
       p->_obj_type   = OGC_OBJ_TYPE_BASE_PROJ_CRS;
+      p->_visible    = true;
       p->_crs_type   = OGC_CRS_TYPE_BASE_PROJ;
       p->_base_crs   = base_crs;
       p->_conversion = conversion;
@@ -349,6 +350,9 @@ bool ogc_base_proj_crs :: to_wkt(
    if ( buffer == OGC_NULL )
       return false;
    *buffer = 0;
+
+   if ( !is_visible() )
+      return true;
 
    rc &= ogc_base_geod_crs :: to_wkt(_base_crs,   buf_base_crs,   opts, OGC_TBUF_MAX);
    rc &= ogc_conversion    :: to_wkt(_conversion, buf_conversion, opts, OGC_TBUF_MAX);

@@ -79,6 +79,7 @@ ogc_conversion * ogc_conversion :: create(
 
       ogc_string::unescape_str(p->_name, name, OGC_NAME_MAX);
       p->_obj_type   = OGC_OBJ_TYPE_CONVERSION;
+      p->_visible    = true;
       p->_method     = method;
       p->_parameters = parameters;
       p->_ids        = ids;
@@ -411,6 +412,9 @@ bool ogc_conversion :: to_wkt(
    if ( buffer == OGC_NULL )
       return false;
    *buffer = 0;
+
+   if ( !is_visible() )
+      return true;
 
    rc &= ogc_method :: to_wkt(_method, buf_method, opts, OGC_TBUF_MAX);
 

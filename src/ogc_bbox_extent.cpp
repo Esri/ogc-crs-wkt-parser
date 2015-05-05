@@ -82,6 +82,7 @@ ogc_bbox_extent * ogc_bbox_extent :: create(
       }
 
       p->_obj_type = OGC_OBJ_TYPE_BBOX_EXTENT;
+      p->_visible  = true;
       p->_ll_lat   = ll_lat;
       p->_ll_lon   = ll_lon;
       p->_ur_lat   = ur_lat;
@@ -294,6 +295,9 @@ bool ogc_bbox_extent :: to_wkt(
    if ( buffer == OGC_NULL )
       return false;
    *buffer = 0;
+
+   if ( !is_visible() )
+      return true;
 
    if ( (options & OGC_WKT_OPT_OLD_SYNTAX) == 0 )
       return true;

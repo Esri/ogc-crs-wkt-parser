@@ -78,6 +78,7 @@ ogc_base_engr_crs * ogc_base_engr_crs :: create(
 
       ogc_string::unescape_str(p->_name, name, OGC_NAME_MAX);
       p->_obj_type = OGC_OBJ_TYPE_BASE_ENGR_CRS;
+      p->_visible  = true;
       p->_crs_type = OGC_CRS_TYPE_BASE_ENGR;
       p->_datum    = datum;
       p->_unit     = unit;
@@ -321,6 +322,9 @@ bool ogc_base_engr_crs :: to_wkt(
    if ( buffer == OGC_NULL )
       return false;
    *buffer = 0;
+
+   if ( !is_visible() )
+      return true;
 
    if ( (opts & OGC_WKT_OPT_OLD_SYNTAX) != 0 )
       return true;

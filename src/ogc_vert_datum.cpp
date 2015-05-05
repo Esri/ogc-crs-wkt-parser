@@ -74,6 +74,7 @@ ogc_vert_datum * ogc_vert_datum :: create(
 
       ogc_string::unescape_str(p->_name, name, OGC_NAME_MAX);
       p->_obj_type   = OGC_OBJ_TYPE_VERT_DATUM;
+      p->_visible    = true;
       p->_datum_type = OGC_DATUM_TYPE_VERT;
       p->_anchor     = anchor;
       p->_ids        = ids;
@@ -348,6 +349,9 @@ bool ogc_vert_datum :: to_wkt(
    if ( buffer == OGC_NULL )
       return false;
    *buffer = 0;
+
+   if ( !is_visible() )
+      return true;
 
    rc &= ogc_anchor :: to_wkt(_anchor, buf_anchor, opts, OGC_TBUF_MAX);
 

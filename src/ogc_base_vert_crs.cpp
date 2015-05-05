@@ -78,6 +78,7 @@ ogc_base_vert_crs * ogc_base_vert_crs :: create(
 
       ogc_string::unescape_str(p->_name, name, OGC_NAME_MAX);
       p->_obj_type = OGC_OBJ_TYPE_BASE_VERT_CRS;
+      p->_visible  = true;
       p->_crs_type = OGC_CRS_TYPE_BASE_VERT;
       p->_datum    = datum;
       p->_unit     = unit;
@@ -321,6 +322,9 @@ bool ogc_base_vert_crs :: to_wkt(
    if ( buffer == OGC_NULL )
       return false;
    *buffer = 0;
+
+   if ( !is_visible() )
+      return true;
 
    rc &= ogc_vert_datum :: to_wkt(_datum,  buf_datum,   opts, OGC_TBUF_MAX);
    rc &= ogc_unit          :: to_wkt(_unit,   buf_unit,    opts, OGC_TBUF_MAX);

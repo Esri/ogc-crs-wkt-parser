@@ -56,6 +56,7 @@ ogc_op_accuracy * ogc_op_accuracy :: create(
       }
 
       p->_obj_type = OGC_OBJ_TYPE_OP_ACCURACY;
+      p->_visible  = true;
       p->_accuracy = accuracy;
    }
 
@@ -256,6 +257,9 @@ bool ogc_op_accuracy :: to_wkt(
    if ( buffer == OGC_NULL )
       return false;
    *buffer = 0;
+
+   if ( !is_visible() )
+      return true;
 
    if ( (options & OGC_WKT_OPT_OLD_SYNTAX) != 0 )
       return true;

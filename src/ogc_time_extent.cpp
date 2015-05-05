@@ -86,6 +86,7 @@ ogc_time_extent * ogc_time_extent :: create(
       ogc_string::unescape_str(p->_start, start, OGC_TIME_MAX);
       ogc_string::unescape_str(p->_end,   end,   OGC_TIME_MAX);
       p->_obj_type = OGC_OBJ_TYPE_TIME_EXTENT;
+      p->_visible  = true;
    }
 
    return p;
@@ -286,6 +287,9 @@ bool ogc_time_extent :: to_wkt(
    if ( buffer == OGC_NULL )
       return false;
    *buffer = 0;
+
+   if ( !is_visible() )
+      return true;
 
    if ( (options & OGC_WKT_OPT_OLD_SYNTAX) == 0 )
       return true;
