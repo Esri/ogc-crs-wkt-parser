@@ -24,6 +24,11 @@ namespace OGC {
 
 const char * ogc_param_crs :: obj_kwd() { return OGC_OBJ_KWD_PARAM_CRS; }
 
+bool ogc_param_crs :: is_kwd(const char * kwd)
+{
+   return ogc_string::is_equal(kwd, obj_kwd());
+}
+
 /*------------------------------------------------------------------------
  * create
  */
@@ -265,7 +270,7 @@ ogc_param_crs * ogc_param_crs :: from_tokens(
    }
    kwd = arr[start].str;
 
-   if ( !ogc_string::is_equal(kwd, obj_kwd()) )
+   if ( !is_kwd(kwd) )
    {
       ogc_error::set(err, OGC_ERR_WKT_INVALID_KEYWORD, obj_kwd(), kwd);
       return OGC_NULL;
@@ -322,7 +327,7 @@ ogc_param_crs * ogc_param_crs :: from_tokens(
    int  next = 0;
    for (int i = start; i < end; i = next)
    {
-      if ( ogc_string::is_equal(arr[i].str, ogc_param_datum::obj_kwd()) )
+      if ( ogc_param_datum::is_kwd(arr[i].str) )
       {
          if ( datum != OGC_NULL )
          {
@@ -338,7 +343,7 @@ ogc_param_crs * ogc_param_crs :: from_tokens(
          continue;
       }
 
-      if ( ogc_string::is_equal(arr[i].str, ogc_base_param_crs::obj_kwd()) )
+      if ( ogc_base_param_crs::is_kwd(arr[i].str) )
       {
          if ( base_crs != OGC_NULL )
          {
@@ -354,7 +359,7 @@ ogc_param_crs * ogc_param_crs :: from_tokens(
          continue;
       }
 
-      if ( ogc_string::is_equal(arr[i].str, ogc_deriving_conv::obj_kwd()) )
+      if ( ogc_deriving_conv::is_kwd(arr[i].str) )
       {
          if ( conv != OGC_NULL )
          {
@@ -370,7 +375,7 @@ ogc_param_crs * ogc_param_crs :: from_tokens(
          continue;
       }
 
-      if ( ogc_string::is_equal(arr[i].str, ogc_cs::obj_kwd()) )
+      if ( ogc_cs::is_kwd(arr[i].str) )
       {
          if ( cs != OGC_NULL )
          {
@@ -386,7 +391,7 @@ ogc_param_crs * ogc_param_crs :: from_tokens(
          continue;
       }
 
-      if ( ogc_string::is_equal(arr[i].str, ogc_axis::obj_kwd()) )
+      if ( ogc_axis::is_kwd(arr[i].str) )
       {
          axis = ogc_axis::from_tokens(t, i, &next, err);
          if ( axis == OGC_NULL )
@@ -405,8 +410,7 @@ ogc_param_crs * ogc_param_crs :: from_tokens(
          continue;
       }
 
-      if ( ogc_string::is_equal(arr[i].str, ogc_paramunit::obj_kwd()) ||
-           ogc_string::is_equal(arr[i].str, ogc_paramunit::alt_kwd()) )
+      if ( ogc_paramunit::is_kwd(arr[i].str) )
       {
          if ( unit != OGC_NULL )
          {
@@ -422,7 +426,7 @@ ogc_param_crs * ogc_param_crs :: from_tokens(
          continue;
       }
 
-      if ( ogc_string::is_equal(arr[i].str, ogc_scope::obj_kwd()) )
+      if ( ogc_scope::is_kwd(arr[i].str) )
       {
          if ( scope != OGC_NULL )
          {
@@ -438,10 +442,7 @@ ogc_param_crs * ogc_param_crs :: from_tokens(
          continue;
       }
 
-      if ( ogc_string::is_equal(arr[i].str, ogc_area_extent::obj_kwd()) ||
-           ogc_string::is_equal(arr[i].str, ogc_bbox_extent::obj_kwd()) ||
-           ogc_string::is_equal(arr[i].str, ogc_time_extent::obj_kwd()) ||
-           ogc_string::is_equal(arr[i].str, ogc_vert_extent::obj_kwd()) )
+      if ( ogc_extent::is_kwd(arr[i].str) )
       {
          extent = ogc_extent::from_tokens(t, i, &next, err);
          if ( extent == OGC_NULL )
@@ -489,7 +490,7 @@ ogc_param_crs * ogc_param_crs :: from_tokens(
          continue;
       }
 
-      if ( ogc_string::is_equal(arr[i].str, ogc_id::obj_kwd()) )
+      if ( ogc_id::is_kwd(arr[i].str) )
       {
          id = ogc_id::from_tokens(t, i, &next, err);
          if ( id == OGC_NULL )
@@ -536,7 +537,7 @@ ogc_param_crs * ogc_param_crs :: from_tokens(
          continue;
       }
 
-      if ( ogc_string::is_equal(arr[i].str, ogc_remark::obj_kwd()) )
+      if ( ogc_remark::is_kwd(arr[i].str) )
       {
          if ( remark != OGC_NULL )
          {

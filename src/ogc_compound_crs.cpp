@@ -25,6 +25,11 @@ namespace OGC {
 const char * ogc_compound_crs :: obj_kwd() { return OGC_OBJ_KWD_COMPOUND_CRS; }
 const char * ogc_compound_crs :: old_kwd() { return OGC_OLD_KWD_COMPDCS;      }
 
+bool ogc_compound_crs :: is_kwd(const char * kwd)
+{
+   return ogc_string::is_equal(kwd, obj_kwd());
+}
+
 /*------------------------------------------------------------------------
  * create
  */
@@ -202,7 +207,7 @@ ogc_compound_crs * ogc_compound_crs :: from_tokens(
    }
    kwd = arr[start].str;
 
-   if ( !ogc_string::is_equal(kwd, obj_kwd()) )
+   if ( !is_kwd(kwd) )
    {
       ogc_error::set(err, OGC_ERR_WKT_INVALID_KEYWORD, obj_kwd(), kwd);
       return OGC_NULL;
@@ -259,9 +264,9 @@ ogc_compound_crs * ogc_compound_crs :: from_tokens(
    int  next = 0;
    for (int i = start; i < end; i = next)
    {
-      if ( ogc_string::is_equal(arr[i].str, ogc_geod_crs::obj_kwd()) ||
-           ogc_string::is_equal(arr[i].str, ogc_proj_crs::obj_kwd()) ||
-           ogc_string::is_equal(arr[i].str, ogc_engr_crs::obj_kwd()) )
+      if ( ogc_geod_crs::is_kwd(arr[i].str) ||
+           ogc_proj_crs::is_kwd(arr[i].str) ||
+           ogc_engr_crs::is_kwd(arr[i].str) )
       {
          if ( first_crs != OGC_NULL )
          {
@@ -277,8 +282,8 @@ ogc_compound_crs * ogc_compound_crs :: from_tokens(
          continue;
       }
 
-      if ( ogc_string::is_equal(arr[i].str, ogc_vert_crs ::obj_kwd()) ||
-           ogc_string::is_equal(arr[i].str, ogc_param_crs::obj_kwd()) )
+      if ( ogc_vert_crs ::is_kwd(arr[i].str) ||
+           ogc_param_crs::is_kwd(arr[i].str) )
       {
          if ( second_crs != OGC_NULL )
          {
@@ -294,7 +299,7 @@ ogc_compound_crs * ogc_compound_crs :: from_tokens(
          continue;
       }
 
-      if ( ogc_string::is_equal(arr[i].str, ogc_time_crs::obj_kwd()) )
+      if ( ogc_time_crs::is_kwd(arr[i].str) )
       {
          if ( (second_crs != OGC_NULL &&
                second_crs->crs_type() == OGC_CRS_TYPE_TIME) ||
@@ -318,7 +323,7 @@ ogc_compound_crs * ogc_compound_crs :: from_tokens(
          continue;
       }
 
-      if ( ogc_string::is_equal(arr[i].str, ogc_id::obj_kwd()) )
+      if ( ogc_id::is_kwd(arr[i].str) )
       {
          id = ogc_id::from_tokens(t, i, &next, err);
          if ( id == OGC_NULL )
@@ -365,7 +370,7 @@ ogc_compound_crs * ogc_compound_crs :: from_tokens(
          continue;
       }
 
-      if ( ogc_string::is_equal(arr[i].str, ogc_remark::obj_kwd()) )
+      if ( ogc_remark::is_kwd(arr[i].str) )
       {
          if ( remark != OGC_NULL )
          {

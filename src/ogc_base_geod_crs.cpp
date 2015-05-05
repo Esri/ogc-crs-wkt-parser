@@ -24,6 +24,11 @@ namespace OGC {
 
 const char * ogc_base_geod_crs :: obj_kwd() { return OGC_OBJ_KWD_BASE_GEOD_CRS; }
 
+bool ogc_base_geod_crs :: is_kwd(const char * kwd)
+{
+   return ogc_string::is_equal(kwd, obj_kwd());
+}
+
 /*------------------------------------------------------------------------
  * create
  */
@@ -139,7 +144,7 @@ ogc_base_geod_crs * ogc_base_geod_crs :: from_tokens(
    }
    kwd = arr[start].str;
 
-   if ( !ogc_string::is_equal(kwd, obj_kwd()) )
+   if ( !is_kwd(kwd) )
    {
       ogc_error::set(err, OGC_ERR_WKT_INVALID_KEYWORD, obj_kwd(), kwd);
       return OGC_NULL;
@@ -196,7 +201,7 @@ ogc_base_geod_crs * ogc_base_geod_crs :: from_tokens(
    int  next = 0;
    for (int i = start; i < end; i = next)
    {
-      if ( ogc_string::is_equal(arr[i].str, ogc_geod_datum::obj_kwd()) )
+      if ( ogc_geod_datum::is_kwd(arr[i].str) )
       {
          if ( datum != OGC_NULL )
          {
@@ -212,7 +217,7 @@ ogc_base_geod_crs * ogc_base_geod_crs :: from_tokens(
          continue;
       }
 
-      if ( ogc_string::is_equal(arr[i].str, ogc_primem::obj_kwd()) )
+      if ( ogc_primem::is_kwd(arr[i].str) )
       {
          if ( primem != OGC_NULL )
          {
@@ -228,8 +233,7 @@ ogc_base_geod_crs * ogc_base_geod_crs :: from_tokens(
          continue;
       }
 
-      if ( ogc_string::is_equal(arr[i].str, ogc_angunit::obj_kwd()) ||
-           ogc_string::is_equal(arr[i].str, ogc_angunit::alt_kwd()) )
+      if ( ogc_angunit::is_kwd(arr[i].str) )
       {
          if ( unit != OGC_NULL )
          {

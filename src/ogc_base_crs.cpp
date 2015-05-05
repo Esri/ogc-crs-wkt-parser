@@ -24,6 +24,11 @@ namespace OGC {
 
 const char * ogc_base_crs :: obj_kwd() { return OGC_OBJ_KWD_BASE_CRS; }
 
+bool ogc_base_crs :: is_kwd(const char * kwd)
+{
+   return ogc_string::is_equal(kwd, obj_kwd());
+}
+
 /*------------------------------------------------------------------------
  * destroy
  */
@@ -59,7 +64,7 @@ ogc_base_crs * ogc_base_crs :: from_tokens(
    const char * kwd = t->_arr[start].str;
 
 #  define CHECK(o,n) \
-   if ( ogc_string::is_equal(kwd, ogc_##n :: obj_kwd()) ) \
+   if ( ogc_##n::is_kwd(kwd) ) \
       return ogc_##n :: from_tokens(t, start, pend, err)
 
    CHECK( BASE_ENGR_CRS,  base_engr_crs  );

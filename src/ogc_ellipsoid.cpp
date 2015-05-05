@@ -25,6 +25,12 @@ namespace OGC {
 const char * ogc_ellipsoid :: obj_kwd() { return OGC_OBJ_KWD_ELLIPSOID; }
 const char * ogc_ellipsoid :: alt_kwd() { return OGC_ALT_KWD_ELLIPSOID; }
 
+bool ogc_ellipsoid :: is_kwd(const char * kwd)
+{
+   return ogc_string::is_equal(kwd, obj_kwd()) ||
+          ogc_string::is_equal(kwd, alt_kwd());
+}
+
 /*------------------------------------------------------------------------
  * create
  */
@@ -152,8 +158,7 @@ ogc_ellipsoid * ogc_ellipsoid :: from_tokens(
    }
    kwd = arr[start].str;
 
-   if ( !ogc_string::is_equal(kwd, obj_kwd()) &&
-        !ogc_string::is_equal(kwd, alt_kwd()) )
+   if ( !is_kwd(kwd) )
    {
       ogc_error::set(err, OGC_ERR_WKT_INVALID_KEYWORD, obj_kwd(), kwd);
       return OGC_NULL;
@@ -217,8 +222,7 @@ ogc_ellipsoid * ogc_ellipsoid :: from_tokens(
    int  next = 0;
    for (int i = start; i < end; i = next)
    {
-      if ( ogc_string::is_equal(arr[i].str, ogc_lenunit::obj_kwd()) ||
-           ogc_string::is_equal(arr[i].str, ogc_lenunit::alt_kwd()) )
+      if ( ogc_lenunit::is_kwd(arr[i].str) )
       {
          if ( lenunit != OGC_NULL )
          {
@@ -234,7 +238,7 @@ ogc_ellipsoid * ogc_ellipsoid :: from_tokens(
          continue;
       }
 
-      if ( ogc_string::is_equal(arr[i].str, ogc_id::obj_kwd()) )
+      if ( ogc_id::is_kwd(arr[i].str) )
       {
          id = ogc_id::from_tokens(t, i, &next, err);
          if ( id == OGC_NULL )

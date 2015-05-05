@@ -25,6 +25,11 @@ namespace OGC {
 const char * ogc_id :: obj_kwd() { return OGC_OBJ_KWD_ID; }
 const char * ogc_id :: old_kwd() { return OGC_OLD_KWD_ID; }
 
+bool ogc_id :: is_kwd(const char * kwd)
+{
+   return ogc_string::is_equal(kwd, obj_kwd());
+}
+
 /*------------------------------------------------------------------------
  * create
  */
@@ -166,7 +171,7 @@ ogc_id * ogc_id :: from_tokens(
    }
    kwd = arr[start].str;
 
-   if ( !ogc_string::is_equal(kwd, obj_kwd()) )
+   if ( !is_kwd(kwd) )
    {
       ogc_error::set(err, OGC_ERR_WKT_INVALID_KEYWORD, obj_kwd(), kwd);
       return OGC_NULL;
@@ -231,7 +236,7 @@ ogc_id * ogc_id :: from_tokens(
    int  next = 0;
    for (int i = start; i < end; i = next)
    {
-      if ( ogc_string::is_equal(arr[i].str, ogc_citation::obj_kwd()) )
+      if ( ogc_citation::is_kwd(arr[i].str) )
       {
          if ( citation != OGC_NULL )
          {
@@ -247,7 +252,7 @@ ogc_id * ogc_id :: from_tokens(
          continue;
       }
 
-      if ( ogc_string::is_equal(arr[i].str, ogc_uri::obj_kwd()) )
+      if ( ogc_uri::is_kwd(arr[i].str) )
       {
          if ( uri != OGC_NULL )
          {

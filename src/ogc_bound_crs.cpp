@@ -24,6 +24,11 @@ namespace OGC {
 
 const char * ogc_bound_crs :: obj_kwd() { return OGC_OBJ_KWD_BOUND_CRS; }
 
+bool ogc_bound_crs :: is_kwd(const char * kwd)
+{
+   return ogc_string::is_equal(kwd, obj_kwd());
+}
+
 /*------------------------------------------------------------------------
  * create
  */
@@ -145,7 +150,7 @@ ogc_bound_crs * ogc_bound_crs :: from_tokens(
    }
    kwd = arr[start].str;
 
-   if ( !ogc_string::is_equal(kwd, obj_kwd()) )
+   if ( !is_kwd(kwd) )
    {
       ogc_error::set(err, OGC_ERR_WKT_INVALID_KEYWORD, obj_kwd(), kwd);
       return OGC_NULL;
@@ -233,7 +238,7 @@ ogc_bound_crs * ogc_bound_crs :: from_tokens(
          continue;
       }
 
-      if ( ogc_string::is_equal(arr[i].str, ogc_abrtrans::obj_kwd()) )
+      if ( ogc_abrtrans::is_kwd(arr[i].str) )
       {
          if ( abrtrans != OGC_NULL )
          {
@@ -249,7 +254,7 @@ ogc_bound_crs * ogc_bound_crs :: from_tokens(
          continue;
       }
 
-      if ( ogc_string::is_equal(arr[i].str, ogc_id::obj_kwd()) )
+      if ( ogc_id::is_kwd(arr[i].str) )
       {
          id = ogc_id::from_tokens(t, i, &next, err);
          if ( id == OGC_NULL )
@@ -296,7 +301,7 @@ ogc_bound_crs * ogc_bound_crs :: from_tokens(
          continue;
       }
 
-      if ( ogc_string::is_equal(arr[i].str, ogc_remark::obj_kwd()) )
+      if ( ogc_remark::is_kwd(arr[i].str) )
       {
          if ( remark != OGC_NULL )
          {

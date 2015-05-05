@@ -24,6 +24,14 @@ namespace OGC {
 
 const char * ogc_extent :: obj_kwd() { return OGC_OBJ_KWD_EXTENT; }
 
+bool ogc_extent :: is_kwd(const char * kwd)
+{
+   return ogc_area_extent::is_kwd(kwd) ||
+          ogc_bbox_extent::is_kwd(kwd) ||
+          ogc_time_extent::is_kwd(kwd) ||
+          ogc_vert_extent::is_kwd(kwd) ;
+}
+
 /*------------------------------------------------------------------------
  * destroy
  */
@@ -58,7 +66,7 @@ ogc_extent * ogc_extent :: from_tokens(
    const char * kwd = t->_arr[start].str;
 
 #  define CHECK(o,n) \
-   if ( ogc_string::is_equal(kwd, ogc_##n :: obj_kwd()) ) \
+   if ( ogc_##n::is_kwd(kwd) ) \
       return ogc_##n :: from_tokens(t, start, pend, err)
 
    CHECK( AREA_EXTENT, area_extent );

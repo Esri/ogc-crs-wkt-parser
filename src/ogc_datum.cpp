@@ -24,6 +24,11 @@ namespace OGC {
 
 const char * ogc_datum :: obj_kwd() { return OGC_OBJ_KWD_DATUM; }
 
+bool ogc_datum :: is_kwd(const char * kwd)
+{
+   return ogc_string::is_equal(kwd, obj_kwd());
+}
+
 /*------------------------------------------------------------------------
  * destroy
  */
@@ -60,7 +65,7 @@ ogc_datum * ogc_datum :: from_tokens(
    const char * kwd = t->_arr[start].str;
 
 #  define CHECK(o,n) \
-   if ( ogc_string::is_equal(kwd, ogc_##n :: obj_kwd()) ) \
+   if ( ogc_##n::is_kwd(kwd) ) \
       return ogc_##n :: from_tokens(t, start, pend, err)
 
    CHECK( ENGR_DATUM,     engr_datum     );

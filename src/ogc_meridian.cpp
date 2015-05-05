@@ -24,6 +24,11 @@ namespace OGC {
 
 const char * ogc_meridian :: obj_kwd() { return OGC_OBJ_KWD_MERIDIAN; }
 
+bool ogc_meridian :: is_kwd(const char * kwd)
+{
+   return ogc_string::is_equal(kwd, obj_kwd());
+}
+
 /*------------------------------------------------------------------------
  * create
  */
@@ -119,7 +124,7 @@ ogc_meridian * ogc_meridian :: from_tokens(
    }
    kwd = arr[start].str;
 
-   if ( !ogc_string::is_equal(kwd, obj_kwd()) )
+   if ( !is_kwd(kwd) )
    {
       ogc_error::set(err, OGC_ERR_WKT_INVALID_KEYWORD, obj_kwd(), kwd);
       return OGC_NULL;
@@ -176,8 +181,7 @@ ogc_meridian * ogc_meridian :: from_tokens(
    int  next = 0;
    for (int i = start; i < end; i = next)
    {
-      if ( ogc_string::is_equal(arr[i].str, ogc_angunit::obj_kwd()) ||
-           ogc_string::is_equal(arr[i].str, ogc_angunit::alt_kwd()) )
+      if ( ogc_angunit::is_kwd(arr[i].str) )
       {
          if ( angunit != OGC_NULL )
          {

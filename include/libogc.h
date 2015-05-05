@@ -875,6 +875,7 @@ protected:
 
 public:
    static const char * obj_kwd();
+   static bool is_kwd(const char * kwd);
 
    /* Strict parsing option.
     *
@@ -989,6 +990,7 @@ private:
 
 public:
    static const char * obj_kwd();
+   static bool is_kwd(const char * kwd);
 
    static ogc_citation * create(
       const char * text,
@@ -1045,6 +1047,7 @@ private:
 
 public:
    static const char * obj_kwd();
+   static bool is_kwd(const char * kwd);
 
    static ogc_uri * create(
       const char * text,
@@ -1106,6 +1109,7 @@ private:
 public:
    static const char * obj_kwd();
    static const char * old_kwd();
+   static bool is_kwd(const char * kwd);
 
    static ogc_id * create(
       const char *   name,
@@ -1170,6 +1174,7 @@ private:
 
 public:
    static const char * obj_kwd();
+   static bool is_kwd(const char * kwd);
 
    static ogc_remark * create(
       const char * text,
@@ -1235,6 +1240,7 @@ protected:
 
 public:
    static const char * obj_kwd();
+   static bool is_kwd(const char * kwd);
 
    static ogc_unit * create(
       const char * name,
@@ -1298,6 +1304,7 @@ private:
 public:
    static const char * obj_kwd();
    static const char * alt_kwd();
+   static bool is_kwd(const char * kwd);
 
    static ogc_angunit * create(
       const char * name,
@@ -1353,6 +1360,7 @@ private:
 public:
    static const char * obj_kwd();
    static const char * alt_kwd();
+   static bool is_kwd(const char * kwd);
 
    static ogc_lenunit * create(
       const char * name,
@@ -1408,6 +1416,7 @@ private:
 public:
    static const char * obj_kwd();
    static const char * alt_kwd();
+   static bool is_kwd(const char * kwd);
 
    static ogc_scaleunit * create(
       const char * name,
@@ -1463,6 +1472,7 @@ private:
 public:
    static const char * obj_kwd();
    static const char * alt_kwd();
+   static bool is_kwd(const char * kwd);
 
    static ogc_timeunit * create(
       const char * name,
@@ -1518,6 +1528,7 @@ private:
 public:
    static const char * obj_kwd();
    static const char * alt_kwd();
+   static bool is_kwd(const char * kwd);
 
    static ogc_paramunit * create(
       const char * name,
@@ -1574,6 +1585,7 @@ private:
 
 public:
    static const char * obj_kwd();
+   static bool is_kwd(const char * kwd);
 
    static ogc_scope * create(
       const char * text,
@@ -1628,6 +1640,7 @@ protected:
 
 public:
    static const char * obj_kwd();
+   static bool is_kwd(const char * kwd);
 
    virtual ~ogc_extent();
    static void destroy(ogc_extent * obj);
@@ -1678,6 +1691,7 @@ private:
 
 public:
    static const char * obj_kwd();
+   static bool is_kwd(const char * kwd);
 
    static ogc_area_extent * create(
       const char * text,
@@ -1737,6 +1751,7 @@ private:
 
 public:
    static const char * obj_kwd();
+   static bool is_kwd(const char * kwd);
 
    static ogc_bbox_extent * create(
       double  ll_lat,
@@ -1801,6 +1816,7 @@ private:
 
 public:
    static const char * obj_kwd();
+   static bool is_kwd(const char * kwd);
 
    static ogc_vert_extent * create(
       double        min_ht,
@@ -1862,6 +1878,7 @@ private:
 
 public:
    static const char * obj_kwd();
+   static bool is_kwd(const char * kwd);
 
    static ogc_time_extent * create(
       const char *   start,
@@ -1923,6 +1940,7 @@ private:
 
 public:
    static const char * obj_kwd();
+   static bool is_kwd(const char * kwd);
 
    static ogc_parameter * create(
       const char * name,
@@ -1990,6 +2008,7 @@ private:
 
 public:
    static const char * obj_kwd();
+   static bool is_kwd(const char * kwd);
 
    static ogc_param_file * create(
       const char * name,
@@ -2058,6 +2077,7 @@ private:
 public:
    static const char * obj_kwd();
    static const char * alt_kwd();
+   static bool is_kwd(const char * kwd);
 
    static ogc_ellipsoid * create(
       const char *  name,
@@ -2131,6 +2151,7 @@ private:
 
 public:
    static const char * obj_kwd();
+   static bool is_kwd(const char * kwd);
 
    static ogc_anchor * create(
       const char * text,
@@ -2187,6 +2208,7 @@ private:
 
 public:
    static const char * obj_kwd();
+   static bool is_kwd(const char * kwd);
 
    static ogc_time_origin * create(
       const char *   origin,
@@ -2246,6 +2268,7 @@ protected:
 
 public:
    static const char * obj_kwd();
+   static bool is_kwd(const char * kwd);
 
    virtual ~ogc_datum();
    static void destroy(ogc_datum * obj);
@@ -2305,6 +2328,7 @@ private:
 public:
    static const char * obj_kwd();
    static const char * alt_kwd();
+   static bool is_kwd(const char * kwd);
 
    static ogc_geod_datum * create(
       const char *    name,
@@ -2363,6 +2387,7 @@ private:
 public:
    static const char * obj_kwd();
    static const char * alt_kwd();
+   static bool is_kwd(const char * kwd);
 
    static ogc_engr_datum * create(
       const char * name,
@@ -2420,6 +2445,7 @@ private:
 public:
    static const char * obj_kwd();
    static const char * alt_kwd();
+   static bool is_kwd(const char * kwd);
 
    static ogc_image_datum * create(
       const char *   name,
@@ -2478,6 +2504,7 @@ private:
 public:
    static const char * obj_kwd();
    static const char * alt_kwd();
+   static bool is_kwd(const char * kwd);
 
    static ogc_param_datum * create(
       const char * name,
@@ -2533,6 +2560,7 @@ private:
 public:
    static const char * obj_kwd();
    static const char * alt_kwd();
+   static bool is_kwd(const char * kwd);
 
    static ogc_time_datum * create(
       const char * name,
@@ -2588,6 +2616,7 @@ private:
 public:
    static const char * obj_kwd();
    static const char * alt_kwd();
+   static bool is_kwd(const char * kwd);
 
    static ogc_vert_datum * create(
       const char * name,
@@ -2648,6 +2677,7 @@ private:
 public:
    static const char * obj_kwd();
    static const char * alt_kwd();
+   static bool is_kwd(const char * kwd);
 
    static ogc_primem * create(
       const char *  name,
@@ -2722,6 +2752,7 @@ private:
 
 public:
    static const char * obj_kwd();
+   static bool is_kwd(const char * kwd);
 
    static ogc_bearing * create(
       double        value,
@@ -2781,6 +2812,7 @@ private:
 
 public:
    static const char * obj_kwd();
+   static bool is_kwd(const char * kwd);
 
    static ogc_meridian * create(
       double        value,
@@ -2839,6 +2871,7 @@ private:
 
 public:
    static const char * obj_kwd();
+   static bool is_kwd(const char * kwd);
 
    static ogc_order * create(
       int         value,
@@ -2902,6 +2935,7 @@ private:
 
 public:
    static const char * obj_kwd();
+   static bool is_kwd(const char * kwd);
 
    static ogc_axis * create(
       const char *        name,
@@ -2985,6 +3019,7 @@ private:
 
 public:
    static const char * obj_kwd();
+   static bool is_kwd(const char * kwd);
 
    static ogc_cs * create(
       ogc_cs_type  cs_type,
@@ -3050,6 +3085,7 @@ private:
 public:
    static const char * obj_kwd();
    static const char * alt_kwd();
+   static bool is_kwd(const char * kwd);
 
    static ogc_method * create(
       const char * name,
@@ -3127,6 +3163,7 @@ private:
 
 public:
    static const char * obj_kwd();
+   static bool is_kwd(const char * kwd);
 
    static ogc_conversion * create(
       const char * name,
@@ -3199,6 +3236,7 @@ private:
 
 public:
    static const char * obj_kwd();
+   static bool is_kwd(const char * kwd);
 
    static ogc_deriving_conv * create(
       const char * name,
@@ -3274,6 +3312,7 @@ protected:
 
 public:
    static const char * obj_kwd();
+   static bool is_kwd(const char * kwd);
 
    virtual ~ogc_base_crs();
    static void destroy(ogc_base_crs * obj);
@@ -3329,6 +3368,7 @@ private:
 
 public:
    static const char * obj_kwd();
+   static bool is_kwd(const char * kwd);
 
    static ogc_base_geod_crs * create(
       const char *     name,
@@ -3391,6 +3431,7 @@ private:
 
 public:
    static const char * obj_kwd();
+   static bool is_kwd(const char * kwd);
 
    static ogc_base_proj_crs * create(
       const char *         name,
@@ -3452,6 +3493,7 @@ private:
 
 public:
    static const char * obj_kwd();
+   static bool is_kwd(const char * kwd);
 
    static ogc_base_vert_crs * create(
       const char *         name,
@@ -3511,6 +3553,7 @@ private:
 
 public:
    static const char * obj_kwd();
+   static bool is_kwd(const char * kwd);
 
    static ogc_base_engr_crs * create(
       const char *         name,
@@ -3570,6 +3613,7 @@ private:
 
 public:
    static const char * obj_kwd();
+   static bool is_kwd(const char * kwd);
 
    static ogc_base_time_crs * create(
       const char *      name,
@@ -3629,6 +3673,7 @@ private:
 
 public:
    static const char * obj_kwd();
+   static bool is_kwd(const char * kwd);
 
    static ogc_base_param_crs * create(
       const char *      name,
@@ -3698,6 +3743,7 @@ protected:
 
 public:
    static const char * obj_kwd();
+   static bool is_kwd(const char * kwd);
 
    virtual ~ogc_crs();
    static void destroy(ogc_crs * obj);
@@ -3772,6 +3818,7 @@ private:
 public:
    static const char * obj_kwd();
    static const char * alt_kwd();
+   static bool is_kwd(const char * kwd);
 
    static ogc_geod_crs * create(
       const char *        name,
@@ -3860,6 +3907,7 @@ public:
    static const char * obj_kwd();
    static const char * alt_kwd();
    static const char * old_kwd();
+   static bool is_kwd(const char * kwd);
 
    static ogc_proj_crs * create(
       const char *         name,
@@ -3932,6 +3980,7 @@ public:
    static const char * obj_kwd();
    static const char * alt_kwd();
    static const char * old_kwd();
+   static bool is_kwd(const char * kwd);
 
    static ogc_vert_crs * create(
       const char *         name,
@@ -4015,6 +4064,7 @@ private:
 public:
    static const char * obj_kwd();
    static const char * alt_kwd();
+   static bool is_kwd(const char * kwd);
 
    static ogc_engr_crs * create(
       const char *         name,
@@ -4099,6 +4149,7 @@ private:
 
 public:
    static const char * obj_kwd();
+   static bool is_kwd(const char * kwd);
 
    static ogc_image_crs *  create(
       const char *         name,
@@ -4166,6 +4217,7 @@ private:
 
 public:
    static const char * obj_kwd();
+   static bool is_kwd(const char * kwd);
 
    static ogc_time_crs * create(
       const char *         name,
@@ -4248,6 +4300,7 @@ private:
 
 public:
    static const char * obj_kwd();
+   static bool is_kwd(const char * kwd);
 
    static ogc_param_crs * create(
       const char *         name,
@@ -4331,6 +4384,7 @@ private:
 public:
    static const char * obj_kwd();
    static const char * old_kwd();
+   static bool is_kwd(const char * kwd);
 
    static ogc_compound_crs * create(
       const char *       name,
@@ -4394,6 +4448,7 @@ private:
 
 public:
    static const char * obj_kwd();
+   static bool is_kwd(const char * kwd);
 
    static ogc_op_accuracy * create(
       double        accuracy,
@@ -4461,6 +4516,7 @@ private:
 
 public:
    static const char * obj_kwd();
+   static bool is_kwd(const char * kwd);
 
    static ogc_coord_op * create(
       const char *      name,
@@ -4558,6 +4614,7 @@ private:
 
 public:
    static const char * obj_kwd();
+   static bool is_kwd(const char * kwd);
 
    static ogc_abrtrans * create(
       const char * name,
@@ -4644,6 +4701,7 @@ private:
 
 public:
    static const char * obj_kwd();
+   static bool is_kwd(const char * kwd);
 
    static ogc_bound_crs * create(
       ogc_crs *      source_crs,

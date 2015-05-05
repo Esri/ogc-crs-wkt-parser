@@ -24,11 +24,16 @@ namespace OGC {
 
 const char * ogc_object :: obj_kwd() { return OGC_OBJ_KWD_OBJECT; }
 
-bool         ogc_object :: _strict_parsing = true;
+bool ogc_object :: is_kwd(const char * kwd)
+{
+   return ogc_string::is_equal(kwd, obj_kwd());
+}
 
 /*------------------------------------------------------------------------
  * strict parsing
  */
+bool ogc_object :: _strict_parsing = true;
+
 bool ogc_object :: get_strict_parsing()
 {
    return _strict_parsing;
@@ -75,7 +80,7 @@ ogc_object * ogc_object :: from_tokens(
    const char * kwd = t->_arr[start].str;
 
 #  define CHECK(o,n) \
-   if ( ogc_string::is_equal(kwd, ogc_##n :: obj_kwd()) ) \
+   if ( ogc_##n::is_kwd(kwd) ) \
       return ogc_##n :: from_tokens(t, start, pend, err)
 
    CHECK( ABRTRANS,        abrtrans        );
@@ -131,29 +136,6 @@ ogc_object * ogc_object :: from_tokens(
    CHECK( VERT_CRS,        vert_crs        );
    CHECK( VERT_DATUM,      vert_datum      );
    CHECK( VERT_EXTENT,     vert_extent     );
-
-#  undef CHECK
-
-#  define CHECK(o,n) \
-   if ( ogc_string::is_equal(kwd, ogc_##n :: alt_kwd()) ) \
-      return ogc_##n :: from_tokens(t, start, pend, err)
-
-   /* alternate object keywords */
-
-   CHECK( ENGR_DATUM,      engr_datum      );
-   CHECK( GEOD_DATUM,      geod_datum      );
-   CHECK( IMAGE_DATUM,     image_datum     );
-   CHECK( PARAM_DATUM,     param_datum     );
-   CHECK( TIME_DATUM,      time_datum      );
-   CHECK( VERT_DATUM,      vert_datum      );
-
-   CHECK( ENGR_CRS,        engr_crs        );
-   CHECK( GEOD_CRS,        geod_crs        );
-   CHECK( PROJ_CRS,        proj_crs        );
-   CHECK( VERT_CRS,        vert_crs        );
-
-   CHECK( SPHEROID,        ellipsoid       );
-   CHECK( PROJECTION,      method          );
 
 #  undef CHECK
 
