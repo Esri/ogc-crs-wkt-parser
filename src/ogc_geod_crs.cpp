@@ -24,6 +24,7 @@ namespace OGC {
 
 const char * ogc_geod_crs :: obj_kwd() { return OGC_OBJ_KWD_GEOD_CRS; }
 const char * ogc_geod_crs :: alt_kwd() { return OGC_ALT_KWD_GEOD_CRS; }
+const char * ogc_geod_crs :: old_kwd() { return OGC_OLD_KWD_GEOGCS;   }
 
 bool ogc_geod_crs :: is_kwd(const char * kwd)
 {
@@ -691,6 +692,7 @@ bool ogc_geod_crs :: to_wkt(
    OGC_TBUF      buf_axis_2;
    OGC_TBUF      buf_axis_3;
    OGC_TBUF      buf_unit;
+   OGC_TBUF      buf_scope;
    OGC_TBUF      buf_extent;
    OGC_TBUF      buf_id;
    OGC_TBUF      buf_remark;
@@ -715,10 +717,23 @@ bool ogc_geod_crs :: to_wkt(
    *buffer = 0;
 
    if ( (opts & OGC_WKT_OPT_OLD_SYNTAX) != 0 )
-      return true;
+   {
+      kwd = old_kwd();
+      if ( _primem == OGC_NULL )
+      {
+         sprintf(buf_primem, "PRIMEM%s\"Greenwich\",0.0%s", opn, cls);
+      }
+      else
+      {
+         rc &= ogc_primem :: to_wkt(_primem, buf_primem, opts, OGC_TBUF_MAX);
+      }
+   }
+   else
+   {
+      rc &= ogc_primem :: to_wkt(_primem, buf_primem, opts, OGC_TBUF_MAX);
+   }
 
    rc &= ogc_geod_datum    :: to_wkt(_datum,         buf_datum,    opts, OGC_TBUF_MAX);
-   rc &= ogc_primem        :: to_wkt(_primem,        buf_primem,   opts, OGC_TBUF_MAX);
    rc &= ogc_base_geod_crs :: to_wkt(_base_crs,      buf_base_crs, opts, OGC_TBUF_MAX);
    rc &= ogc_deriving_conv :: to_wkt(_deriving_conv, buf_conv,     opts, OGC_TBUF_MAX);
    rc &= ogc_cs            :: to_wkt(_cs,            buf_cs,       opts, OGC_TBUF_MAX);
@@ -726,6 +741,7 @@ bool ogc_geod_crs :: to_wkt(
    rc &= ogc_axis          :: to_wkt(_axis_2,        buf_axis_2,   opts, OGC_TBUF_MAX);
    rc &= ogc_axis          :: to_wkt(_axis_3,        buf_axis_3,   opts, OGC_TBUF_MAX);
    rc &= ogc_unit          :: to_wkt(_unit,          buf_unit,     opts, OGC_TBUF_MAX);
+   rc &= ogc_scope         :: to_wkt(_scope,         buf_scope,    opts, OGC_TBUF_MAX);
    rc &= ogc_remark        :: to_wkt(_remark,        buf_remark,   opts, OGC_TBUF_MAX);
 
    ogc_string::escape_str(buf_name, _name, OGC_UTF8_NAME_MAX);
@@ -742,6 +758,7 @@ bool ogc_geod_crs :: to_wkt(
    OGC_ADD_TO_BUF( buf_axis_2   );
    OGC_ADD_TO_BUF( buf_axis_3   );
    OGC_ADD_TO_BUF( buf_unit     );
+   OGC_ADD_TO_BUF( buf_scope    );
 
    if ( _extents != OGC_NULL )
    {
@@ -758,6 +775,8 @@ bool ogc_geod_crs :: to_wkt(
       {
          rc &= ogc_id :: to_wkt(id(i), buf_id, opts, OGC_TBUF_MAX);
          OGC_ADD_TO_BUF( buf_id );
+         if ( (options & OGC_WKT_OPT_OLD_SYNTAX) != 0 )
+            break;
       }
    }
 

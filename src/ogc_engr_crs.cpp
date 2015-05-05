@@ -701,6 +701,7 @@ bool ogc_engr_crs :: to_wkt(
    OGC_TBUF      buf_axis_2;
    OGC_TBUF      buf_axis_3;
    OGC_TBUF      buf_unit;
+   OGC_TBUF      buf_scope;
    OGC_TBUF      buf_extent;
    OGC_TBUF      buf_id;
    OGC_TBUF      buf_remark;
@@ -735,6 +736,7 @@ bool ogc_engr_crs :: to_wkt(
    rc &= ogc_axis          :: to_wkt(_axis_2,        buf_axis_2,   opts, OGC_TBUF_MAX);
    rc &= ogc_axis          :: to_wkt(_axis_3,        buf_axis_3,   opts, OGC_TBUF_MAX);
    rc &= ogc_unit          :: to_wkt(_unit,          buf_unit,     opts, OGC_TBUF_MAX);
+   rc &= ogc_scope         :: to_wkt(_scope,         buf_scope,    opts, OGC_TBUF_MAX);
    rc &= ogc_remark        :: to_wkt(_remark,        buf_remark,   opts, OGC_TBUF_MAX);
 
    ogc_string::escape_str(buf_name, _name, OGC_UTF8_NAME_MAX);
@@ -750,6 +752,7 @@ bool ogc_engr_crs :: to_wkt(
    OGC_ADD_TO_BUF( buf_axis_2   );
    OGC_ADD_TO_BUF( buf_axis_3   );
    OGC_ADD_TO_BUF( buf_unit     );
+   OGC_ADD_TO_BUF( buf_scope    );
 
    if ( _extents != OGC_NULL )
    {
