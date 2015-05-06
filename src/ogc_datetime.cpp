@@ -121,94 +121,162 @@ void ogc_datetime :: now()
 
 /*------------------------------------------------------------------------
  * parse a datetime string
- *
- * String format is: "[YYYY-MM-DD][T][hh:mm:ss.sss]".
- * Either part or both parts may be present.
- * If both parts are present, they are separated by 'T'.
- *
- * Note that we are ignoring any trailing timezone info.
  */
 bool ogc_datetime :: parse(
    const char * str)
 {
+   OGC_TIME timebuf;
+   const char * s;
+   char * t;
+
    clear();
 
-   if ( strchr(str, 'T') != OGC_NULL )
-      return parse_timestamp(str);
-
-   if ( strchr(str, '-') != OGC_NULL )
-      return parse_date(str);
-
-   if ( strchr(str, ':') != OGC_NULL )
-      return parse_time(str);
-
-   return false;
-}
-
-/*------------------------------------------------------------------------
- * parse a datetime string
- *
- * String format is: "YYYY-MM-DDThh:mm:ss.sss [Z|+-h[:m]]".
- */
-bool ogc_datetime :: parse_timestamp(
-   const char * str)
-{
-   const char * T = strchr(str, 'T');
-   if ( T == OGC_NULL )
+   if ( str == OGC_NULL )
       return false;
 
-   if ( ! parse_date(str) )
+   /* copy string, remove WS, uppercase all chars */
+   t = timebuf;
+   for (s = str; *s; s++)
+   {
+      if ( !isspace(*s) )
+         *t++ = (char)toupper(*s);
+   }
+   *t = 0;
+
+   s = timebuf;
+   if ( *s == 0 )
       return false;
 
-   if ( ! parse_time(T+1) )
+   if ( !parse_date(&s) )
+      return false;
+   if ( *s == 0 )
+      return true;
+
+   if ( *s++ != 'T' )
       return false;
 
-   if ( ! parse_timezone(T+1) )
+   if ( !parse_time(&s) )
+      return false;
+   if ( *s == 0 )
+      return true;
+
+   if ( !parse_tz(&s) )
       return false;
 
    return true;
+}
+
+/*------------------------------------------------------------------------
+ * collect digits
+ */
+static int collect (const char ** str, int *num_dig)
+{
+   const char * s = *str;
+   int num = 0;
+
+   *num_dig = 0;
+   for (; isdigit(*s); s++)
+   {
+      num = (num * 10) + (*s - '0');
+      (*num_dig)++;
+   }
+
+   *str = s;
+   return num;
 }
 
 /*------------------------------------------------------------------------
  * parse a date string
  *
- * String format is: "YYYY-MM-DD".
+ * String format is:
+ *    YYYY
+ *    YYYY-MM
+ *    YYYY-MM-DD
+ *    YYYY-DDD
  */
 bool ogc_datetime :: parse_date(
-   const char * str)
+   const char ** str)
 {
-   const int days[] =
+   const int month_days_norm[] =
+      /* jan  feb  mar  apr  may  jun  jul  aug  sep  oct  nov  dec */
+      {   31,  28,  31,  30,  31,  30,  31,  31,  30,  31,  30,  31 };
+   const int month_days_leap[] =
       /* jan  feb  mar  apr  may  jun  jul  aug  sep  oct  nov  dec */
       {   31,  29,  31,  30,  31,  30,  31,  31,  30,  31,  30,  31 };
+   const int * month_days;
 
-   for (; isdigit(*str); str++)
+   const char * s = *str;
+   int num;
+   int num_digs;
+
+   /* get year */
+
+   num = collect(&s, &num_digs);
+   if ( num_digs != 4 )
+      return false;
+   _year = num;
+
+   month_days = (is_leapyear() ? month_days_leap : month_days_norm);
+
+   if ( *s == 0 )
    {
-      _year = (_year * 10) + (*str - '0');
+      *str = s;
+      return true;
    }
-   if ( _year > 9999 )
+   if ( *s++ != '-' )
       return false;
 
-   for (; !isdigit(*str); str++)
-      ;
+   /* get month or ordinal-day */
 
-   for (; isdigit(*str); str++)
-   {
-      _month = (_month * 10) + (*str - '0');
-   }
-   if ( _month > 12 )
+   num = collect(&s, &num_digs);
+   if ( num_digs < 2 || num_digs > 3)
       return false;
-
-   for (; !isdigit(*str); str++)
-      ;
-
-   for (; isdigit(*str); str++)
+   if ( num_digs == 3 )
    {
-      _day = (_day * 10) + (*str - '0');
-   }
-   if ( _month > 0 && _day > days[_month-1] )
-      return false;
+      /* ordinal day */
 
-   return true;
+      int i;
+
+      if ( num == 0 || num > (365 + (is_leapyear() ? 1 : 0)) )
+         return false;
+      for (i = 0; i < 11; i++)
+      {
+         if ( num <= month_days[i] )
+            break;
+         num -= month_days[i];
+      }
+      _month = i+1;
+      _day   = num;
+
+      *str = s;
+      return true;
+   }
+   else
+   {
+      if ( num == 0 || num > 12 )
+         return false;
+      _month = num;
+
+      if ( *s == 0 )
+      {
+         *str = s;
+         return true;
+      }
+      if ( *s++ != '-' )
+         return false;
+
+      /* get day */
+
+      num = collect(&s, &num_digs);
+      if ( num_digs != 2 )
+         return false;
+      if ( num == 0 || num > month_days[_month-1] )
+         return false;
+      _day = num;
+
+      *str = s;
+      return true;
+   }
 }
 
 /*------------------------------------------------------------------------
@@ -217,35 +285,67 @@ bool ogc_datetime :: parse_date(
  * String format is: "hh:mm:ss.sss".
  *
  * Note that we ignore the case where we may have leap seconds (60-62).
- * Note also that this code will ignore any trailing timezone info.
  */
 bool ogc_datetime :: parse_time(
-   const char * str)
+   const char ** str)
 {
-   for (; isdigit(*str); str++)
+   const char * s = *str;
+   double dbl;
+   int num;
+   int num_digs;
+
+   /* get hour */
+
+   num = collect(&s, &num_digs);
+   if ( num_digs != 2 )
+      return false;
+   if ( num > 23 )
+      return false;
+   _hour = num;
+
+   if ( *s == 0 )
    {
-      _hour = (_hour * 10) + (*str - '0');
+      *str = s;
+      return true;
    }
-   if ( _hour > 23 )
+   if ( *s++ != ':' )
       return false;
 
-   for (; !isdigit(*str); str++)
-      ;
+   /* get minute */
 
-   for (; isdigit(*str); str++)
+   num = collect(&s, &num_digs);
+   if ( num_digs != 2 )
+      return false;
+   if ( num > 59 )
+      return false;
+   _min = num;
+
+   if ( *s == 0 )
    {
-      _min = (_min * 10) + (*str - '0');
+      *str = s;
+      return true;
    }
-   if ( _min > 59 )
+   if ( *s++ != ':' )
       return false;
 
-   for (; !isdigit(*str); str++)
-      ;
+   /* get second (as a double) */
 
-   _sec = ogc_string::atod(str);
-   if ( _sec >= 60.0 )
+   char buf[24];
+   char * b = buf;
+   for (; *s; s++)
+   {
+      if (*s != '.' && !isdigit(*s) )
+         break;
+      *b = *s;
+   }
+   *b = 0;
+
+   dbl = atof(buf);
+   if ( dbl >= 60.0 )
       return false;
+   _sec = dbl;
 
+   *str = s;
    return true;
 }
 
@@ -254,22 +354,23 @@ bool ogc_datetime :: parse_time(
  *
  * String format is: ... "Z" | [+_hh[:mm]]"
  */
-bool ogc_datetime :: parse_timezone(
-   const char * str)
+bool ogc_datetime :: parse_tz(
+   const char ** str)
 {
-   const char * s;
+   const char * s = *str;
    bool  minus = false;
    int   h = 0;
    int   m = 0;
 
-   s = strchr(str, 'Z');
-   if ( s != OGC_NULL )
+   if ( *s == 'Z' )
       return true;
 
-   s = strpbrk(str, "+-");
-   if ( s == OGC_NULL )
-      return true;
-   minus = (*s == '-');
+   if ( *s == '+' )
+      minus = false;
+   else if (*s == '-' )
+      minus = true;
+   else
+      return false;
 
    for (s++; isdigit(*s); s++)
       h = (10 * h) + (*s - '0');
@@ -288,15 +389,12 @@ bool ogc_datetime :: parse_timezone(
    if ( minus )
       _tz = -_tz;
 
+   *str = s;
    return true;
 }
 
 /*------------------------------------------------------------------------
  * number of seconds since Jan 1, 1970 UTC
- *
- * Note that we are ignoring the fact that years divisible by 100
- * are not leap years unless they are also divisible by 400.
- * This is valid until the year 2100 (by then someone else can do this).
  */
 time_t ogc_datetime :: unixtime() const
 {
@@ -346,6 +444,18 @@ int ogc_datetime :: yday() const
 }
 
 /*------------------------------------------------------------------------
+ * check if leapyear
+ *
+ * Note that we are ignoring the fact that years divisible by 100
+ * are not leap years unless they are also divisible by 400.
+ * This is valid until the year 2100 (by then someone else can do this).
+ */
+bool ogc_datetime :: is_leapyear() const
+{
+   return ( (_year % 4) == 0 );
+}
+
+/*------------------------------------------------------------------------
  * create datetime string "YYYY-MM-DDThh:mm:ss.sss[Z|+-h[:m]]"
  */
 char * ogc_datetime :: timestamp_str(
@@ -358,31 +468,8 @@ char * ogc_datetime :: timestamp_str(
       strcat  (timebuf, "T");
       time_str(timebuf+11, sec_digits);
 
-      if ( _tz == 0 )
-      {
-         strcat(timebuf, "Z");
-      }
-      else
-      {
-         char * t = timebuf + strlen(timebuf);
-         char pm = '+';
-         int  tz = _tz;
-         int  h;
-         int  m;
-
-         if ( tz < 0 )
-         {
-            pm = '-';
-            tz = -tz;
-         }
-
-         h = (tz % 60);
-         m = (tz / 60);
-
-         t += sprintf(t, "%c%d", pm, h);
-         if ( m != 0 )
-            t += sprintf(t, ":%d", m);
-      }
+      char * t = timebuf + strlen(timebuf);
+      tz_str(t);
    }
 
    return timebuf;
@@ -424,6 +511,39 @@ char * ogc_datetime :: time_str(
          sprintf(timebuf, "%02d:%02d:%.*f",
             _hour, _min, sec_digits, _sec);
       }
+   }
+
+   return timebuf;
+}
+
+/*------------------------------------------------------------------------
+ * create timezone string "Z" or "+-hh[:mm]"
+ */
+char * ogc_datetime :: tz_str(
+   OGC_TIME timebuf) const
+{
+   if ( _tz == 0 )
+   {
+      strcpy(timebuf, "Z");
+   }
+   else
+   {
+      char * t = timebuf;
+      char pm = '+';
+      int  tz = _tz;
+
+      if ( tz < 0 )
+      {
+         pm = '-';
+         tz = -tz;
+      }
+
+      int h = (tz / 60);
+      int m = (tz % 60);
+
+      t += sprintf(t, "%c%d", pm, h);
+      if ( m != 0 )
+         t += sprintf(t, ":%d", m);
    }
 
    return timebuf;

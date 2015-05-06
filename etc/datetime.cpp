@@ -198,7 +198,16 @@ int main(int argc, const char **argv)
             int h = (tz / 60);
             int m = (tz % 60);
 
-            printf("tz    = %c%d.%d\n", (minus ? '-' : '+'), h, m);
+            if ( m == 0 )
+            {
+               printf("tz    = %c%d (%d)\n",    (minus ? '-' : '+'),
+                  h, t.tz());
+            }
+            else
+            {
+               printf("tz    = %c%d:%d (%d)\n", (minus ? '-' : '+'),
+                  h, m, t.tz());
+            }
          }
       }
 

@@ -4869,10 +4869,9 @@ private:
    double _sec;     /* seconds after the minute   (0     to 59.999999999) */
    int    _tz;      /* TZ offset from UTC in mins (-1439 to +1439)        */
 
-   bool parse_timestamp(const char * str); /* "YYYY-MM-DDThh:mm:ss.sss"   */
-   bool parse_date     (const char * str); /* "YYYY-MM-DD"                */
-   bool parse_time     (const char * str); /* "hh:mm:ss.sss"              */
-   bool parse_timezone (const char * str); /* "Z" | "+-hh[:mm]"           */
+   bool parse_date (const char ** str);
+   bool parse_time (const char ** str);
+   bool parse_tz   (const char ** str);
 
 public:
    ogc_datetime();
@@ -4907,6 +4906,9 @@ public:
    /* days since Jan 1 (0-366) */
    int yday() const;
 
+   /* check if yesr is a leap year */
+   bool is_leapyear() const;
+
    /* create timestamp string "YYYY-MM-DDThh:mm:ss.sss[Z|+-hh[:mm]]" */
    char * timestamp_str(OGC_TIME timebuf, int sec_digits = 0) const;
 
@@ -4915,6 +4917,9 @@ public:
 
    /* create time string "hh:mm:ss.sss" */
    char * time_str(OGC_TIME timebuf, int sec_digits = 0) const;
+
+   /* create timezone string "Z" or "+-hh[:mm]" */
+   char * tz_str(OGC_TIME timebuf) const;
 
    int    year()  const { return _year;  }
    int    month() const { return _month; }
