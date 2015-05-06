@@ -366,7 +366,16 @@ bool ogc_id :: to_wkt(
       return true;
 
    if ( (options & OGC_WKT_OPT_OLD_SYNTAX) != 0 )
+   {
       kwd = old_kwd();
+
+      /* old syntax requires an integer identifier > 0 */
+      if ( (options & OGC_WKT_OPT_OLD_SYNTAX) != 0 )
+      {
+         if ( ! ogc_string::is_numeric(_identifier) )
+            return false;
+      }
+   }
 
    rc &= ogc_citation :: to_wkt(_citation, buf_citation, opts, OGC_TBUF_MAX);
    rc &= ogc_uri      :: to_wkt(_uri,      buf_uri,      opts, OGC_TBUF_MAX);
@@ -377,16 +386,8 @@ bool ogc_id :: to_wkt(
 
    if ( (options & OGC_WKT_OPT_OLD_SYNTAX) != 0 )
    {
-      if ( ogc_string::is_numeric(buf_identifier) )
-      {
-         sprintf(buf_hdr, "%s%s\"%s\",%s",
-            kwd, opn, buf_name, _identifier);
-      }
-      else
-      {
-         sprintf(buf_hdr, "%s%s\"%s\",\"%s\"",
-            kwd, opn, buf_name, _identifier);
-      }
+      sprintf(buf_hdr, "%s%s\"%s\",%s",
+         kwd, opn, buf_name, _identifier);
    }
    else
    {

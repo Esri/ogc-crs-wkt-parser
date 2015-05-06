@@ -287,7 +287,7 @@ bool ogc_vert_extent :: to_wkt(
    if ( !is_visible() )
       return true;
 
-   if ( (options & OGC_WKT_OPT_OLD_SYNTAX) == 0 )
+   if ( (options & OGC_WKT_OPT_OLD_SYNTAX) != 0 )
       return true;
 
    ogc_string :: dtoa(_min_ht, buf_min_ht);

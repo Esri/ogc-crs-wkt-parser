@@ -324,11 +324,14 @@ enum ogc_obj_type
 
 /* keywords for old (19125) objects */
 
+#define OGC_OLD_KWD_GEOCCS           "GEOCCS"
 #define OGC_OLD_KWD_GEOGCS           "GEOGCS"
 #define OGC_OLD_KWD_PROJCS           "PROJCS"
-#define OGC_OLD_KWD_VDATUM           "VERT_DATUM"
-#define OGC_OLD_KWD_COMPDCS          "COMPD_CS"
 #define OGC_OLD_KWD_VERTCS           "VERT_CS"
+#define OGC_OLD_KWD_LOCALCS          "LOCAL_CS"
+#define OGC_OLD_KWD_VDATUM           "VERT_DATUM"
+#define OGC_OLD_KWD_LDATUM           "LOCAL_DATUM"
+#define OGC_OLD_KWD_COMPDCS          "COMPD_CS"
 #define OGC_OLD_KWD_ID               "AUTHORITY"
 
 /* ------------------------------------------------------------------------- */
@@ -2391,6 +2394,7 @@ private:
 public:
    static const char * obj_kwd();
    static const char * alt_kwd();
+   static const char * old_kwd();
    static bool is_kwd(const char * kwd);
 
    static ogc_engr_datum * create(
@@ -2620,6 +2624,7 @@ private:
 public:
    static const char * obj_kwd();
    static const char * alt_kwd();
+   static const char * old_kwd();
    static bool is_kwd(const char * kwd);
 
    static ogc_vert_datum * create(
@@ -4069,6 +4074,7 @@ private:
 public:
    static const char * obj_kwd();
    static const char * alt_kwd();
+   static const char * old_kwd();
    static bool is_kwd(const char * kwd);
 
    static ogc_engr_crs * create(

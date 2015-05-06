@@ -299,7 +299,7 @@ bool ogc_bbox_extent :: to_wkt(
    if ( !is_visible() )
       return true;
 
-   if ( (options & OGC_WKT_OPT_OLD_SYNTAX) == 0 )
+   if ( (options & OGC_WKT_OPT_OLD_SYNTAX) != 0 )
       return true;
 
    ogc_string :: dtoa(_ll_lat, buf_ll_lat);

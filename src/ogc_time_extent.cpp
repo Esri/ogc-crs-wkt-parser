@@ -291,7 +291,7 @@ bool ogc_time_extent :: to_wkt(
    if ( !is_visible() )
       return true;
 
-   if ( (options & OGC_WKT_OPT_OLD_SYNTAX) == 0 )
+   if ( (options & OGC_WKT_OPT_OLD_SYNTAX) != 0 )
       return true;
 
    sprintf(buf_hdr, "%s%s\"%s\",\"%s\"",

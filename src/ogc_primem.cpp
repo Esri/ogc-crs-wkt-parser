@@ -362,7 +362,8 @@ bool ogc_primem :: to_wkt(
       return false;
    *buffer = 0;
 
-   if ( !is_visible() )
+   /* if old syntax, we want to output primem even if not visible */
+   if ( !is_visible() && (options & OGC_WKT_OPT_OLD_SYNTAX) == 0 )
       return true;
 
    ogc_string :: dtoa(_longitude, buf_longitude);

@@ -65,6 +65,15 @@ ogc_base_geod_crs * ogc_base_geod_crs :: create(
       bad = true;
    }
 
+   if ( primem == OGC_NULL )
+   {
+      primem = ogc_primem::create("Greenwich", 0.0, OGC_NULL, OGC_NULL, err);
+      if ( primem == OGC_NULL )
+         bad = true;
+      else
+         primem->set_visible(false);
+   }
+
    /*---------------------------------------------------------
     * create the object
     */
@@ -346,23 +355,10 @@ bool ogc_base_geod_crs :: to_wkt(
       return true;
 
    if ( (opts & OGC_WKT_OPT_OLD_SYNTAX) != 0 )
-   {
       kwd = ogc_geod_crs::old_kwd();
-      if ( _primem == OGC_NULL )
-      {
-         sprintf(buf_primem, "PRIMEM%s\"Greenwich\",0.0%s", opn, cls);
-      }
-      else
-      {
-         rc &= ogc_primem :: to_wkt(_primem, buf_primem, opts, OGC_TBUF_MAX);
-      }
-   }
-   else
-   {
-      rc &= ogc_primem :: to_wkt(_primem, buf_primem, opts, OGC_TBUF_MAX);
-   }
 
    rc &= ogc_geod_datum :: to_wkt(_datum,  buf_datum,  opts, OGC_TBUF_MAX);
+   rc &= ogc_primem     :: to_wkt(_primem, buf_primem, opts, OGC_TBUF_MAX);
    rc &= ogc_unit       :: to_wkt(_unit,   buf_unit,   opts, OGC_TBUF_MAX);
 
    ogc_string::escape_str(buf_name, _name, OGC_UTF8_NAME_MAX);

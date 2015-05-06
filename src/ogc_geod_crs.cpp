@@ -76,6 +76,15 @@ ogc_geod_crs * ogc_geod_crs :: create(
       bad = true;
    }
 
+   if ( primem == OGC_NULL )
+   {
+      primem = ogc_primem::create("Greenwich", 0.0, OGC_NULL, OGC_NULL, err);
+      if ( primem == OGC_NULL )
+         bad = true;
+      else
+         primem->set_visible(false);
+   }
+
    if ( cs == OGC_NULL )
    {
       ogc_error::set(err, OGC_ERR_MISSING_CS, obj_kwd());
@@ -724,21 +733,12 @@ bool ogc_geod_crs :: to_wkt(
    if ( (opts & OGC_WKT_OPT_OLD_SYNTAX) != 0 )
    {
       kwd = old_kwd();
-      if ( _primem == OGC_NULL )
-      {
-         sprintf(buf_primem, "PRIMEM%s\"Greenwich\",0.0%s", opn, cls);
-      }
-      else
-      {
-         rc &= ogc_primem :: to_wkt(_primem, buf_primem, opts, OGC_TBUF_MAX);
-      }
-   }
-   else
-   {
-      rc &= ogc_primem :: to_wkt(_primem, buf_primem, opts, OGC_TBUF_MAX);
+      if ( _cs->dimension() != 2 )
+         kwd = OGC_OLD_KWD_GEOCCS;
    }
 
    rc &= ogc_geod_datum    :: to_wkt(_datum,         buf_datum,    opts, OGC_TBUF_MAX);
+   rc &= ogc_primem        :: to_wkt(_primem,        buf_primem,   opts, OGC_TBUF_MAX);
    rc &= ogc_base_geod_crs :: to_wkt(_base_crs,      buf_base_crs, opts, OGC_TBUF_MAX);
    rc &= ogc_deriving_conv :: to_wkt(_deriving_conv, buf_conv,     opts, OGC_TBUF_MAX);
    rc &= ogc_cs            :: to_wkt(_cs,            buf_cs,       opts, OGC_TBUF_MAX);

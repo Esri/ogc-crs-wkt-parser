@@ -24,6 +24,7 @@ namespace OGC {
 
 const char * ogc_engr_crs :: obj_kwd() { return OGC_OBJ_KWD_ENGR_CRS; }
 const char * ogc_engr_crs :: alt_kwd() { return OGC_ALT_KWD_ENGR_CRS; }
+const char * ogc_engr_crs :: old_kwd() { return OGC_OLD_KWD_LOCALCS ; }
 
 bool ogc_engr_crs :: is_kwd(const char * kwd)
 {
@@ -731,7 +732,7 @@ bool ogc_engr_crs :: to_wkt(
       return true;
 
    if ( (opts & OGC_WKT_OPT_OLD_SYNTAX) != 0 )
-      return true;
+      kwd = old_kwd();
 
    rc &= ogc_engr_datum    :: to_wkt(_datum,         buf_datum,    opts, OGC_TBUF_MAX);
    rc &= ogc_base_crs      :: to_wkt(_base_crs,      buf_base_crs, opts, OGC_TBUF_MAX);
