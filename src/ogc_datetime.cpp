@@ -336,7 +336,7 @@ bool ogc_datetime :: parse_time(
    {
       if (*s != '.' && !isdigit(*s) )
          break;
-      *b = *s;
+      *b++ = *s;
    }
    *b = 0;
 
