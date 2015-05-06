@@ -70,23 +70,18 @@ ogc_crs * ogc_crs :: from_tokens(
 
    const char * kwd = t->_arr[start].str;
 
-#  define CHECK(o,n) \
+#  define CHECK(n) \
    if ( ogc_##n::is_kwd(kwd) ) \
       return ogc_##n :: from_tokens(t, start, pend, err)
 
-   CHECK( ENGR_CRS,     engr_crs     );
-   CHECK( GEOD_CRS,     geod_crs     );
-   CHECK( IMAGE_CRS,    image_crs    );
-   CHECK( PARAM_CRS,    param_crs    );
-   CHECK( PROJ_CRS,     proj_crs     );
-   CHECK( TIME_CRS,     time_crs     );
-   CHECK( VERT_CRS,     vert_crs     );
-   CHECK( COMPOUND_CRS, compound_crs );
-
-   /* legacy object keywords */
-
-   CHECK( GEOGCS,       geod_crs     );
-   CHECK( PROJCS,       proj_crs     );
+   CHECK( engr_crs     );
+   CHECK( geod_crs     );
+   CHECK( image_crs    );
+   CHECK( param_crs    );
+   CHECK( proj_crs     );
+   CHECK( time_crs     );
+   CHECK( vert_crs     );
+   CHECK( compound_crs );
 
 #  undef CHECK
 

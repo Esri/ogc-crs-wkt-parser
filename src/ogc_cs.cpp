@@ -348,7 +348,7 @@ bool ogc_cs :: to_wkt(
    cs_type = ogc_utils :: cs_type_to_kwd(_cs_type);
    ogc_string :: itoa(_dimension, buf_dimension);
 
-   sprintf(buf_hdr, "%s%s\"%s\",%s",
+   sprintf(buf_hdr, "%s%s%s,%s",
       kwd, opn, cs_type, buf_dimension);
 
    OGC_CPY_TO_BUF( buf_hdr );

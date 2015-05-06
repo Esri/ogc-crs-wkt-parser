@@ -3358,9 +3358,9 @@ public:
                             const ogc_base_crs * p2);
           bool is_identical(const ogc_base_crs * p) const;
 
-   const char * name()          const { return _name;     }
-   ogc_crs_type crs_type()      const { return _crs_type; }
-   ogc_unit *   unit()          const { return _unit;     }
+   const char * name()     const { return _name;     }
+   ogc_crs_type crs_type() const { return _crs_type; }
+   ogc_unit *   unit()     const { return _unit;     }
 };
 
 /* ------------------------------------------------------------------------- */
@@ -3377,6 +3377,7 @@ private:
 
 public:
    static const char * obj_kwd();
+   static const char * old_kwd();
    static bool is_kwd(const char * kwd);
 
    static ogc_base_geod_crs * create(
@@ -3869,6 +3870,12 @@ public:
       int *             pend,
       ogc_error *       err = OGC_NULL);
 
+   static ogc_geod_crs * from_tokens_old(
+      const ogc_token * t,
+      int               start,
+      int *             pend,
+      ogc_error *       err = OGC_NULL);
+
    static ogc_geod_crs * from_wkt(
       const char * wkt,
       ogc_error *  err = OGC_NULL);
@@ -3937,6 +3944,12 @@ public:
    static void destroy(ogc_proj_crs * obj);
 
    static ogc_proj_crs * from_tokens(
+      const ogc_token * t,
+      int               start,
+      int *             pend,
+      ogc_error *       err = OGC_NULL);
+
+   static ogc_proj_crs * from_tokens_old(
       const ogc_token * t,
       int               start,
       int *             pend,
@@ -4026,6 +4039,12 @@ public:
       int *             pend,
       ogc_error *       err = OGC_NULL);
 
+   static ogc_vert_crs * from_tokens_old(
+      const ogc_token * t,
+      int               start,
+      int *             pend,
+      ogc_error *       err = OGC_NULL);
+
    static ogc_vert_crs * from_wkt(
       const char * wkt,
       ogc_error *  err = OGC_NULL);
@@ -4110,6 +4129,12 @@ public:
    static void destroy(ogc_engr_crs * obj);
 
    static ogc_engr_crs * from_tokens(
+      const ogc_token * t,
+      int               start,
+      int *             pend,
+      ogc_error *       err = OGC_NULL);
+
+   static ogc_engr_crs * from_tokens_old(
       const ogc_token * t,
       int               start,
       int *             pend,
@@ -4410,6 +4435,12 @@ public:
    static void destroy(ogc_compound_crs * obj);
 
    static ogc_compound_crs * from_tokens(
+      const ogc_token * t,
+      int               start,
+      int *             pend,
+      ogc_error *       err = OGC_NULL);
+
+   static ogc_compound_crs * from_tokens_old(
       const ogc_token * t,
       int               start,
       int *             pend,

@@ -63,16 +63,16 @@ ogc_base_crs * ogc_base_crs :: from_tokens(
 
    const char * kwd = t->_arr[start].str;
 
-#  define CHECK(o,n) \
+#  define CHECK(n) \
    if ( ogc_##n::is_kwd(kwd) ) \
       return ogc_##n :: from_tokens(t, start, pend, err)
 
-   CHECK( BASE_ENGR_CRS,  base_engr_crs  );
-   CHECK( BASE_GEOD_CRS,  base_geod_crs  );
-   CHECK( BASE_PARAM_CRS, base_param_crs );
-   CHECK( BASE_PROJ_CRS,  base_proj_crs  );
-   CHECK( BASE_TIME_CRS,  base_time_crs  );
-   CHECK( BASE_VERT_CRS,  base_vert_crs  );
+   CHECK( base_engr_crs  );
+   CHECK( base_geod_crs  );
+   CHECK( base_param_crs );
+   CHECK( base_proj_crs  );
+   CHECK( base_time_crs  );
+   CHECK( base_vert_crs  );
 
 #  undef CHECK
 

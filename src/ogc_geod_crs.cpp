@@ -29,7 +29,8 @@ const char * ogc_geod_crs :: old_kwd() { return OGC_OLD_KWD_GEOGCS;   }
 bool ogc_geod_crs :: is_kwd(const char * kwd)
 {
    return ogc_string::is_equal(kwd, obj_kwd()) ||
-          ogc_string::is_equal(kwd, alt_kwd());
+          ogc_string::is_equal(kwd, alt_kwd()) ||
+          ogc_string::is_equal(kwd, old_kwd());
 }
 
 /*------------------------------------------------------------------------
@@ -293,6 +294,9 @@ ogc_geod_crs * ogc_geod_crs :: from_tokens(
       return OGC_NULL;
    }
    kwd = arr[start].str;
+
+   if ( ogc_string::is_equal(kwd, old_kwd()) )
+      return from_tokens_old(t, start, pend, err);
 
    if ( !is_kwd(kwd) )
    {
@@ -645,6 +649,278 @@ ogc_geod_crs * ogc_geod_crs :: from_tokens(
       ogc_scope         :: destroy( scope         );
       ogc_vector        :: destroy( extents       );
       ogc_remark        :: destroy( remark        );
+   }
+
+   return obj;
+}
+
+/*------------------------------------------------------------------------
+ * object from tokens (using old syntax)
+ */
+ogc_geod_crs * ogc_geod_crs :: from_tokens_old(
+   const ogc_token * t,
+   int               start,
+   int *             pend,
+   ogc_error *       err)
+{
+   const ogc_token_entry * arr;
+   const char * kwd;
+   bool bad = false;
+   int  level;
+   int  end;
+   int  same;
+   int  num;
+
+   ogc_geod_crs *   obj    = OGC_NULL;
+   ogc_geod_datum * datum  = OGC_NULL;
+   ogc_primem *     primem = OGC_NULL;
+   ogc_cs *         cs     = OGC_NULL;
+   ogc_axis *       axis   = OGC_NULL;
+   ogc_axis *       axis_1 = OGC_NULL;
+   ogc_axis *       axis_2 = OGC_NULL;
+   ogc_axis *       axis_3 = OGC_NULL;
+   ogc_unit *       unit   = OGC_NULL;
+   ogc_id *         id     = OGC_NULL;
+   ogc_vector *     ids    = OGC_NULL;
+   const char * name;
+
+   /*---------------------------------------------------------
+    * sanity checks
+    */
+   if ( t == OGC_NULL )
+   {
+      ogc_error::set(err, OGC_ERR_WKT_EMPTY_STRING, obj_kwd());
+      return OGC_NULL;
+   }
+   arr = t->_arr;
+
+   if ( start < 0 || start >= t->_num )
+   {
+      ogc_error::set(err, OGC_ERR_WKT_INDEX_OUT_OF_RANGE, obj_kwd(), start);
+      return OGC_NULL;
+   }
+   kwd = arr[start].str;
+
+   if ( !ogc_string::is_equal(kwd, old_kwd()) )
+   {
+      ogc_error::set(err, OGC_ERR_WKT_INVALID_KEYWORD, obj_kwd(), kwd);
+      return OGC_NULL;
+   }
+
+   /*---------------------------------------------------------
+    * Get the level for this object,
+    * the number of tokens at that level,
+    * and the total number of tokens.
+    */
+   level = arr[start].lvl;
+   for (end = start+1; end < t->_num; end++)
+   {
+      if ( arr[end].lvl <= level )
+         break;
+   }
+
+   if ( pend != OGC_NULL )
+      *pend = end;
+   num = (end - start);
+
+   for (same = 0; same < num; same++)
+   {
+      if ( arr[start+same+1].lvl != level+1 || arr[start+same+1].idx == 0 )
+         break;
+   }
+
+   /*---------------------------------------------------------
+    * There must be 1 token: GCENCRS[ "name" ...
+    */
+   if ( same < 1 )
+   {
+      ogc_error::set(err, OGC_ERR_WKT_INSUFFICIENT_TOKENS, obj_kwd(), same);
+      return OGC_NULL;
+   }
+
+   if ( same > 1 && get_strict_parsing() )
+   {
+      ogc_error::set(err, OGC_ERR_WKT_TOO_MANY_TOKENS,     obj_kwd(), same);
+      return OGC_NULL;
+   }
+
+   start++;
+
+   /*---------------------------------------------------------
+    * Process all non-object tokens.
+    * They come first and are syntactically fixed.
+    */
+   name = arr[start++].str;
+
+   /*---------------------------------------------------------
+    * Now process all sub-objects
+    */
+   int  next = 0;
+   for (int i = start; i < end; i = next)
+   {
+      if ( ogc_geod_datum::is_kwd(arr[i].str) )
+      {
+         if ( datum != OGC_NULL )
+         {
+            ogc_error::set(err, OGC_ERR_WKT_DUPLICATE_DATUM, obj_kwd());
+            bad = true;
+         }
+         else
+         {
+            datum = ogc_geod_datum::from_tokens(t, i, &next, err);
+            if ( datum == OGC_NULL )
+               bad = true;
+         }
+         continue;
+      }
+
+      if ( ogc_primem::is_kwd(arr[i].str) )
+      {
+         if ( primem != OGC_NULL )
+         {
+            ogc_error::set(err, OGC_ERR_WKT_DUPLICATE_PRIMEM, obj_kwd());
+            bad = true;
+         }
+         else
+         {
+            primem = ogc_primem::from_tokens(t, i, &next, err);
+            if ( primem == OGC_NULL )
+               bad = true;
+         }
+         continue;
+      }
+
+      if ( ogc_axis::is_kwd(arr[i].str) )
+      {
+         axis = ogc_axis::from_tokens(t, i, &next, err);
+         if ( axis == OGC_NULL )
+         {
+            bad = true;
+         }
+         else
+         {
+            if ( !ogc_utils::place_axis(axis, &axis_1, &axis_2, &axis_3,
+                                        obj_kwd(), err) )
+            {
+               delete axis;
+               bad = true;
+            }
+         }
+         continue;
+      }
+
+      if ( ogc_angunit::is_kwd(arr[i].str) )
+      {
+         if ( unit != OGC_NULL )
+         {
+            ogc_error::set(err, OGC_ERR_WKT_DUPLICATE_UNIT, obj_kwd());
+            bad = true;
+         }
+         else
+         {
+            unit = ogc_unit::from_tokens(t, i, &next, err);
+            if ( unit == OGC_NULL )
+               bad = true;
+         }
+         continue;
+      }
+
+      if ( ogc_id::is_kwd(arr[i].str) )
+      {
+         id = ogc_id::from_tokens(t, i, &next, err);
+         if ( id == OGC_NULL )
+         {
+            bad = true;
+         }
+         else
+         {
+            if ( ids == OGC_NULL )
+            {
+               ids = ogc_vector::create(1, 1);
+               if ( ids == OGC_NULL )
+               {
+                  ogc_error::set(err, OGC_ERR_NO_MEMORY, obj_kwd());
+                  delete id;
+                  bad = true;
+               }
+            }
+
+            if ( ids != OGC_NULL )
+            {
+               void * p = ids->find(
+                             id,
+                             false,
+                             ogc_utils::compare_id);
+               if ( p != OGC_NULL )
+               {
+                  ogc_error::set(err, OGC_ERR_WKT_DUPLICATE_ID,
+                     obj_kwd(), id->name());
+                  delete id;
+                  bad = true;
+               }
+               else
+               {
+                  if ( ids->add( id ) < 0 )
+                  {
+                     ogc_error::set(err, OGC_ERR_NO_MEMORY, obj_kwd());
+                     delete id;
+                     bad = true;
+                  }
+               }
+            }
+         }
+         continue;
+      }
+
+      /* unknown object, skip over it */
+      for (next = i+1; next < end; next++)
+      {
+         if ( (arr[next].lvl <= arr[i].lvl) )
+            break;
+      }
+   }
+
+   /*---------------------------------------------------------
+    * Create a pseudo-cs object
+    */
+   {
+      int ndims = 0;
+      if ( axis_1 != OGC_NULL )  ndims++;
+      if ( axis_2 != OGC_NULL )  ndims++;
+      if ( axis_3 != OGC_NULL )  ndims++;
+      if ( ndims == 0 )
+      {
+         /* assume 2D */
+         ndims = 2;
+      }
+
+      /* We are also assuming it it ellipsoidal, not cartesian.
+         It's not clear to me how to determine which it is.
+      */
+      cs = ogc_cs::create(OGC_CS_TYPE_ELLIPSOIDAL, ndims, OGC_NULL, err);
+      if ( cs == OGC_NULL )
+         bad = true;
+   }
+
+   /*---------------------------------------------------------
+    * Create the object
+    */
+   if ( !bad )
+   {
+      obj = create(name, datum, primem, cs, axis_1, axis_2, axis_3, unit,
+                OGC_NULL, OGC_NULL, ids, OGC_NULL, err);
+   }
+
+   if ( obj == OGC_NULL )
+   {
+      ogc_geod_datum    :: destroy( datum         );
+      ogc_primem        :: destroy( primem        );
+      ogc_cs            :: destroy( cs            );
+      ogc_axis          :: destroy( axis_1        );
+      ogc_axis          :: destroy( axis_2        );
+      ogc_axis          :: destroy( axis_3        );
+      ogc_unit          :: destroy( unit          );
+      ogc_vector        :: destroy( ids           );
    }
 
    return obj;

@@ -27,7 +27,8 @@ const char * ogc_id :: old_kwd() { return OGC_OLD_KWD_ID; }
 
 bool ogc_id :: is_kwd(const char * kwd)
 {
-   return ogc_string::is_equal(kwd, obj_kwd());
+   return ogc_string::is_equal(kwd, obj_kwd()) ||
+          ogc_string::is_equal(kwd, old_kwd());
 }
 
 /*------------------------------------------------------------------------

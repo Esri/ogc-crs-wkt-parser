@@ -29,7 +29,8 @@ const char * ogc_engr_datum :: old_kwd() { return OGC_OLD_KWD_LDATUM;     }
 bool ogc_engr_datum :: is_kwd(const char * kwd)
 {
    return ogc_string::is_equal(kwd, obj_kwd()) ||
-          ogc_string::is_equal(kwd, alt_kwd());
+          ogc_string::is_equal(kwd, alt_kwd()) ||
+          ogc_string::is_equal(kwd, old_kwd());
 }
 
 /*------------------------------------------------------------------------

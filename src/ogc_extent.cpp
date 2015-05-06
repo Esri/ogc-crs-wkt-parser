@@ -65,14 +65,14 @@ ogc_extent * ogc_extent :: from_tokens(
 
    const char * kwd = t->_arr[start].str;
 
-#  define CHECK(o,n) \
+#  define CHECK(n) \
    if ( ogc_##n::is_kwd(kwd) ) \
       return ogc_##n :: from_tokens(t, start, pend, err)
 
-   CHECK( AREA_EXTENT, area_extent );
-   CHECK( BBOX_EXTENT, bbox_extent );
-   CHECK( TIME_EXTENT, time_extent );
-   CHECK( VERT_EXTENT, vert_extent );
+   CHECK( area_extent );
+   CHECK( bbox_extent );
+   CHECK( time_extent );
+   CHECK( vert_extent );
 
 #  undef CHECK
 

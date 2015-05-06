@@ -27,7 +27,8 @@ const char * ogc_compound_crs :: old_kwd() { return OGC_OLD_KWD_COMPDCS;      }
 
 bool ogc_compound_crs :: is_kwd(const char * kwd)
 {
-   return ogc_string::is_equal(kwd, obj_kwd());
+   return ogc_string::is_equal(kwd, obj_kwd()) ||
+          ogc_string::is_equal(kwd, old_kwd());
 }
 
 /*------------------------------------------------------------------------
@@ -207,6 +208,9 @@ ogc_compound_crs * ogc_compound_crs :: from_tokens(
       return OGC_NULL;
    }
    kwd = arr[start].str;
+
+   if ( ogc_string::is_equal(kwd, old_kwd()) )
+      return from_tokens_old(t, start, pend, err);
 
    if ( !is_kwd(kwd) )
    {
@@ -410,6 +414,210 @@ ogc_compound_crs * ogc_compound_crs :: from_tokens(
       ogc_crs    :: destroy( third_crs  );
       ogc_vector :: destroy( ids        );
       ogc_remark :: destroy( remark     );
+   }
+
+   return obj;
+}
+
+/*------------------------------------------------------------------------
+ * object from tokens (using old syntax)
+ */
+ogc_compound_crs * ogc_compound_crs :: from_tokens_old(
+   const ogc_token * t,
+   int               start,
+   int *             pend,
+   ogc_error *       err)
+{
+   const ogc_token_entry * arr;
+   const char * kwd;
+   bool bad = false;
+   int  level;
+   int  end;
+   int  same;
+   int  num;
+
+   ogc_compound_crs * obj        = OGC_NULL;
+   ogc_crs *          first_crs  = OGC_NULL;
+   ogc_crs *          second_crs = OGC_NULL;
+   ogc_id *           id         = OGC_NULL;
+   ogc_vector *       ids        = OGC_NULL;
+   const char * name;
+
+   /*---------------------------------------------------------
+    * sanity checks
+    */
+   if ( t == OGC_NULL )
+   {
+      ogc_error::set(err, OGC_ERR_WKT_EMPTY_STRING, obj_kwd());
+      return OGC_NULL;
+   }
+   arr = t->_arr;
+
+   if ( start < 0 || start >= t->_num )
+   {
+      ogc_error::set(err, OGC_ERR_WKT_INDEX_OUT_OF_RANGE, obj_kwd(), start);
+      return OGC_NULL;
+   }
+   kwd = arr[start].str;
+
+   if ( !ogc_string::is_equal(kwd, old_kwd()) )
+   {
+      ogc_error::set(err, OGC_ERR_WKT_INVALID_KEYWORD, obj_kwd(), kwd);
+      return OGC_NULL;
+   }
+
+   /*---------------------------------------------------------
+    * Get the level for this object,
+    * the number of tokens at that level,
+    * and the total number of tokens.
+    */
+   level = arr[start].lvl;
+   for (end = start+1; end < t->_num; end++)
+   {
+      if ( arr[end].lvl <= level )
+         break;
+   }
+
+   if ( pend != OGC_NULL )
+      *pend = end;
+   num = (end - start);
+
+   for (same = 0; same < num; same++)
+   {
+      if ( arr[start+same+1].lvl != level+1 || arr[start+same+1].idx == 0 )
+         break;
+   }
+
+   /*---------------------------------------------------------
+    * There must be 1 token: COMPOUNDCRS[ "name" ...
+    */
+   if ( same < 1 )
+   {
+      ogc_error::set(err, OGC_ERR_WKT_INSUFFICIENT_TOKENS, obj_kwd(), same);
+      return OGC_NULL;
+   }
+
+   if ( same > 1 && get_strict_parsing() )
+   {
+      ogc_error::set(err, OGC_ERR_WKT_TOO_MANY_TOKENS,     obj_kwd(), same);
+      return OGC_NULL;
+   }
+
+   start++;
+
+   /*---------------------------------------------------------
+    * Process all non-object tokens.
+    * They come first and are syntactically fixed.
+    */
+   name = arr[start++].str;
+
+   /*---------------------------------------------------------
+    * Now process all sub-objects
+    */
+   int  next = 0;
+   for (int i = start; i < end; i = next)
+   {
+      if ( ogc_geod_crs::is_kwd(arr[i].str) ||
+           ogc_proj_crs::is_kwd(arr[i].str) )
+      {
+         if ( first_crs != OGC_NULL )
+         {
+            ogc_error::set(err, OGC_ERR_WKT_DUPLICATE_FIRST_CRS, obj_kwd());
+            bad = true;
+         }
+         else
+         {
+            first_crs = ogc_crs::from_tokens(t, i, &next, err);
+            if ( first_crs == OGC_NULL )
+               bad = true;
+         }
+         continue;
+      }
+
+      if ( ogc_vert_crs ::is_kwd(arr[i].str) )
+      {
+         if ( second_crs != OGC_NULL )
+         {
+            ogc_error::set(err, OGC_ERR_WKT_DUPLICATE_SECOND_CRS, obj_kwd());
+            bad = true;
+         }
+         else
+         {
+            second_crs = ogc_crs::from_tokens(t, i, &next, err);
+            if ( second_crs == OGC_NULL )
+               bad = true;
+         }
+         continue;
+      }
+
+      if ( ogc_id::is_kwd(arr[i].str) )
+      {
+         id = ogc_id::from_tokens(t, i, &next, err);
+         if ( id == OGC_NULL )
+         {
+            bad = true;
+         }
+         else
+         {
+            if ( ids == OGC_NULL )
+            {
+               ids = ogc_vector::create(1, 1);
+               if ( ids == OGC_NULL )
+               {
+                  ogc_error::set(err, OGC_ERR_NO_MEMORY, obj_kwd());
+                  delete id;
+                  bad = true;
+               }
+            }
+
+            if ( ids != OGC_NULL )
+            {
+               void * p = ids->find(
+                             id,
+                             false,
+                             ogc_utils::compare_id);
+               if ( p != OGC_NULL )
+               {
+                  ogc_error::set(err, OGC_ERR_WKT_DUPLICATE_ID,
+                     obj_kwd(), id->name());
+                  delete id;
+                  bad = true;
+               }
+               else
+               {
+                  if ( ids->add( id ) < 0 )
+                  {
+                     ogc_error::set(err, OGC_ERR_NO_MEMORY, obj_kwd());
+                     delete id;
+                     bad = true;
+                  }
+               }
+            }
+         }
+         continue;
+      }
+
+      /* unknown object, skip over it */
+      for (next = i+1; next < end; next++)
+      {
+         if ( (arr[next].lvl <= arr[i].lvl) )
+            break;
+      }
+   }
+
+   /*---------------------------------------------------------
+    * Create the object
+    */
+   if ( !bad )
+   {
+      obj = create(name, first_crs, second_crs, OGC_NULL, ids, OGC_NULL, err);
+   }
+
+   if ( obj == OGC_NULL )
+   {
+      ogc_crs    :: destroy( first_crs  );
+      ogc_crs    :: destroy( second_crs );
+      ogc_vector :: destroy( ids        );
    }
 
    return obj;

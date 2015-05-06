@@ -79,71 +79,63 @@ ogc_object * ogc_object :: from_tokens(
 
    const char * kwd = t->_arr[start].str;
 
-#  define CHECK(o,n) \
+#  define CHECK(n) \
    if ( ogc_##n::is_kwd(kwd) ) \
       return ogc_##n :: from_tokens(t, start, pend, err)
 
-   CHECK( ABRTRANS,        abrtrans        );
-   CHECK( ANCHOR,          anchor          );
-   CHECK( ANGUNIT,         angunit         );
-   CHECK( AREA_EXTENT,     area_extent     );
-   CHECK( AXIS,            axis            );
-   CHECK( BASE_ENGR_CRS,   base_engr_crs   );
-   CHECK( BASE_GEOD_CRS,   base_geod_crs   );
-   CHECK( BASE_PARAM_CRS,  base_param_crs  );
-   CHECK( BASE_PROJ_CRS,   base_proj_crs   );
-   CHECK( BASE_TIME_CRS,   base_time_crs   );
-   CHECK( BASE_VERT_CRS,   base_vert_crs   );
-   CHECK( BBOX_EXTENT,     bbox_extent     );
-   CHECK( BEARING,         bearing         );
-   CHECK( BOUND_CRS,       bound_crs       );
-   CHECK( CITATION,        citation        );
-   CHECK( COMPOUND_CRS,    compound_crs    );
-   CHECK( CONVERSION,      conversion      );
-   CHECK( COORD_OP,        coord_op        );
-   CHECK( CS,              cs              );
-   CHECK( DERIVING_CONV,   deriving_conv   );
-   CHECK( ELLIPSOID,       ellipsoid       );
-   CHECK( ENGR_CRS,        engr_crs        );
-   CHECK( ENGR_DATUM,      engr_datum      );
-   CHECK( GEOD_CRS,        geod_crs        );
-   CHECK( GEOD_DATUM,      geod_datum      );
-   CHECK( ID,              id              );
-   CHECK( IMAGE_CRS,       image_crs       );
-   CHECK( IMAGE_DATUM,     image_datum     );
-   CHECK( LENUNIT,         lenunit         );
-   CHECK( MERIDIAN,        meridian        );
-   CHECK( METHOD,          method          );
-   CHECK( OP_ACCURACY,     op_accuracy     );
-   CHECK( ORDER,           order           );
-   CHECK( PARAMETER,       parameter       );
-   CHECK( PARAM_FILE,      param_file      );
-   CHECK( PARAM_CRS,       param_crs       );
-   CHECK( PARAM_DATUM,     param_datum     );
-   CHECK( PARAMUNIT,       paramunit       );
-   CHECK( PRIMEM,          primem          );
-   CHECK( PROJ_CRS,        proj_crs        );
-   CHECK( REMARK,          remark          );
-   CHECK( SCALEUNIT,       scaleunit       );
-   CHECK( SCOPE,           scope           );
-   CHECK( TIME_CRS,        time_crs        );
-   CHECK( TIME_DATUM,      time_datum      );
-   CHECK( TIME_EXTENT,     time_extent     );
-   CHECK( TIME_ORIGIN,     time_origin     );
-   CHECK( TIMEUNIT,        timeunit        );
-   CHECK( UNIT,            unit            );
-   CHECK( URI,             uri             );
-   CHECK( VERT_CRS,        vert_crs        );
-   CHECK( VERT_DATUM,      vert_datum      );
-   CHECK( VERT_EXTENT,     vert_extent     );
-
-#  undef CHECK
-
-#  define CHECK(o,n) \
-   if ( ogc_string::is_equal(kwd, ogc_##n :: old_kwd()) ) \
-      return ogc_##n :: from_tokens(t, start, pend, err)
-
-   /* legacy object keywords */
+   CHECK( abrtrans        );
+   CHECK( anchor          );
+   CHECK( angunit         );
+   CHECK( area_extent     );
+   CHECK( axis            );
+   CHECK( base_engr_crs   );
+   CHECK( base_geod_crs   );
+   CHECK( base_param_crs  );
+   CHECK( base_proj_crs   );
+   CHECK( base_time_crs   );
+   CHECK( base_vert_crs   );
+   CHECK( bbox_extent     );
+   CHECK( bearing         );
+   CHECK( bound_crs       );
+   CHECK( citation        );
+   CHECK( compound_crs    );
+   CHECK( conversion      );
+   CHECK( coord_op        );
+   CHECK( cs              );
+   CHECK( deriving_conv   );
+   CHECK( ellipsoid       );
+   CHECK( engr_crs        );
+   CHECK( engr_datum      );
+   CHECK( geod_crs        );
+   CHECK( geod_datum      );
+   CHECK( id              );
+   CHECK( image_crs       );
+   CHECK( image_datum     );
+   CHECK( lenunit         );
+   CHECK( meridian        );
+   CHECK( method          );
+   CHECK( op_accuracy     );
+   CHECK( order           );
+   CHECK( parameter       );
+   CHECK( param_file      );
+   CHECK( param_crs       );
+   CHECK( param_datum     );
+   CHECK( paramunit       );
+   CHECK( primem          );
+   CHECK( proj_crs        );
+   CHECK( remark          );
+   CHECK( scaleunit       );
+   CHECK( scope           );
+   CHECK( time_crs        );
+   CHECK( time_datum      );
+   CHECK( time_extent     );
+   CHECK( time_origin     );
+   CHECK( timeunit        );
+   CHECK( unit            );
+   CHECK( uri             );
+   CHECK( vert_crs        );
+   CHECK( vert_datum      );
+   CHECK( vert_extent     );
 
 #  undef CHECK
 

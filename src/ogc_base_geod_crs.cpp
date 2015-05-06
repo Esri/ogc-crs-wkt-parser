@@ -23,6 +23,7 @@
 namespace OGC {
 
 const char * ogc_base_geod_crs :: obj_kwd() { return OGC_OBJ_KWD_BASE_GEOD_CRS; }
+const char * ogc_base_geod_crs :: old_kwd() { return OGC_OLD_KWD_GEOGCS;        }
 
 bool ogc_base_geod_crs :: is_kwd(const char * kwd)
 {
@@ -154,7 +155,8 @@ ogc_base_geod_crs * ogc_base_geod_crs :: from_tokens(
    }
    kwd = arr[start].str;
 
-   if ( !is_kwd(kwd) )
+   if ( !is_kwd(kwd) &&
+        !ogc_string::is_equal(kwd, old_kwd()) )
    {
       ogc_error::set(err, OGC_ERR_WKT_INVALID_KEYWORD, obj_kwd(), kwd);
       return OGC_NULL;
@@ -355,7 +357,7 @@ bool ogc_base_geod_crs :: to_wkt(
       return true;
 
    if ( (opts & OGC_WKT_OPT_OLD_SYNTAX) != 0 )
-      kwd = ogc_geod_crs::old_kwd();
+      kwd = old_kwd();
 
    rc &= ogc_geod_datum :: to_wkt(_datum,  buf_datum,  opts, OGC_TBUF_MAX);
    rc &= ogc_primem     :: to_wkt(_primem, buf_primem, opts, OGC_TBUF_MAX);
