@@ -112,14 +112,9 @@ following is a list of these areas. This list may not be complete.
 
    6.  Underscores are allowed in keywords, but they are ignored.
 
-   7.  WKT strings in the old syntax identified by the following
-       keywords will be processed into a new-style object:
-
-          GEOGCS     -> GEODCRS
-          PROJCS     -> PROJCRS
-          VERT_DATUM -> VDATUM
-          VERT_CS    -> VERTCRS
-          COMPD_CS   -> COMPOUNDCRS
+   7.  The spec mandates that AXIS sub-objects must all have an ORDER
+       sub-object or none of them may have an ORDER sub-object.
+       This implementation relaxes that restriction.
 
    8.  The ability to output objects in the old (19125) syntax is provided,
        although no checks are done to insure that the created WKT will be
@@ -202,18 +197,17 @@ Copyright 2010-2015 Esri
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
+You may obtain a copy of the License
+[here](http://www.apache.org/licenses/LICENSE-2.0).
+It is also available in the repository's
+[license.txt](https://raw.github.com/Esri/ogc-crs-wkt-parser/master/license.txt) file.
 
-   http://www.apache.org/licenses/LICENSE-2.0
 
 Unless required by applicable law or agreed to in writing, software
 distributed under the License is distributed on an "AS IS" BASIS,
 WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
-
-A copy of the license is available in the repository's
-[license.txt](https://raw.github.com/Esri/ogc-crs-wkt-parser/master/license.txt) file.
 
 [](Esri Tags: OGC WKT)
 [](Esri Language: C-plus-plus)
