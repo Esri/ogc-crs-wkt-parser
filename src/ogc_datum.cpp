@@ -34,17 +34,18 @@ bool ogc_datum :: is_kwd(const char * kwd)
  */
 ogc_datum :: ~ogc_datum()
 {
-   ogc_anchor :: destroy( _anchor );
-   ogc_vector :: destroy( _ids    );
+   _anchor = ogc_anchor :: destroy( _anchor );
+   _ids    = ogc_vector :: destroy( _ids    );
 }
 
-void ogc_datum :: destroy(
+ogc_datum * ogc_datum :: destroy(
    ogc_datum * obj)
 {
    if ( obj != OGC_NULL )
    {
       delete obj;
    }
+   return OGC_NULL;
 }
 
 /*------------------------------------------------------------------------

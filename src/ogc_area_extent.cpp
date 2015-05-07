@@ -83,13 +83,14 @@ ogc_area_extent :: ~ogc_area_extent()
 {
 }
 
-void ogc_area_extent :: destroy(
+ogc_area_extent * ogc_area_extent :: destroy(
    ogc_area_extent * obj)
 {
    if ( obj != OGC_NULL )
    {
       delete obj;
    }
+   return OGC_NULL;
 }
 
 /*------------------------------------------------------------------------

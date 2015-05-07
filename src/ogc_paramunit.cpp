@@ -96,13 +96,14 @@ ogc_paramunit :: ~ogc_paramunit()
 {
 }
 
-void ogc_paramunit :: destroy(
+ogc_paramunit * ogc_paramunit :: destroy(
    ogc_paramunit * obj)
 {
    if ( obj != OGC_NULL )
    {
       delete obj;
    }
+   return OGC_NULL;
 }
 
 /*------------------------------------------------------------------------

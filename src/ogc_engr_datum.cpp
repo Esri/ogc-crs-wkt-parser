@@ -92,13 +92,14 @@ ogc_engr_datum :: ~ogc_engr_datum()
 {
 }
 
-void ogc_engr_datum :: destroy(
+ogc_engr_datum * ogc_engr_datum :: destroy(
    ogc_engr_datum * obj)
 {
    if ( obj != OGC_NULL )
    {
       delete obj;
    }
+   return OGC_NULL;
 }
 
 /*------------------------------------------------------------------------

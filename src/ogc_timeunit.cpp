@@ -96,13 +96,14 @@ ogc_timeunit :: ~ogc_timeunit()
 {
 }
 
-void ogc_timeunit :: destroy(
+ogc_timeunit * ogc_timeunit :: destroy(
    ogc_timeunit * obj)
 {
    if ( obj != OGC_NULL )
    {
       delete obj;
    }
+   return OGC_NULL;
 }
 
 /*------------------------------------------------------------------------

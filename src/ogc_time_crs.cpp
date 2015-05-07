@@ -208,18 +208,19 @@ ogc_time_crs * ogc_time_crs :: create(
  */
 ogc_time_crs :: ~ogc_time_crs()
 {
-   ogc_time_datum    :: destroy( _datum         );
-   ogc_base_time_crs :: destroy( _base_crs      );
-   ogc_deriving_conv :: destroy( _deriving_conv );
+   _datum         = ogc_time_datum    :: destroy( _datum         );
+   _base_crs      = ogc_base_time_crs :: destroy( _base_crs      );
+   _deriving_conv = ogc_deriving_conv :: destroy( _deriving_conv );
 }
 
-void ogc_time_crs :: destroy(
+ogc_time_crs * ogc_time_crs :: destroy(
    ogc_time_crs * obj)
 {
    if ( obj != OGC_NULL )
    {
       delete obj;
    }
+   return OGC_NULL;
 }
 
 /*------------------------------------------------------------------------

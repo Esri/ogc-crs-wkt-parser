@@ -90,13 +90,14 @@ ogc_time_datum :: ~ogc_time_datum()
 {
 }
 
-void ogc_time_datum :: destroy(
+ogc_time_datum * ogc_time_datum :: destroy(
    ogc_time_datum * obj)
 {
    if ( obj != OGC_NULL )
    {
       delete obj;
    }
+   return OGC_NULL;
 }
 
 /*------------------------------------------------------------------------

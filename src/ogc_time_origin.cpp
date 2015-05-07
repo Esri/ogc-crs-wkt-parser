@@ -83,13 +83,14 @@ ogc_time_origin :: ~ogc_time_origin()
 {
 }
 
-void ogc_time_origin :: destroy(
+ogc_time_origin * ogc_time_origin :: destroy(
    ogc_time_origin * obj)
 {
    if ( obj != OGC_NULL )
    {
       delete obj;
    }
+   return OGC_NULL;
 }
 
 /*------------------------------------------------------------------------

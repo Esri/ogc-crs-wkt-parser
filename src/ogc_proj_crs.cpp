@@ -131,17 +131,18 @@ ogc_proj_crs * ogc_proj_crs :: create(
  */
 ogc_proj_crs :: ~ogc_proj_crs()
 {
-   ogc_base_geod_crs :: destroy( _base_crs   );
-   ogc_conversion    :: destroy( _conversion );
+   _base_crs   = ogc_base_geod_crs :: destroy( _base_crs   );
+   _conversion = ogc_conversion    :: destroy( _conversion );
 }
 
-void ogc_proj_crs :: destroy(
+ogc_proj_crs * ogc_proj_crs :: destroy(
    ogc_proj_crs * obj)
 {
    if ( obj != OGC_NULL )
    {
       delete obj;
    }
+   return OGC_NULL;
 }
 
 /*------------------------------------------------------------------------

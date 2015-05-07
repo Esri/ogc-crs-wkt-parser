@@ -75,13 +75,14 @@ ogc_order :: ~ogc_order()
 {
 }
 
-void ogc_order :: destroy(
+ogc_order * ogc_order :: destroy(
    ogc_order * obj)
 {
    if ( obj != OGC_NULL )
    {
       delete obj;
    }
+   return OGC_NULL;
 }
 
 /*------------------------------------------------------------------------

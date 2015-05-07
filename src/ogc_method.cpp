@@ -86,16 +86,17 @@ ogc_method * ogc_method :: create(
  */
 ogc_method :: ~ogc_method()
 {
-   ogc_vector :: destroy( _ids );
+   _ids = ogc_vector :: destroy( _ids );
 }
 
-void ogc_method :: destroy(
+ogc_method * ogc_method :: destroy(
    ogc_method * obj)
 {
    if ( obj != OGC_NULL )
    {
       delete obj;
    }
+   return OGC_NULL;
 }
 
 /*------------------------------------------------------------------------

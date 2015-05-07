@@ -212,18 +212,19 @@ ogc_vert_crs * ogc_vert_crs :: create(
  */
 ogc_vert_crs :: ~ogc_vert_crs()
 {
-   ogc_vert_datum    :: destroy( _datum         );
-   ogc_base_vert_crs :: destroy( _base_crs      );
-   ogc_deriving_conv :: destroy( _deriving_conv );
+   _datum         = ogc_vert_datum    :: destroy( _datum         );
+   _base_crs      = ogc_base_vert_crs :: destroy( _base_crs      );
+   _deriving_conv = ogc_deriving_conv :: destroy( _deriving_conv );
 }
 
-void ogc_vert_crs :: destroy(
+ogc_vert_crs * ogc_vert_crs :: destroy(
    ogc_vert_crs * obj)
 {
    if ( obj != OGC_NULL )
    {
       delete obj;
    }
+   return OGC_NULL;
 }
 
 /*------------------------------------------------------------------------

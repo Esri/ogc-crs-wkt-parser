@@ -93,20 +93,21 @@ ogc_bound_crs * ogc_bound_crs :: create(
  */
 ogc_bound_crs :: ~ogc_bound_crs()
 {
-   ogc_crs        :: destroy( _source_crs );
-   ogc_crs        :: destroy( _target_crs );
-   ogc_abrtrans   :: destroy( _abrtrans   );
-   ogc_vector     :: destroy( _ids        );
-   ogc_remark     :: destroy( _remark     );
+   _source_crs = ogc_crs      :: destroy( _source_crs );
+   _target_crs = ogc_crs      :: destroy( _target_crs );
+   _abrtrans   = ogc_abrtrans :: destroy( _abrtrans   );
+   _ids        = ogc_vector   :: destroy( _ids        );
+   _remark     = ogc_remark   :: destroy( _remark     );
 }
 
-void ogc_bound_crs :: destroy(
+ogc_bound_crs * ogc_bound_crs :: destroy(
    ogc_bound_crs * obj)
 {
    if ( obj != OGC_NULL )
    {
       delete obj;
    }
+   return OGC_NULL;
 }
 
 /*------------------------------------------------------------------------

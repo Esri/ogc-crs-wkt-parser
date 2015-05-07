@@ -99,13 +99,14 @@ ogc_time_extent :: ~ogc_time_extent()
 {
 }
 
-void ogc_time_extent :: destroy(
+ogc_time_extent * ogc_time_extent :: destroy(
    ogc_time_extent * obj)
 {
    if ( obj != OGC_NULL )
    {
       delete obj;
    }
+   return OGC_NULL;
 }
 
 /*------------------------------------------------------------------------

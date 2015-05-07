@@ -83,13 +83,14 @@ ogc_citation :: ~ogc_citation()
 {
 }
 
-void ogc_citation :: destroy(
+ogc_citation * ogc_citation :: destroy(
    ogc_citation * obj)
 {
    if ( obj != OGC_NULL )
    {
       delete obj;
    }
+   return OGC_NULL;
 }
 
 /*------------------------------------------------------------------------

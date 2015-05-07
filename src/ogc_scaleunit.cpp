@@ -96,13 +96,14 @@ ogc_scaleunit :: ~ogc_scaleunit()
 {
 }
 
-void ogc_scaleunit :: destroy(
+ogc_scaleunit * ogc_scaleunit :: destroy(
    ogc_scaleunit * obj)
 {
    if ( obj != OGC_NULL )
    {
       delete obj;
    }
+   return OGC_NULL;
 }
 
 /*------------------------------------------------------------------------

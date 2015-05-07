@@ -72,16 +72,17 @@ ogc_vert_extent * ogc_vert_extent :: create(
  */
 ogc_vert_extent :: ~ogc_vert_extent()
 {
-   ogc_lenunit :: destroy( _lenunit );
+   _lenunit = ogc_lenunit :: destroy( _lenunit );
 }
 
-void ogc_vert_extent :: destroy(
+ogc_vert_extent * ogc_vert_extent :: destroy(
    ogc_vert_extent * obj)
 {
    if ( obj != OGC_NULL )
    {
       delete obj;
    }
+   return OGC_NULL;
 }
 
 /*------------------------------------------------------------------------

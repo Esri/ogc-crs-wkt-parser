@@ -31,7 +31,7 @@ ogc_vector :: ~ogc_vector()
    {
       for (int i = 0; i < _length; i++)
       {
-         ogc_object :: destroy(_array[i]);
+         _array[i] = ogc_object :: destroy(_array[i]);
       }
       delete [] _array;
    }
@@ -105,12 +105,13 @@ ogc_vector * ogc_vector :: clone() const
 /*------------------------------------------------------------------------
  * static destroy
  */
-void ogc_vector :: destroy( ogc_vector * obj )
+ogc_vector * ogc_vector :: destroy( ogc_vector * obj )
 {
    if ( obj != OGC_NULL )
    {
       delete obj;
    }
+   return OGC_NULL;
 }
 
 /*------------------------------------------------------------------------

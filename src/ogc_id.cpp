@@ -119,17 +119,18 @@ ogc_id * ogc_id :: create(
  */
 ogc_id :: ~ogc_id()
 {
-   ogc_citation :: destroy( _citation );
-   ogc_uri      :: destroy( _uri      );
+   _citation = ogc_citation :: destroy( _citation );
+   _uri      = ogc_uri      :: destroy( _uri      );
 }
 
-void ogc_id :: destroy(
+ogc_id * ogc_id :: destroy(
    ogc_id * obj)
 {
    if ( obj != OGC_NULL )
    {
       delete obj;
    }
+   return OGC_NULL;
 }
 
 /*------------------------------------------------------------------------

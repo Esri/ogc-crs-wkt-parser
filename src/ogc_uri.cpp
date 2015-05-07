@@ -83,13 +83,14 @@ ogc_uri :: ~ogc_uri()
 {
 }
 
-void ogc_uri :: destroy(
+ogc_uri * ogc_uri :: destroy(
    ogc_uri * obj)
 {
    if ( obj != OGC_NULL )
    {
       delete obj;
    }
+   return OGC_NULL;
 }
 
 /*------------------------------------------------------------------------

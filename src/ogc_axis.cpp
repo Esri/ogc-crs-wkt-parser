@@ -117,18 +117,19 @@ ogc_axis * ogc_axis :: create(
  */
 ogc_axis :: ~ogc_axis()
 {
-   ogc_order  :: destroy( _order );
-   ogc_unit   :: destroy( _unit  );
-   ogc_vector :: destroy( _ids   );
+   _order = ogc_order  :: destroy( _order );
+   _unit  = ogc_unit   :: destroy( _unit  );
+   _ids   = ogc_vector :: destroy( _ids   );
 }
 
-void ogc_axis :: destroy(
+ogc_axis * ogc_axis :: destroy(
    ogc_axis * obj)
 {
    if ( obj != OGC_NULL )
    {
       delete obj;
    }
+   return OGC_NULL;
 }
 
 /*------------------------------------------------------------------------

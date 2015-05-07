@@ -83,13 +83,14 @@ ogc_anchor :: ~ogc_anchor()
 {
 }
 
-void ogc_anchor :: destroy(
+ogc_anchor * ogc_anchor :: destroy(
    ogc_anchor * obj)
 {
    if ( obj != OGC_NULL )
    {
       delete obj;
    }
+   return OGC_NULL;
 }
 
 /*------------------------------------------------------------------------

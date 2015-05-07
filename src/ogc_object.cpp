@@ -53,13 +53,14 @@ ogc_object :: ~ogc_object()
 {
 }
 
-void ogc_object :: destroy(
+ogc_object * ogc_object :: destroy(
    ogc_object * obj)
 {
    if ( obj != OGC_NULL )
    {
       delete obj;
    }
+   return OGC_NULL;
 }
 
 /*------------------------------------------------------------------------

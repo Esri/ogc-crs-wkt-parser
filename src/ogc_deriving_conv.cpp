@@ -95,19 +95,20 @@ ogc_deriving_conv * ogc_deriving_conv :: create(
  */
 ogc_deriving_conv :: ~ogc_deriving_conv()
 {
-   ogc_method :: destroy( _method      );
-   ogc_vector :: destroy( _parameters  );
-   ogc_vector :: destroy( _param_files );
-   ogc_vector :: destroy( _ids         );
+   _method      = ogc_method :: destroy( _method      );
+   _parameters  = ogc_vector :: destroy( _parameters  );
+   _param_files = ogc_vector :: destroy( _param_files );
+   _ids         = ogc_vector :: destroy( _ids         );
 }
 
-void ogc_deriving_conv :: destroy(
+ogc_deriving_conv * ogc_deriving_conv :: destroy(
    ogc_deriving_conv * obj)
 {
    if ( obj != OGC_NULL )
    {
       delete obj;
    }
+   return OGC_NULL;
 }
 
 /*------------------------------------------------------------------------

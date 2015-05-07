@@ -118,16 +118,17 @@ ogc_image_crs * ogc_image_crs :: create(
  */
 ogc_image_crs :: ~ogc_image_crs()
 {
-   ogc_image_datum :: destroy( _datum );
+   _datum = ogc_image_datum :: destroy( _datum );
 }
 
-void ogc_image_crs :: destroy(
+ogc_image_crs * ogc_image_crs :: destroy(
    ogc_image_crs * obj)
 {
    if ( obj != OGC_NULL )
    {
       delete obj;
    }
+   return OGC_NULL;
 }
 
 /*------------------------------------------------------------------------

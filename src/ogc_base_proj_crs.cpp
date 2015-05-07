@@ -100,17 +100,18 @@ ogc_base_proj_crs * ogc_base_proj_crs :: create(
  */
 ogc_base_proj_crs :: ~ogc_base_proj_crs()
 {
-   ogc_base_geod_crs :: destroy( _base_crs   );
-   ogc_conversion    :: destroy( _conversion );
 }
 
-void ogc_base_proj_crs :: destroy(
+ogc_base_proj_crs * ogc_base_proj_crs :: destroy(
    ogc_base_proj_crs * obj)
 {
    if ( obj != OGC_NULL )
    {
+#if 0 /* this will be deleted by the parent */
       delete obj;
+#endif
    }
+   return OGC_NULL;
 }
 
 /*------------------------------------------------------------------------

@@ -88,17 +88,18 @@ ogc_parameter * ogc_parameter :: create(
  */
 ogc_parameter :: ~ogc_parameter()
 {
-   ogc_unit   :: destroy( _unit );
-   ogc_vector :: destroy( _ids  );
+   _unit = ogc_unit   :: destroy( _unit );
+   _ids  = ogc_vector :: destroy( _ids  );
 }
 
-void ogc_parameter :: destroy(
+ogc_parameter * ogc_parameter :: destroy(
    ogc_parameter * obj)
 {
    if ( obj != OGC_NULL )
    {
       delete obj;
    }
+   return OGC_NULL;
 }
 
 /*------------------------------------------------------------------------

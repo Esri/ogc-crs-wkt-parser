@@ -83,13 +83,14 @@ ogc_scope :: ~ogc_scope()
 {
 }
 
-void ogc_scope :: destroy(
+ogc_scope * ogc_scope :: destroy(
    ogc_scope * obj)
 {
    if ( obj != OGC_NULL )
    {
       delete obj;
    }
+   return OGC_NULL;
 }
 
 /*------------------------------------------------------------------------

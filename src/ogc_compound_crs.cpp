@@ -150,20 +150,21 @@ ogc_compound_crs * ogc_compound_crs :: create(
  */
 ogc_compound_crs :: ~ogc_compound_crs()
 {
-   ogc_crs    :: destroy( _first_crs  );
-   ogc_crs    :: destroy( _second_crs );
-   ogc_crs    :: destroy( _third_crs  );
-   ogc_vector :: destroy( _ids        );
-   ogc_remark :: destroy( _remark     );
+   _first_crs  = ogc_crs      :: destroy( _first_crs  );
+   _second_crs = ogc_crs      :: destroy( _second_crs );
+   _third_crs  = ogc_time_crs :: destroy( _third_crs  );
+   _ids        = ogc_vector   :: destroy( _ids        );
+   _remark     = ogc_remark   :: destroy( _remark     );
 }
 
-void ogc_compound_crs :: destroy(
+ogc_compound_crs * ogc_compound_crs :: destroy(
    ogc_compound_crs * obj)
 {
    if ( obj != OGC_NULL )
    {
       delete obj;
    }
+   return OGC_NULL;
 }
 
 /*------------------------------------------------------------------------

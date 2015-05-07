@@ -75,16 +75,17 @@ ogc_bearing * ogc_bearing :: create(
  */
 ogc_bearing :: ~ogc_bearing()
 {
-   ogc_angunit :: destroy( _angunit );
+   _angunit = ogc_angunit :: destroy( _angunit );
 }
 
-void ogc_bearing :: destroy(
+ogc_bearing * ogc_bearing :: destroy(
    ogc_bearing * obj)
 {
    if ( obj != OGC_NULL )
    {
       delete obj;
    }
+   return OGC_NULL;
 }
 
 /*------------------------------------------------------------------------

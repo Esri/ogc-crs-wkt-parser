@@ -121,26 +121,27 @@ ogc_coord_op * ogc_coord_op :: create(
  */
 ogc_coord_op :: ~ogc_coord_op()
 {
-   ogc_crs         :: destroy( _source_crs  );
-   ogc_crs         :: destroy( _target_crs  );
-   ogc_crs         :: destroy( _interp_crs  );
-   ogc_method      :: destroy( _method      );
-   ogc_vector      :: destroy( _parameters  );
-   ogc_vector      :: destroy( _param_files );
-   ogc_op_accuracy :: destroy( _op_accuracy );
-   ogc_scope       :: destroy( _scope       );
-   ogc_vector      :: destroy( _extents     );
-   ogc_vector      :: destroy( _ids         );
-   ogc_remark      :: destroy( _remark      );
+   _source_crs  = ogc_crs         :: destroy( _source_crs  );
+   _target_crs  = ogc_crs         :: destroy( _target_crs  );
+   _interp_crs  = ogc_crs         :: destroy( _interp_crs  );
+   _method      = ogc_method      :: destroy( _method      );
+   _parameters  = ogc_vector      :: destroy( _parameters  );
+   _param_files = ogc_vector      :: destroy( _param_files );
+   _op_accuracy = ogc_op_accuracy :: destroy( _op_accuracy );
+   _scope       = ogc_scope       :: destroy( _scope       );
+   _extents     = ogc_vector      :: destroy( _extents     );
+   _ids         = ogc_vector      :: destroy( _ids         );
+   _remark      = ogc_remark      :: destroy( _remark      );
 }
 
-void ogc_coord_op :: destroy(
+ogc_coord_op * ogc_coord_op :: destroy(
    ogc_coord_op * obj)
 {
    if ( obj != OGC_NULL )
    {
       delete obj;
    }
+   return OGC_NULL;
 }
 
 /*------------------------------------------------------------------------

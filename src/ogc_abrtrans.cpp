@@ -101,22 +101,23 @@ ogc_abrtrans * ogc_abrtrans :: create(
  */
 ogc_abrtrans :: ~ogc_abrtrans()
 {
-   ogc_method :: destroy( _method      );
-   ogc_vector :: destroy( _parameters  );
-   ogc_vector :: destroy( _param_files );
-   ogc_scope  :: destroy( _scope       );
-   ogc_vector :: destroy( _extents     );
-   ogc_vector :: destroy( _ids         );
-   ogc_remark :: destroy( _remark      );
+   _method      = ogc_method :: destroy( _method      );
+   _parameters  = ogc_vector :: destroy( _parameters  );
+   _param_files = ogc_vector :: destroy( _param_files );
+   _scope       = ogc_scope  :: destroy( _scope       );
+   _extents     = ogc_vector :: destroy( _extents     );
+   _ids         = ogc_vector :: destroy( _ids         );
+   _remark      = ogc_remark :: destroy( _remark      );
 }
 
-void ogc_abrtrans :: destroy(
+ogc_abrtrans * ogc_abrtrans :: destroy(
    ogc_abrtrans * obj)
 {
    if ( obj != OGC_NULL )
    {
       delete obj;
    }
+   return OGC_NULL;
 }
 
 /*------------------------------------------------------------------------
@@ -480,13 +481,13 @@ ogc_abrtrans * ogc_abrtrans :: from_tokens(
 
    if ( obj == OGC_NULL )
    {
-      ogc_method     :: destroy( method      );
-      ogc_vector     :: destroy( parameters  );
-      ogc_vector     :: destroy( param_files );
-      ogc_scope      :: destroy( scope       );
-      ogc_vector     :: destroy( extents     );
-      ogc_vector     :: destroy( ids         );
-      ogc_remark     :: destroy( remark      );
+      ogc_method :: destroy( method      );
+      ogc_vector :: destroy( parameters  );
+      ogc_vector :: destroy( param_files );
+      ogc_scope  :: destroy( scope       );
+      ogc_vector :: destroy( extents     );
+      ogc_vector :: destroy( ids         );
+      ogc_remark :: destroy( remark      );
    }
 
    return obj;

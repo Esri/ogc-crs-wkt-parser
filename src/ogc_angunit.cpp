@@ -96,13 +96,14 @@ ogc_angunit :: ~ogc_angunit()
 {
 }
 
-void ogc_angunit :: destroy(
+ogc_angunit * ogc_angunit :: destroy(
    ogc_angunit * obj)
 {
    if ( obj != OGC_NULL )
    {
       delete obj;
    }
+   return OGC_NULL;
 }
 
 /*------------------------------------------------------------------------

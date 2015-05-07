@@ -894,7 +894,7 @@ public:
    static bool get_strict_parsing();
 
    virtual ~ogc_object();
-   static void destroy(ogc_object * obj);
+   static ogc_object * destroy(ogc_object * obj);
 
    static ogc_object * from_tokens(
       const ogc_token * t,
@@ -958,7 +958,7 @@ public:
           ogc_vector * clone() const;
 
    ~ogc_vector();
-   static void destroy(ogc_vector * obj);
+   static ogc_vector * destroy(ogc_vector * obj);
 
    int           length   ()         const { return _length;    }
    int           capacity ()         const { return _capacity;  }
@@ -1004,7 +1004,7 @@ public:
       ogc_error *  err = OGC_NULL);
 
    virtual ~ogc_citation();
-   static void destroy(ogc_citation * obj);
+   static ogc_citation * destroy(ogc_citation * obj);
 
    static ogc_citation * from_tokens(
       const ogc_token * t,
@@ -1061,7 +1061,7 @@ public:
       ogc_error *  err = OGC_NULL);
 
    virtual ~ogc_uri();
-   static void destroy(ogc_uri * obj);
+   static ogc_uri * destroy(ogc_uri * obj);
 
    static ogc_uri * from_tokens(
       const ogc_token * t,
@@ -1127,7 +1127,7 @@ public:
       ogc_error *    err = OGC_NULL);
 
    virtual ~ogc_id();
-   static void destroy(ogc_id * obj);
+   static ogc_id * destroy(ogc_id * obj);
 
    static ogc_id * from_tokens(
       const ogc_token * t,
@@ -1188,7 +1188,7 @@ public:
       ogc_error *  err = OGC_NULL);
 
    virtual ~ogc_remark();
-   static void destroy(ogc_remark * obj);
+   static ogc_remark * destroy(ogc_remark * obj);
 
    static ogc_remark * from_tokens(
       const ogc_token * t,
@@ -1256,7 +1256,7 @@ public:
       ogc_error *  err = OGC_NULL);
 
    virtual ~ogc_unit();
-   static void destroy(ogc_unit * obj);
+   static ogc_unit * destroy(ogc_unit * obj);
 
    static ogc_unit * from_tokens(
       const ogc_token * t,
@@ -1320,7 +1320,7 @@ public:
       ogc_error *  err = OGC_NULL);
 
    virtual ~ogc_angunit();
-   static void destroy(ogc_angunit * obj);
+   static ogc_angunit * destroy(ogc_angunit * obj);
 
    static ogc_angunit * from_tokens(
       const ogc_token * t,
@@ -1376,7 +1376,7 @@ public:
       ogc_error *  err = OGC_NULL);
 
    virtual ~ogc_lenunit();
-   static void destroy(ogc_lenunit * obj);
+   static ogc_lenunit * destroy(ogc_lenunit * obj);
 
    static ogc_lenunit * from_tokens(
       const ogc_token * t,
@@ -1432,7 +1432,7 @@ public:
       ogc_error *  err = OGC_NULL);
 
    virtual ~ogc_scaleunit();
-   static void destroy(ogc_scaleunit * obj);
+   static ogc_scaleunit * destroy(ogc_scaleunit * obj);
 
    static ogc_scaleunit * from_tokens(
       const ogc_token * t,
@@ -1488,7 +1488,7 @@ public:
       ogc_error *  err = OGC_NULL);
 
    virtual ~ogc_timeunit();
-   static void destroy(ogc_timeunit * obj);
+   static ogc_timeunit * destroy(ogc_timeunit * obj);
 
    static ogc_timeunit * from_tokens(
       const ogc_token * t,
@@ -1544,7 +1544,7 @@ public:
       ogc_error *  err = OGC_NULL);
 
    virtual ~ogc_paramunit();
-   static void destroy(ogc_paramunit * obj);
+   static ogc_paramunit * destroy(ogc_paramunit * obj);
 
    static ogc_paramunit * from_tokens(
       const ogc_token * t,
@@ -1599,7 +1599,7 @@ public:
       ogc_error *  err = OGC_NULL);
 
    virtual ~ogc_scope();
-   static void destroy(ogc_scope * obj);
+   static ogc_scope * destroy(ogc_scope * obj);
 
    static ogc_scope * from_tokens(
       const ogc_token * t,
@@ -1650,7 +1650,7 @@ public:
    static bool is_kwd(const char * kwd);
 
    virtual ~ogc_extent();
-   static void destroy(ogc_extent * obj);
+   static ogc_extent * destroy(ogc_extent * obj);
 
    static ogc_extent * from_tokens(
       const ogc_token * t,
@@ -1705,7 +1705,7 @@ public:
       ogc_error *  err = OGC_NULL);
 
    virtual ~ogc_area_extent();
-   static void destroy(ogc_area_extent * obj);
+   static ogc_area_extent * destroy(ogc_area_extent * obj);
 
    static ogc_area_extent * from_tokens(
       const ogc_token * t,
@@ -1768,7 +1768,7 @@ public:
       ogc_error *  err = OGC_NULL);
 
    virtual ~ogc_bbox_extent();
-   static void destroy(ogc_bbox_extent * obj);
+   static ogc_bbox_extent * destroy(ogc_bbox_extent * obj);
 
    static ogc_bbox_extent * from_tokens(
       const ogc_token * t,
@@ -1832,7 +1832,7 @@ public:
       ogc_error *   err = OGC_NULL);
 
    virtual ~ogc_vert_extent();
-   static void destroy(ogc_vert_extent * obj);
+   static ogc_vert_extent * destroy(ogc_vert_extent * obj);
 
    static ogc_vert_extent * from_tokens(
       const ogc_token * t,
@@ -1893,7 +1893,7 @@ public:
       ogc_error *    err = OGC_NULL);
 
    virtual ~ogc_time_extent();
-   static void destroy(ogc_time_extent * obj);
+   static ogc_time_extent * destroy(ogc_time_extent * obj);
 
    static ogc_time_extent * from_tokens(
       const ogc_token * t,
@@ -1957,7 +1957,7 @@ public:
       ogc_error *  err = OGC_NULL);
 
    virtual ~ogc_parameter();
-   static void destroy(ogc_parameter * obj);
+   static ogc_parameter * destroy(ogc_parameter * obj);
 
    static ogc_parameter * from_tokens(
       const ogc_token * t,
@@ -2024,7 +2024,7 @@ public:
       ogc_error *  err = OGC_NULL);
 
    virtual ~ogc_param_file();
-   static void destroy(ogc_param_file * obj);
+   static ogc_param_file * destroy(ogc_param_file * obj);
 
    static ogc_param_file * from_tokens(
       const ogc_token * t,
@@ -2095,7 +2095,7 @@ public:
       ogc_error *   err = OGC_NULL);
 
    virtual ~ogc_ellipsoid();
-   static void destroy(ogc_ellipsoid * obj);
+   static ogc_ellipsoid * destroy(ogc_ellipsoid * obj);
 
    static ogc_ellipsoid * from_tokens(
       const ogc_token * t,
@@ -2165,7 +2165,7 @@ public:
       ogc_error *  err = OGC_NULL);
 
    virtual ~ogc_anchor();
-   static void destroy(ogc_anchor * obj);
+   static ogc_anchor * destroy(ogc_anchor * obj);
 
    static ogc_anchor * from_tokens(
       const ogc_token * t,
@@ -2222,7 +2222,7 @@ public:
       ogc_error *    err = OGC_NULL);
 
    virtual ~ogc_time_origin();
-   static void destroy(ogc_time_origin * obj);
+   static ogc_time_origin * destroy(ogc_time_origin * obj);
 
    static ogc_time_origin * from_tokens(
       const ogc_token * t,
@@ -2278,7 +2278,7 @@ public:
    static bool is_kwd(const char * kwd);
 
    virtual ~ogc_datum();
-   static void destroy(ogc_datum * obj);
+   static ogc_datum * destroy(ogc_datum * obj);
 
    static ogc_datum * from_tokens(
       const ogc_token * t,
@@ -2345,7 +2345,7 @@ public:
       ogc_error *     err = OGC_NULL);
 
    virtual ~ogc_geod_datum();
-   static void destroy(ogc_geod_datum * obj);
+   static ogc_geod_datum * destroy(ogc_geod_datum * obj);
 
    static ogc_geod_datum * from_tokens(
       const ogc_token * t,
@@ -2404,7 +2404,7 @@ public:
       ogc_error *  err = OGC_NULL);
 
    virtual ~ogc_engr_datum();
-   static void destroy(ogc_engr_datum * obj);
+   static ogc_engr_datum * destroy(ogc_engr_datum * obj);
 
    static ogc_engr_datum * from_tokens(
       const ogc_token * t,
@@ -2463,7 +2463,7 @@ public:
       ogc_error *    err = OGC_NULL);
 
    virtual ~ogc_image_datum();
-   static void destroy(ogc_image_datum * obj);
+   static ogc_image_datum * destroy(ogc_image_datum * obj);
 
    static ogc_image_datum * from_tokens(
       const ogc_token * t,
@@ -2521,7 +2521,7 @@ public:
       ogc_error *  err = OGC_NULL);
 
    virtual ~ogc_param_datum();
-   static void destroy(ogc_param_datum * obj);
+   static ogc_param_datum * destroy(ogc_param_datum * obj);
 
    static ogc_param_datum * from_tokens(
       const ogc_token * t,
@@ -2577,7 +2577,7 @@ public:
       ogc_error *  err = OGC_NULL);
 
    virtual ~ogc_time_datum();
-   static void destroy(ogc_time_datum * obj);
+   static ogc_time_datum * destroy(ogc_time_datum * obj);
 
    static ogc_time_datum * from_tokens(
       const ogc_token * t,
@@ -2634,7 +2634,7 @@ public:
       ogc_error *  err = OGC_NULL);
 
    virtual ~ogc_vert_datum();
-   static void destroy(ogc_vert_datum * obj);
+   static ogc_vert_datum * destroy(ogc_vert_datum * obj);
 
    static ogc_vert_datum * from_tokens(
       const ogc_token * t,
@@ -2696,7 +2696,7 @@ public:
       ogc_error *   err = OGC_NULL);
 
    virtual ~ogc_primem();
-   static void destroy(ogc_primem * obj);
+   static ogc_primem * destroy(ogc_primem * obj);
 
    static ogc_primem * from_tokens(
       const ogc_token * t,
@@ -2769,7 +2769,7 @@ public:
       ogc_error *   err = OGC_NULL);
 
    virtual ~ogc_bearing();
-   static void destroy(ogc_bearing * obj);
+   static ogc_bearing * destroy(ogc_bearing * obj);
 
    static ogc_bearing * from_tokens(
       const ogc_token * t,
@@ -2829,7 +2829,7 @@ public:
       ogc_error *   err = OGC_NULL);
 
    virtual ~ogc_meridian();
-   static void destroy(ogc_meridian * obj);
+   static ogc_meridian * destroy(ogc_meridian * obj);
 
    static ogc_meridian * from_tokens(
       const ogc_token * t,
@@ -2887,7 +2887,7 @@ public:
       ogc_error * err = OGC_NULL);
 
    virtual ~ogc_order();
-   static void destroy(ogc_order * obj);
+   static ogc_order * destroy(ogc_order * obj);
 
    static ogc_order * from_tokens(
       const ogc_token * t,
@@ -2958,7 +2958,7 @@ public:
       ogc_error *         err = OGC_NULL);
 
    virtual ~ogc_axis();
-   static void destroy(ogc_axis * obj);
+   static ogc_axis * destroy(ogc_axis * obj);
 
    static ogc_axis * from_tokens(
       const ogc_token * t,
@@ -3037,7 +3037,7 @@ public:
       ogc_error *  err = OGC_NULL);
 
    virtual ~ogc_cs();
-   static void destroy(ogc_cs * obj);
+   static ogc_cs * destroy(ogc_cs * obj);
 
    static ogc_cs * from_tokens(
       const ogc_token * t,
@@ -3102,7 +3102,7 @@ public:
       ogc_error *  err = OGC_NULL);
 
    virtual ~ogc_method();
-   static void destroy(ogc_method * obj);
+   static ogc_method * destroy(ogc_method * obj);
 
    static ogc_method * from_tokens(
       const ogc_token * t,
@@ -3182,7 +3182,7 @@ public:
       ogc_error *  err = OGC_NULL);
 
    virtual ~ogc_conversion();
-   static void destroy(ogc_conversion * obj);
+   static ogc_conversion * destroy(ogc_conversion * obj);
 
    static ogc_conversion * from_tokens(
       const ogc_token * t,
@@ -3256,7 +3256,7 @@ public:
       ogc_error *  err = OGC_NULL);
 
    virtual ~ogc_deriving_conv();
-   static void destroy(ogc_deriving_conv * obj);
+   static ogc_deriving_conv * destroy(ogc_deriving_conv * obj);
 
    static ogc_deriving_conv * from_tokens(
       const ogc_token * t,
@@ -3307,430 +3307,6 @@ public:
 };
 
 /* ------------------------------------------------------------------------- */
-/* Base Coordinate reference system                                          */
-/* ------------------------------------------------------------------------- */
-
-class OGC_EXPORT ogc_base_crs : public ogc_object
-{
-protected:
-   OGC_NAME     _name;
-   ogc_crs_type _crs_type;
-   ogc_unit *   _unit;
-
-   ogc_base_crs() {}
-
-public:
-   static const char * obj_kwd();
-   static bool is_kwd(const char * kwd);
-
-   virtual ~ogc_base_crs();
-   static void destroy(ogc_base_crs * obj);
-
-   static ogc_base_crs * from_tokens(
-      const ogc_token * t,
-      int               start,
-      int *             pend,
-      ogc_error *       err = OGC_NULL);
-
-   static ogc_base_crs * from_wkt(
-      const char * wkt,
-      ogc_error *  err = OGC_NULL);
-
-   static bool to_wkt(
-      const ogc_base_crs * obj,
-      char     buffer[],
-      int      options = OGC_WKT_OPT_NONE,
-      size_t   buflen  = OGC_BUFF_MAX);
-
-   virtual bool to_wkt(
-      char     buffer[],
-      int      options = OGC_WKT_OPT_NONE,
-      size_t   buflen  = OGC_BUFF_MAX) const;
-
-   static ogc_base_crs * clone(const ogc_base_crs * obj);
-          ogc_base_crs * clone() const;
-
-   static bool is_equal    (const ogc_base_crs * p1,
-                            const ogc_base_crs * p2);
-          bool is_equal    (const ogc_base_crs * p) const;
-
-   static bool is_identical(const ogc_base_crs * p1,
-                            const ogc_base_crs * p2);
-          bool is_identical(const ogc_base_crs * p) const;
-
-   const char * name()     const { return _name;     }
-   ogc_crs_type crs_type() const { return _crs_type; }
-   ogc_unit *   unit()     const { return _unit;     }
-};
-
-/* ------------------------------------------------------------------------- */
-/* Base Geodetic coordinate reference system                                 */
-/* ------------------------------------------------------------------------- */
-
-class OGC_EXPORT ogc_base_geod_crs : public ogc_base_crs
-{
-private:
-   ogc_geod_datum * _datum;
-   ogc_primem *     _primem;
-
-   ogc_base_geod_crs() {}
-
-public:
-   static const char * obj_kwd();
-   static const char * old_kwd();
-   static bool is_kwd(const char * kwd);
-
-   static ogc_base_geod_crs * create(
-      const char *     name,
-      ogc_geod_datum * datum,
-      ogc_primem *     primem,
-      ogc_unit *       unit,
-      ogc_error *      err = OGC_NULL);
-
-   virtual ~ogc_base_geod_crs();
-   static void destroy(ogc_base_geod_crs * obj);
-
-   static ogc_base_geod_crs * from_tokens(
-      const ogc_token * t,
-      int               start,
-      int *             pend,
-      ogc_error *       err = OGC_NULL);
-
-   static ogc_base_geod_crs * from_wkt(
-      const char * wkt,
-      ogc_error *  err = OGC_NULL);
-
-   static bool to_wkt(
-      const ogc_base_geod_crs * obj,
-      char     buffer[],
-      int      options = OGC_WKT_OPT_NONE,
-      size_t   buflen  = OGC_BUFF_MAX);
-
-   bool to_wkt(
-      char     buffer[],
-      int      options = OGC_WKT_OPT_NONE,
-      size_t   buflen  = OGC_BUFF_MAX) const;
-
-   static ogc_base_geod_crs * clone(const ogc_base_geod_crs * obj);
-          ogc_base_geod_crs * clone() const;
-
-   static bool is_equal    (const ogc_base_geod_crs * p1,
-                            const ogc_base_geod_crs * p2);
-          bool is_equal    (const ogc_base_geod_crs * p) const;
-
-   static bool is_identical(const ogc_base_geod_crs * p1,
-                            const ogc_base_geod_crs * p2);
-          bool is_identical(const ogc_base_geod_crs * p) const;
-
-   ogc_geod_datum * datum()   const { return _datum;  }
-   ogc_primem *     primem()  const { return _primem; }
-   ogc_angunit *    angunit() const { return (ogc_angunit *)_unit; }
-};
-
-/* ------------------------------------------------------------------------- */
-/* Base Projected coordinate reference system                                */
-/* ------------------------------------------------------------------------- */
-
-class OGC_EXPORT ogc_base_proj_crs : public ogc_base_crs
-{
-private:
-   ogc_base_geod_crs * _base_crs;
-   ogc_conversion *    _conversion;
-
-   ogc_base_proj_crs() {}
-
-public:
-   static const char * obj_kwd();
-   static bool is_kwd(const char * kwd);
-
-   static ogc_base_proj_crs * create(
-      const char *         name,
-      ogc_base_geod_crs *  base_crs,
-      ogc_conversion *     conversion,
-      ogc_unit *           unit,
-      ogc_error *          err = OGC_NULL);
-
-   virtual ~ogc_base_proj_crs();
-   static void destroy(ogc_base_proj_crs * obj);
-
-   static ogc_base_proj_crs * from_tokens(
-      const ogc_token * t,
-      int               start,
-      int *             pend,
-      ogc_error *       err = OGC_NULL);
-
-   static ogc_base_proj_crs * from_wkt(
-      const char * wkt,
-      ogc_error *  err = OGC_NULL);
-
-   static bool to_wkt(
-      const ogc_base_proj_crs * obj,
-      char     buffer[],
-      int      options = OGC_WKT_OPT_NONE,
-      size_t   buflen  = OGC_BUFF_MAX);
-
-   bool to_wkt(
-      char     buffer[],
-      int      options = OGC_WKT_OPT_NONE,
-      size_t   buflen  = OGC_BUFF_MAX) const;
-
-   static ogc_base_proj_crs * clone(const ogc_base_proj_crs * obj);
-          ogc_base_proj_crs * clone() const;
-
-   static bool is_equal    (const ogc_base_proj_crs * p1,
-                            const ogc_base_proj_crs * p2);
-          bool is_equal    (const ogc_base_proj_crs * p) const;
-
-   static bool is_identical(const ogc_base_proj_crs * p1,
-                            const ogc_base_proj_crs * p2);
-          bool is_identical(const ogc_base_proj_crs * p) const;
-
-   ogc_base_geod_crs * base_crs()   const { return _base_crs;            }
-   ogc_conversion *    conversion() const { return _conversion;          }
-   ogc_lenunit *       lenunit()    const { return (ogc_lenunit *)_unit; }
-};
-
-/* ------------------------------------------------------------------------- */
-/* Base Vertical coordinate reference system                                 */
-/* ------------------------------------------------------------------------- */
-
-class OGC_EXPORT ogc_base_vert_crs : public ogc_base_crs
-{
-private:
-   ogc_vert_datum * _datum;
-
-   ogc_base_vert_crs() {}
-
-public:
-   static const char * obj_kwd();
-   static bool is_kwd(const char * kwd);
-
-   static ogc_base_vert_crs * create(
-      const char *         name,
-      ogc_vert_datum *     datum,
-      ogc_unit *           unit,
-      ogc_error *          err = OGC_NULL);
-
-   virtual ~ogc_base_vert_crs();
-   static void destroy(ogc_base_vert_crs * obj);
-
-   static ogc_base_vert_crs * from_tokens(
-      const ogc_token * t,
-      int               start,
-      int *             pend,
-      ogc_error *       err = OGC_NULL);
-
-   static ogc_base_vert_crs * from_wkt(
-      const char * wkt,
-      ogc_error *  err = OGC_NULL);
-
-   static bool to_wkt(
-      const ogc_base_vert_crs * obj,
-      char     buffer[],
-      int      options = OGC_WKT_OPT_NONE,
-      size_t   buflen  = OGC_BUFF_MAX);
-
-   bool to_wkt(
-      char     buffer[],
-      int      options = OGC_WKT_OPT_NONE,
-      size_t   buflen  = OGC_BUFF_MAX) const;
-
-   static ogc_base_vert_crs * clone(const ogc_base_vert_crs * obj);
-          ogc_base_vert_crs * clone() const;
-
-   static bool is_equal    (const ogc_base_vert_crs * p1,
-                            const ogc_base_vert_crs * p2);
-          bool is_equal    (const ogc_base_vert_crs * p) const;
-
-   static bool is_identical(const ogc_base_vert_crs * p1,
-                            const ogc_base_vert_crs * p2);
-          bool is_identical(const ogc_base_vert_crs * p) const;
-
-   ogc_vert_datum * datum()   const { return _datum;               }
-   ogc_lenunit *    lenunit() const { return (ogc_lenunit *)_unit; }
-};
-
-/* ------------------------------------------------------------------------- */
-/* Base Engineering coordinate reference system                              */
-/* ------------------------------------------------------------------------- */
-
-class OGC_EXPORT ogc_base_engr_crs : public ogc_base_crs
-{
-private:
-   ogc_engr_datum * _datum;
-
-   ogc_base_engr_crs() {}
-
-public:
-   static const char * obj_kwd();
-   static bool is_kwd(const char * kwd);
-
-   static ogc_base_engr_crs * create(
-      const char *         name,
-      ogc_engr_datum *     datum,
-      ogc_unit *           unit,
-      ogc_error *          err = OGC_NULL);
-
-   virtual ~ogc_base_engr_crs();
-   static void destroy(ogc_base_engr_crs * obj);
-
-   static ogc_base_engr_crs * from_tokens(
-      const ogc_token * t,
-      int               start,
-      int *             pend,
-      ogc_error *       err = OGC_NULL);
-
-   static ogc_base_engr_crs * from_wkt(
-      const char * wkt,
-      ogc_error *  err = OGC_NULL);
-
-   static bool to_wkt(
-      const ogc_base_engr_crs * obj,
-      char     buffer[],
-      int      options = OGC_WKT_OPT_NONE,
-      size_t   buflen  = OGC_BUFF_MAX);
-
-   bool to_wkt(
-      char     buffer[],
-      int      options = OGC_WKT_OPT_NONE,
-      size_t   buflen  = OGC_BUFF_MAX) const;
-
-   static ogc_base_engr_crs * clone(const ogc_base_engr_crs * obj);
-          ogc_base_engr_crs * clone() const;
-
-   static bool is_equal    (const ogc_base_engr_crs * p1,
-                            const ogc_base_engr_crs * p2);
-          bool is_equal    (const ogc_base_engr_crs * p) const;
-
-   static bool is_identical(const ogc_base_engr_crs * p1,
-                            const ogc_base_engr_crs * p2);
-          bool is_identical(const ogc_base_engr_crs * p) const;
-
-   ogc_engr_datum * datum()   const { return _datum; }
-   ogc_lenunit *    lenunit() const { return (ogc_lenunit *)_unit; }
-};
-
-/* ------------------------------------------------------------------------- */
-/* Base Temporal coordinate reference system                                 */
-/* ------------------------------------------------------------------------- */
-
-class OGC_EXPORT ogc_base_time_crs : public ogc_base_crs
-{
-private:
-   ogc_time_datum * _datum;
-
-   ogc_base_time_crs() {}
-
-public:
-   static const char * obj_kwd();
-   static bool is_kwd(const char * kwd);
-
-   static ogc_base_time_crs * create(
-      const char *      name,
-      ogc_time_datum *  datum,
-      ogc_unit *        unit,
-      ogc_error *       err = OGC_NULL);
-
-   virtual ~ogc_base_time_crs();
-   static void destroy(ogc_base_time_crs * obj);
-
-   static ogc_base_time_crs * from_tokens(
-      const ogc_token * t,
-      int               start,
-      int *             pend,
-      ogc_error *       err = OGC_NULL);
-
-   static ogc_base_time_crs * from_wkt(
-      const char * wkt,
-      ogc_error *  err = OGC_NULL);
-
-   static bool to_wkt(
-      const ogc_base_time_crs * obj,
-      char     buffer[],
-      int      options = OGC_WKT_OPT_NONE,
-      size_t   buflen  = OGC_BUFF_MAX);
-
-   bool to_wkt(
-      char     buffer[],
-      int      options = OGC_WKT_OPT_NONE,
-      size_t   buflen  = OGC_BUFF_MAX) const;
-
-   static ogc_base_time_crs * clone(const ogc_base_time_crs * obj);
-          ogc_base_time_crs * clone() const;
-
-   static bool is_equal    (const ogc_base_time_crs * p1,
-                            const ogc_base_time_crs * p2);
-          bool is_equal    (const ogc_base_time_crs * p) const;
-
-   static bool is_identical(const ogc_base_time_crs * p1,
-                            const ogc_base_time_crs * p2);
-          bool is_identical(const ogc_base_time_crs * p) const;
-
-   ogc_time_datum * datum()    const { return _datum;                }
-   ogc_timeunit *   timeunit() const { return (ogc_timeunit *)_unit; }
-};
-
-/* ------------------------------------------------------------------------- */
-/* Base Parametric coordinate reference system                               */
-/* ------------------------------------------------------------------------- */
-
-class OGC_EXPORT ogc_base_param_crs : public ogc_base_crs
-{
-private:
-   ogc_param_datum * _datum;
-
-   ogc_base_param_crs() {}
-
-public:
-   static const char * obj_kwd();
-   static bool is_kwd(const char * kwd);
-
-   static ogc_base_param_crs * create(
-      const char *      name,
-      ogc_param_datum * datum,
-      ogc_unit *        unit,
-      ogc_error *       err = OGC_NULL);
-
-   virtual ~ogc_base_param_crs();
-   static void destroy(ogc_base_param_crs * obj);
-
-   static ogc_base_param_crs * from_tokens(
-      const ogc_token * t,
-      int               start,
-      int *             pend,
-      ogc_error *       err = OGC_NULL);
-
-   static ogc_base_param_crs * from_wkt(
-      const char * wkt,
-      ogc_error *  err = OGC_NULL);
-
-   static bool to_wkt(
-      const ogc_base_param_crs * obj,
-      char     buffer[],
-      int      options = OGC_WKT_OPT_NONE,
-      size_t   buflen  = OGC_BUFF_MAX);
-
-   bool to_wkt(
-      char     buffer[],
-      int      options = OGC_WKT_OPT_NONE,
-      size_t   buflen  = OGC_BUFF_MAX) const;
-
-   static ogc_base_param_crs * clone(const ogc_base_param_crs * obj);
-          ogc_base_param_crs * clone() const;
-
-   static bool is_equal    (const ogc_base_param_crs * p1,
-                            const ogc_base_param_crs * p2);
-          bool is_equal    (const ogc_base_param_crs * p) const;
-
-   static bool is_identical(const ogc_base_param_crs * p1,
-                            const ogc_base_param_crs * p2);
-          bool is_identical(const ogc_base_param_crs * p) const;
-
-   ogc_param_datum * datum()     const { return _datum;                 }
-   ogc_paramunit *   paramunit() const { return (ogc_paramunit *)_unit; }
-};
-
-/* ------------------------------------------------------------------------- */
 /* Coordinate reference system                                               */
 /* ------------------------------------------------------------------------- */
 
@@ -3756,7 +3332,7 @@ public:
    static bool is_kwd(const char * kwd);
 
    virtual ~ogc_crs();
-   static void destroy(ogc_crs * obj);
+   static ogc_crs * destroy(ogc_crs * obj);
 
    static ogc_crs * from_tokens(
       const ogc_token * t,
@@ -3815,9 +3391,11 @@ public:
 /* Geodetic coordinate reference system                                      */
 /* ------------------------------------------------------------------------- */
 
+class ogc_base_geod_crs;
+
 class OGC_EXPORT ogc_geod_crs : public ogc_crs
 {
-private:
+protected:
    ogc_base_geod_crs * _base_crs;
    ogc_deriving_conv * _deriving_conv;
    ogc_geod_datum *    _datum;
@@ -3862,7 +3440,7 @@ public:
       ogc_error *         err = OGC_NULL);
 
    virtual ~ogc_geod_crs();
-   static void destroy(ogc_geod_crs * obj);
+   static ogc_geod_crs * destroy(ogc_geod_crs * obj);
 
    static ogc_geod_crs * from_tokens(
       const ogc_token * t,
@@ -3909,12 +3487,71 @@ public:
 };
 
 /* ------------------------------------------------------------------------- */
+/* Base Geodetic coordinate reference system                                 */
+/* ------------------------------------------------------------------------- */
+
+class OGC_EXPORT ogc_base_geod_crs : public ogc_geod_crs
+{
+private:
+   ogc_base_geod_crs() {}
+
+public:
+   static const char * obj_kwd();
+   static const char * old_kwd();
+   static bool is_kwd(const char * kwd);
+
+   static ogc_base_geod_crs * create(
+      const char *     name,
+      ogc_geod_datum * datum,
+      ogc_primem *     primem,
+      ogc_unit *       unit,
+      ogc_error *      err = OGC_NULL);
+
+   virtual ~ogc_base_geod_crs();
+   static ogc_base_geod_crs * destroy(ogc_base_geod_crs * obj);
+
+   static ogc_base_geod_crs * from_tokens(
+      const ogc_token * t,
+      int               start,
+      int *             pend,
+      ogc_error *       err = OGC_NULL);
+
+   static ogc_base_geod_crs * from_wkt(
+      const char * wkt,
+      ogc_error *  err = OGC_NULL);
+
+   static bool to_wkt(
+      const ogc_base_geod_crs * obj,
+      char     buffer[],
+      int      options = OGC_WKT_OPT_NONE,
+      size_t   buflen  = OGC_BUFF_MAX);
+
+   bool to_wkt(
+      char     buffer[],
+      int      options = OGC_WKT_OPT_NONE,
+      size_t   buflen  = OGC_BUFF_MAX) const;
+
+   static ogc_base_geod_crs * clone(const ogc_base_geod_crs * obj);
+          ogc_base_geod_crs * clone() const;
+
+   static bool is_equal    (const ogc_base_geod_crs * p1,
+                            const ogc_base_geod_crs * p2);
+          bool is_equal    (const ogc_base_geod_crs * p) const;
+
+   static bool is_identical(const ogc_base_geod_crs * p1,
+                            const ogc_base_geod_crs * p2);
+          bool is_identical(const ogc_base_geod_crs * p) const;
+};
+
+/* ------------------------------------------------------------------------- */
 /* Projected coordinate reference system                                     */
 /* ------------------------------------------------------------------------- */
 
+class ogc_base_geod_crs;
+
 class OGC_EXPORT ogc_proj_crs : public ogc_crs
 {
-private:
+protected:
    ogc_base_geod_crs * _base_crs;
    ogc_conversion *    _conversion;
 
@@ -3941,7 +3578,7 @@ public:
       ogc_error *          err = OGC_NULL);
 
    virtual ~ogc_proj_crs();
-   static void destroy(ogc_proj_crs * obj);
+   static ogc_proj_crs * destroy(ogc_proj_crs * obj);
 
    static ogc_proj_crs * from_tokens(
       const ogc_token * t,
@@ -3987,12 +3624,70 @@ public:
 };
 
 /* ------------------------------------------------------------------------- */
+/* Base Projected coordinate reference system                                */
+/* ------------------------------------------------------------------------- */
+
+class OGC_EXPORT ogc_base_proj_crs : public ogc_proj_crs
+{
+private:
+   ogc_base_proj_crs() {}
+
+public:
+   static const char * obj_kwd();
+   static bool is_kwd(const char * kwd);
+
+   static ogc_base_proj_crs * create(
+      const char *         name,
+      ogc_base_geod_crs *  base_crs,
+      ogc_conversion *     conversion,
+      ogc_unit *           unit,
+      ogc_error *          err = OGC_NULL);
+
+   virtual ~ogc_base_proj_crs();
+   static ogc_base_proj_crs * destroy(ogc_base_proj_crs * obj);
+
+   static ogc_base_proj_crs * from_tokens(
+      const ogc_token * t,
+      int               start,
+      int *             pend,
+      ogc_error *       err = OGC_NULL);
+
+   static ogc_base_proj_crs * from_wkt(
+      const char * wkt,
+      ogc_error *  err = OGC_NULL);
+
+   static bool to_wkt(
+      const ogc_base_proj_crs * obj,
+      char     buffer[],
+      int      options = OGC_WKT_OPT_NONE,
+      size_t   buflen  = OGC_BUFF_MAX);
+
+   bool to_wkt(
+      char     buffer[],
+      int      options = OGC_WKT_OPT_NONE,
+      size_t   buflen  = OGC_BUFF_MAX) const;
+
+   static ogc_base_proj_crs * clone(const ogc_base_proj_crs * obj);
+          ogc_base_proj_crs * clone() const;
+
+   static bool is_equal    (const ogc_base_proj_crs * p1,
+                            const ogc_base_proj_crs * p2);
+          bool is_equal    (const ogc_base_proj_crs * p) const;
+
+   static bool is_identical(const ogc_base_proj_crs * p1,
+                            const ogc_base_proj_crs * p2);
+          bool is_identical(const ogc_base_proj_crs * p) const;
+};
+
+/* ------------------------------------------------------------------------- */
 /* Vertical coordinate reference system                                      */
 /* ------------------------------------------------------------------------- */
 
+class ogc_base_vert_crs;
+
 class OGC_EXPORT ogc_vert_crs : public ogc_crs
 {
-private:
+protected:
    ogc_vert_datum *    _datum;
    ogc_base_vert_crs * _base_crs;
    ogc_deriving_conv * _deriving_conv;
@@ -4031,7 +3726,7 @@ public:
       ogc_error *          err = OGC_NULL);
 
    virtual ~ogc_vert_crs();
-   static void destroy(ogc_vert_crs * obj);
+   static ogc_vert_crs * destroy(ogc_vert_crs * obj);
 
    static ogc_vert_crs * from_tokens(
       const ogc_token * t,
@@ -4078,14 +3773,69 @@ public:
 };
 
 /* ------------------------------------------------------------------------- */
+/* Base Vertical coordinate reference system                                 */
+/* ------------------------------------------------------------------------- */
+
+class OGC_EXPORT ogc_base_vert_crs : public ogc_vert_crs
+{
+private:
+   ogc_base_vert_crs() {}
+
+public:
+   static const char * obj_kwd();
+   static bool is_kwd(const char * kwd);
+
+   static ogc_base_vert_crs * create(
+      const char *         name,
+      ogc_vert_datum *     datum,
+      ogc_unit *           unit,
+      ogc_error *          err = OGC_NULL);
+
+   virtual ~ogc_base_vert_crs();
+   static ogc_base_vert_crs * destroy(ogc_base_vert_crs * obj);
+
+   static ogc_base_vert_crs * from_tokens(
+      const ogc_token * t,
+      int               start,
+      int *             pend,
+      ogc_error *       err = OGC_NULL);
+
+   static ogc_base_vert_crs * from_wkt(
+      const char * wkt,
+      ogc_error *  err = OGC_NULL);
+
+   static bool to_wkt(
+      const ogc_base_vert_crs * obj,
+      char     buffer[],
+      int      options = OGC_WKT_OPT_NONE,
+      size_t   buflen  = OGC_BUFF_MAX);
+
+   bool to_wkt(
+      char     buffer[],
+      int      options = OGC_WKT_OPT_NONE,
+      size_t   buflen  = OGC_BUFF_MAX) const;
+
+   static ogc_base_vert_crs * clone(const ogc_base_vert_crs * obj);
+          ogc_base_vert_crs * clone() const;
+
+   static bool is_equal    (const ogc_base_vert_crs * p1,
+                            const ogc_base_vert_crs * p2);
+          bool is_equal    (const ogc_base_vert_crs * p) const;
+
+   static bool is_identical(const ogc_base_vert_crs * p1,
+                            const ogc_base_vert_crs * p2);
+          bool is_identical(const ogc_base_vert_crs * p) const;
+};
+
+/* ------------------------------------------------------------------------- */
 /* Engineering coordinate reference system                                   */
 /* ------------------------------------------------------------------------- */
 
 class OGC_EXPORT ogc_engr_crs : public ogc_crs
 {
-private:
+protected:
    ogc_engr_datum *    _datum;
-   ogc_base_crs *      _base_crs;
+   ogc_crs *           _base_crs;
    ogc_deriving_conv * _deriving_conv;
 
    ogc_engr_crs() {}
@@ -4112,7 +3862,7 @@ public:
 
    static ogc_engr_crs * create(
       const char *         name,
-      ogc_base_crs *       base_crs,
+      ogc_crs *            base_crs,
       ogc_deriving_conv *  deriving_conv,
       ogc_cs *             cs,
       ogc_axis *           axis_1,
@@ -4126,7 +3876,7 @@ public:
       ogc_error *          err = OGC_NULL);
 
    virtual ~ogc_engr_crs();
-   static void destroy(ogc_engr_crs * obj);
+   static ogc_engr_crs * destroy(ogc_engr_crs * obj);
 
    static ogc_engr_crs * from_tokens(
       const ogc_token * t,
@@ -4167,9 +3917,64 @@ public:
           bool is_identical(const ogc_engr_crs * p) const;
 
    ogc_engr_datum *    datum()         const { return _datum;               }
-   ogc_base_crs *      base_crs()      const { return _base_crs;            }
+   ogc_crs *           base_crs()      const { return _base_crs;            }
    ogc_deriving_conv * deriving_conv() const { return _deriving_conv;       }
    ogc_lenunit *       lenunit()       const { return (ogc_lenunit *)_unit; }
+};
+
+/* ------------------------------------------------------------------------- */
+/* Base Engineering coordinate reference system                              */
+/* ------------------------------------------------------------------------- */
+
+class OGC_EXPORT ogc_base_engr_crs : public ogc_engr_crs
+{
+private:
+   ogc_base_engr_crs() {}
+
+public:
+   static const char * obj_kwd();
+   static bool is_kwd(const char * kwd);
+
+   static ogc_base_engr_crs * create(
+      const char *         name,
+      ogc_engr_datum *     datum,
+      ogc_unit *           unit,
+      ogc_error *          err = OGC_NULL);
+
+   virtual ~ogc_base_engr_crs();
+   static ogc_base_engr_crs * destroy(ogc_base_engr_crs * obj);
+
+   static ogc_base_engr_crs * from_tokens(
+      const ogc_token * t,
+      int               start,
+      int *             pend,
+      ogc_error *       err = OGC_NULL);
+
+   static ogc_base_engr_crs * from_wkt(
+      const char * wkt,
+      ogc_error *  err = OGC_NULL);
+
+   static bool to_wkt(
+      const ogc_base_engr_crs * obj,
+      char     buffer[],
+      int      options = OGC_WKT_OPT_NONE,
+      size_t   buflen  = OGC_BUFF_MAX);
+
+   bool to_wkt(
+      char     buffer[],
+      int      options = OGC_WKT_OPT_NONE,
+      size_t   buflen  = OGC_BUFF_MAX) const;
+
+   static ogc_base_engr_crs * clone(const ogc_base_engr_crs * obj);
+          ogc_base_engr_crs * clone() const;
+
+   static bool is_equal    (const ogc_base_engr_crs * p1,
+                            const ogc_base_engr_crs * p2);
+          bool is_equal    (const ogc_base_engr_crs * p) const;
+
+   static bool is_identical(const ogc_base_engr_crs * p1,
+                            const ogc_base_engr_crs * p2);
+          bool is_identical(const ogc_base_engr_crs * p) const;
 };
 
 /* ------------------------------------------------------------------------- */
@@ -4201,7 +4006,7 @@ public:
       ogc_error *          err = OGC_NULL);
 
    virtual ~ogc_image_crs();
-   static void destroy(ogc_image_crs * obj);
+   static ogc_image_crs * destroy(ogc_image_crs * obj);
 
    static ogc_image_crs * from_tokens(
       const ogc_token * t,
@@ -4242,9 +4047,11 @@ public:
 /* Temporal coordinate reference system                                      */
 /* ------------------------------------------------------------------------- */
 
+class ogc_base_time_crs;
+
 class OGC_EXPORT ogc_time_crs : public ogc_crs
 {
-private:
+protected:
    ogc_time_datum *    _datum;
    ogc_base_time_crs * _base_crs;
    ogc_deriving_conv * _deriving_conv;
@@ -4281,7 +4088,7 @@ public:
       ogc_error *          err = OGC_NULL);
 
    virtual ~ogc_time_crs();
-   static void destroy(ogc_time_crs * obj);
+   static ogc_time_crs * destroy(ogc_time_crs * obj);
 
    static ogc_time_crs * from_tokens(
       const ogc_token * t,
@@ -4322,12 +4129,69 @@ public:
 };
 
 /* ------------------------------------------------------------------------- */
+/* Base Temporal coordinate reference system                                 */
+/* ------------------------------------------------------------------------- */
+
+class OGC_EXPORT ogc_base_time_crs : public ogc_time_crs
+{
+private:
+   ogc_base_time_crs() {}
+
+public:
+   static const char * obj_kwd();
+   static bool is_kwd(const char * kwd);
+
+   static ogc_base_time_crs * create(
+      const char *      name,
+      ogc_time_datum *  datum,
+      ogc_unit *        unit,
+      ogc_error *       err = OGC_NULL);
+
+   virtual ~ogc_base_time_crs();
+   static ogc_base_time_crs * destroy(ogc_base_time_crs * obj);
+
+   static ogc_base_time_crs * from_tokens(
+      const ogc_token * t,
+      int               start,
+      int *             pend,
+      ogc_error *       err = OGC_NULL);
+
+   static ogc_base_time_crs * from_wkt(
+      const char * wkt,
+      ogc_error *  err = OGC_NULL);
+
+   static bool to_wkt(
+      const ogc_base_time_crs * obj,
+      char     buffer[],
+      int      options = OGC_WKT_OPT_NONE,
+      size_t   buflen  = OGC_BUFF_MAX);
+
+   bool to_wkt(
+      char     buffer[],
+      int      options = OGC_WKT_OPT_NONE,
+      size_t   buflen  = OGC_BUFF_MAX) const;
+
+   static ogc_base_time_crs * clone(const ogc_base_time_crs * obj);
+          ogc_base_time_crs * clone() const;
+
+   static bool is_equal    (const ogc_base_time_crs * p1,
+                            const ogc_base_time_crs * p2);
+          bool is_equal    (const ogc_base_time_crs * p) const;
+
+   static bool is_identical(const ogc_base_time_crs * p1,
+                            const ogc_base_time_crs * p2);
+          bool is_identical(const ogc_base_time_crs * p) const;
+};
+
+/* ------------------------------------------------------------------------- */
 /* Parametric coordinate reference system                                    */
 /* ------------------------------------------------------------------------- */
 
+class ogc_base_param_crs;
+
 class OGC_EXPORT ogc_param_crs : public ogc_crs
 {
-private:
+protected:
    ogc_param_datum *    _datum;
    ogc_base_param_crs * _base_crs;
    ogc_deriving_conv *  _deriving_conv;
@@ -4364,7 +4228,7 @@ public:
       ogc_error *          err = OGC_NULL);
 
    virtual ~ogc_param_crs();
-   static void destroy(ogc_param_crs * obj);
+   static ogc_param_crs * destroy(ogc_param_crs * obj);
 
    static ogc_param_crs * from_tokens(
       const ogc_token * t,
@@ -4405,6 +4269,61 @@ public:
 };
 
 /* ------------------------------------------------------------------------- */
+/* Base Parametric coordinate reference system                               */
+/* ------------------------------------------------------------------------- */
+
+class OGC_EXPORT ogc_base_param_crs : public ogc_param_crs
+{
+private:
+   ogc_base_param_crs() {}
+
+public:
+   static const char * obj_kwd();
+   static bool is_kwd(const char * kwd);
+
+   static ogc_base_param_crs * create(
+      const char *      name,
+      ogc_param_datum * datum,
+      ogc_unit *        unit,
+      ogc_error *       err = OGC_NULL);
+
+   virtual ~ogc_base_param_crs();
+   static ogc_base_param_crs * destroy(ogc_base_param_crs * obj);
+
+   static ogc_base_param_crs * from_tokens(
+      const ogc_token * t,
+      int               start,
+      int *             pend,
+      ogc_error *       err = OGC_NULL);
+
+   static ogc_base_param_crs * from_wkt(
+      const char * wkt,
+      ogc_error *  err = OGC_NULL);
+
+   static bool to_wkt(
+      const ogc_base_param_crs * obj,
+      char     buffer[],
+      int      options = OGC_WKT_OPT_NONE,
+      size_t   buflen  = OGC_BUFF_MAX);
+
+   bool to_wkt(
+      char     buffer[],
+      int      options = OGC_WKT_OPT_NONE,
+      size_t   buflen  = OGC_BUFF_MAX) const;
+
+   static ogc_base_param_crs * clone(const ogc_base_param_crs * obj);
+          ogc_base_param_crs * clone() const;
+
+   static bool is_equal    (const ogc_base_param_crs * p1,
+                            const ogc_base_param_crs * p2);
+          bool is_equal    (const ogc_base_param_crs * p) const;
+
+   static bool is_identical(const ogc_base_param_crs * p1,
+                            const ogc_base_param_crs * p2);
+          bool is_identical(const ogc_base_param_crs * p) const;
+};
+
+/* ------------------------------------------------------------------------- */
 /* Compound coordinate reference system                                      */
 /* ------------------------------------------------------------------------- */
 
@@ -4432,7 +4351,7 @@ public:
       ogc_error *        err = OGC_NULL);
 
    virtual ~ogc_compound_crs();
-   static void destroy(ogc_compound_crs * obj);
+   static ogc_compound_crs * destroy(ogc_compound_crs * obj);
 
    static ogc_compound_crs * from_tokens(
       const ogc_token * t,
@@ -4497,7 +4416,7 @@ public:
       ogc_error *   err = OGC_NULL);
 
    virtual ~ogc_op_accuracy();
-   static void destroy(ogc_op_accuracy * obj);
+   static ogc_op_accuracy * destroy(ogc_op_accuracy * obj);
 
    static ogc_op_accuracy * from_tokens(
       const ogc_token * t,
@@ -4576,7 +4495,7 @@ public:
       ogc_error *       err = OGC_NULL);
 
    virtual ~ogc_coord_op();
-   static void destroy(ogc_coord_op * obj);
+   static ogc_coord_op * destroy(ogc_coord_op * obj);
 
    static ogc_coord_op * from_tokens(
       const ogc_token * t,
@@ -4670,7 +4589,7 @@ public:
       ogc_error *  err = OGC_NULL);
 
    virtual ~ogc_abrtrans();
-   static void destroy(ogc_abrtrans * obj);
+   static ogc_abrtrans * destroy(ogc_abrtrans * obj);
 
    static ogc_abrtrans * from_tokens(
       const ogc_token * t,
@@ -4754,7 +4673,7 @@ public:
       ogc_error *    err = OGC_NULL);
 
    virtual ~ogc_bound_crs();
-   static void destroy(ogc_bound_crs * obj);
+   static ogc_bound_crs * destroy(ogc_bound_crs * obj);
 
    static ogc_bound_crs * from_tokens(
       const ogc_token * t,

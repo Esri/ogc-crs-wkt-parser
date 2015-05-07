@@ -95,17 +95,18 @@ ogc_primem * ogc_primem :: create(
  */
 ogc_primem :: ~ogc_primem()
 {
-   ogc_angunit :: destroy( _angunit );
-   ogc_vector  :: destroy( _ids     );
+   _angunit = ogc_angunit :: destroy( _angunit );
+   _ids     = ogc_vector  :: destroy( _ids     );
 }
 
-void ogc_primem :: destroy(
+ogc_primem * ogc_primem :: destroy(
    ogc_primem * obj)
 {
    if ( obj != OGC_NULL )
    {
       delete obj;
    }
+   return OGC_NULL;
 }
 
 /*------------------------------------------------------------------------

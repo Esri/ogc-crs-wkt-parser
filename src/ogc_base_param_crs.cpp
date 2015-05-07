@@ -92,16 +92,18 @@ ogc_base_param_crs * ogc_base_param_crs :: create(
  */
 ogc_base_param_crs :: ~ogc_base_param_crs()
 {
-   ogc_param_datum :: destroy( _datum );
 }
 
-void ogc_base_param_crs :: destroy(
+ogc_base_param_crs * ogc_base_param_crs :: destroy(
    ogc_base_param_crs * obj)
 {
    if ( obj != OGC_NULL )
    {
+#if 0 /* this will be deleted by the parent */
       delete obj;
+#endif
    }
+   return OGC_NULL;
 }
 
 /*------------------------------------------------------------------------

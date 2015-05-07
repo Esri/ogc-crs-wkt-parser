@@ -106,13 +106,16 @@ ogc_base_geod_crs :: ~ogc_base_geod_crs()
 {
 }
 
-void ogc_base_geod_crs :: destroy(
+ogc_base_geod_crs * ogc_base_geod_crs :: destroy(
    ogc_base_geod_crs * obj)
 {
    if ( obj != OGC_NULL )
    {
+#if 0 /* this will be deleted by the parent */
       delete obj;
+#endif
    }
+   return OGC_NULL;
 }
 
 /*------------------------------------------------------------------------

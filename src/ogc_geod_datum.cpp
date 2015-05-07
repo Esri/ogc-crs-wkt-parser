@@ -96,16 +96,17 @@ ogc_geod_datum * ogc_geod_datum :: create(
  */
 ogc_geod_datum :: ~ogc_geod_datum()
 {
-   ogc_ellipsoid :: destroy( _ellipsoid );
+   _ellipsoid = ogc_ellipsoid :: destroy( _ellipsoid );
 }
 
-void ogc_geod_datum :: destroy(
+ogc_geod_datum * ogc_geod_datum :: destroy(
    ogc_geod_datum * obj)
 {
    if ( obj != OGC_NULL )
    {
       delete obj;
    }
+   return OGC_NULL;
 }
 
 /*------------------------------------------------------------------------

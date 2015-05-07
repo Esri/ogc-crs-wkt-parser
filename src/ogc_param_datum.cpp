@@ -90,13 +90,14 @@ ogc_param_datum :: ~ogc_param_datum()
 {
 }
 
-void ogc_param_datum :: destroy(
+ogc_param_datum * ogc_param_datum :: destroy(
    ogc_param_datum * obj)
 {
    if ( obj != OGC_NULL )
    {
       delete obj;
    }
+   return OGC_NULL;
 }
 
 /*------------------------------------------------------------------------

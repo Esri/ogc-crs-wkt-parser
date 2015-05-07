@@ -92,13 +92,14 @@ ogc_vert_datum :: ~ogc_vert_datum()
 {
 }
 
-void ogc_vert_datum :: destroy(
+ogc_vert_datum * ogc_vert_datum :: destroy(
    ogc_vert_datum * obj)
 {
    if ( obj != OGC_NULL )
    {
       delete obj;
    }
+   return OGC_NULL;
 }
 
 /*------------------------------------------------------------------------

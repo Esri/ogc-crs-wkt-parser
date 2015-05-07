@@ -346,7 +346,6 @@
 			<File RelativePath="..\..\src\ogc_vert_crs.cpp" />
 			<File RelativePath="..\..\src\ogc_vert_datum.cpp" />
 			<File RelativePath="..\..\src\ogc_vert_extent.cpp" />
-			<File RelativePath="..\..\src\ogc_base_crs.cpp" />
 			<File RelativePath="..\..\src\ogc_base_engr_crs.cpp" />
 			<File RelativePath="..\..\src\ogc_base_geod_crs.cpp" />
 			<File RelativePath="..\..\src\ogc_base_param_crs.cpp" />

@@ -75,16 +75,17 @@ ogc_meridian * ogc_meridian :: create(
  */
 ogc_meridian :: ~ogc_meridian()
 {
-   ogc_angunit :: destroy( _angunit );
+   _angunit = ogc_angunit :: destroy( _angunit );
 }
 
-void ogc_meridian :: destroy(
+ogc_meridian * ogc_meridian :: destroy(
    ogc_meridian * obj)
 {
    if ( obj != OGC_NULL )
    {
       delete obj;
    }
+   return OGC_NULL;
 }
 
 /*------------------------------------------------------------------------

@@ -122,7 +122,7 @@ ogc_engr_crs * ogc_engr_crs :: create(
 
 ogc_engr_crs * ogc_engr_crs :: create(
    const char *        name,
-   ogc_base_crs *      base_crs,
+   ogc_crs *           base_crs,
    ogc_deriving_conv * deriving_conv,
    ogc_cs *            cs,
    ogc_axis *          axis_1,
@@ -216,18 +216,19 @@ ogc_engr_crs * ogc_engr_crs :: create(
  */
 ogc_engr_crs :: ~ogc_engr_crs()
 {
-   ogc_engr_datum    :: destroy( _datum         );
-   ogc_base_crs      :: destroy( _base_crs      );
-   ogc_deriving_conv :: destroy( _deriving_conv );
+   _datum         = ogc_engr_datum    :: destroy( _datum         );
+   _base_crs      = ogc_crs           :: destroy( _base_crs      );
+   _deriving_conv = ogc_deriving_conv :: destroy( _deriving_conv );
 }
 
-void ogc_engr_crs :: destroy(
+ogc_engr_crs * ogc_engr_crs :: destroy(
    ogc_engr_crs * obj)
 {
    if ( obj != OGC_NULL )
    {
       delete obj;
    }
+   return OGC_NULL;
 }
 
 /*------------------------------------------------------------------------
@@ -249,7 +250,7 @@ ogc_engr_crs * ogc_engr_crs :: from_tokens(
 
    ogc_engr_crs *      obj      = OGC_NULL;
    ogc_engr_datum *    datum    = OGC_NULL;
-   ogc_base_crs *      base_crs = OGC_NULL;
+   ogc_crs *           base_crs = OGC_NULL;
    ogc_deriving_conv * conv     = OGC_NULL;
    ogc_cs *            cs       = OGC_NULL;
    ogc_axis *          axis     = OGC_NULL;
@@ -629,7 +630,7 @@ ogc_engr_crs * ogc_engr_crs :: from_tokens(
          obj = create(name, datum, cs, axis_1, axis_2, axis_3, unit,
                       scope, extents, ids, remark, err);
 
-         ogc_base_crs      :: destroy( base_crs );
+         ogc_crs           :: destroy( base_crs );
          ogc_deriving_conv :: destroy( conv     );
 
          base_crs          = OGC_NULL;
@@ -640,7 +641,7 @@ ogc_engr_crs * ogc_engr_crs :: from_tokens(
    if ( obj == OGC_NULL )
    {
       ogc_engr_datum    :: destroy( datum    );
-      ogc_base_crs      :: destroy( base_crs );
+      ogc_crs           :: destroy( base_crs );
       ogc_deriving_conv :: destroy( conv     );
       ogc_cs            :: destroy( cs       );
       ogc_axis          :: destroy( axis_1   );
@@ -987,7 +988,7 @@ bool ogc_engr_crs :: to_wkt(
       kwd = old_kwd();
 
    rc &= ogc_engr_datum    :: to_wkt(_datum,         buf_datum,    opts, OGC_TBUF_MAX);
-   rc &= ogc_base_crs      :: to_wkt(_base_crs,      buf_base_crs, opts, OGC_TBUF_MAX);
+   rc &= ogc_crs           :: to_wkt(_base_crs,      buf_base_crs, opts, OGC_TBUF_MAX);
    rc &= ogc_deriving_conv :: to_wkt(_deriving_conv, buf_conv,     opts, OGC_TBUF_MAX);
    rc &= ogc_cs            :: to_wkt(_cs,            buf_cs,       opts, OGC_TBUF_MAX);
    rc &= ogc_axis          :: to_wkt(_axis_1,        buf_axis_1,   opts, OGC_TBUF_MAX);
@@ -1055,7 +1056,7 @@ ogc_engr_crs * ogc_engr_crs :: clone(const ogc_engr_crs * obj)
 ogc_engr_crs * ogc_engr_crs :: clone() const
 {
    ogc_engr_datum *    datum    = OGC_NULL;
-   ogc_base_crs *      base_crs = OGC_NULL;
+   ogc_crs *           base_crs = OGC_NULL;
    ogc_deriving_conv * conv     = OGC_NULL;
    ogc_cs *            cs       = ogc_cs     :: clone( _cs      );
    ogc_axis *          axis_1   = ogc_axis   :: clone( _axis_1  );
@@ -1070,7 +1071,7 @@ ogc_engr_crs * ogc_engr_crs :: clone() const
 
    if ( _base_crs != OGC_NULL )
    {
-      base_crs = ogc_base_crs      :: clone( _base_crs      );
+      base_crs = ogc_crs           :: clone( _base_crs      );
       conv     = ogc_deriving_conv :: clone( _deriving_conv );
       p = create(_name,
                   base_crs,
@@ -1132,7 +1133,7 @@ bool ogc_engr_crs :: is_equal(
 
    if ( !ogc_string        :: is_equal( p1->name(),          p2->name()          ) ||
         !ogc_engr_datum    :: is_equal( p1->datum(),         p2->datum()         ) ||
-        !ogc_base_crs      :: is_equal( p1->base_crs(),      p2->base_crs()      ) ||
+        !ogc_crs           :: is_equal( p1->base_crs(),      p2->base_crs()      ) ||
         !ogc_deriving_conv :: is_equal( p1->deriving_conv(), p2->deriving_conv() ) ||
         !ogc_cs            :: is_equal( p1->cs(),            p2->cs()            ) ||
         !ogc_axis          :: is_equal( p1->axis_1(),        p2->axis_1()        ) ||
@@ -1164,7 +1165,7 @@ bool ogc_engr_crs :: is_identical(
 
    if ( !ogc_string        :: is_equal    ( p1->name(),          p2->name()          ) ||
         !ogc_engr_datum    :: is_identical( p1->datum(),         p2->datum()         ) ||
-        !ogc_base_crs      :: is_identical( p1->base_crs(),      p2->base_crs()      ) ||
+        !ogc_crs           :: is_identical( p1->base_crs(),      p2->base_crs()      ) ||
         !ogc_deriving_conv :: is_identical( p1->deriving_conv(), p2->deriving_conv() ) ||
         !ogc_cs            :: is_identical( p1->cs(),            p2->cs()            ) ||
         !ogc_axis          :: is_identical( p1->axis_1(),        p2->axis_1()        ) ||

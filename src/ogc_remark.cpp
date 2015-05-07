@@ -83,13 +83,14 @@ ogc_remark :: ~ogc_remark()
 {
 }
 
-void ogc_remark :: destroy(
+ogc_remark * ogc_remark :: destroy(
    ogc_remark * obj)
 {
    if ( obj != OGC_NULL )
    {
       delete obj;
    }
+   return OGC_NULL;
 }
 
 /*------------------------------------------------------------------------

@@ -96,13 +96,14 @@ ogc_lenunit :: ~ogc_lenunit()
 {
 }
 
-void ogc_lenunit :: destroy(
+ogc_lenunit * ogc_lenunit :: destroy(
    ogc_lenunit * obj)
 {
    if ( obj != OGC_NULL )
    {
       delete obj;
    }
+   return OGC_NULL;
 }
 
 /*------------------------------------------------------------------------

@@ -99,13 +99,14 @@ ogc_bbox_extent :: ~ogc_bbox_extent()
 {
 }
 
-void ogc_bbox_extent :: destroy(
+ogc_bbox_extent * ogc_bbox_extent :: destroy(
    ogc_bbox_extent * obj)
 {
    if ( obj != OGC_NULL )
    {
       delete obj;
    }
+   return OGC_NULL;
 }
 
 /*------------------------------------------------------------------------

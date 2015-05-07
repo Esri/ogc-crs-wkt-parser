@@ -34,23 +34,24 @@ bool ogc_crs :: is_kwd(const char * kwd)
  */
 ogc_crs :: ~ogc_crs()
 {
-   ogc_cs     :: destroy( _cs      );
-   ogc_axis   :: destroy( _axis_1  );
-   ogc_axis   :: destroy( _axis_2  );
-   ogc_axis   :: destroy( _axis_3  );
-   ogc_scope  :: destroy( _scope   );
-   ogc_vector :: destroy( _extents );
-   ogc_vector :: destroy( _ids     );
-   ogc_remark :: destroy( _remark  );
+   _cs      = ogc_cs     :: destroy( _cs      );
+   _axis_1  = ogc_axis   :: destroy( _axis_1  );
+   _axis_2  = ogc_axis   :: destroy( _axis_2  );
+   _axis_3  = ogc_axis   :: destroy( _axis_3  );
+   _scope   = ogc_scope  :: destroy( _scope   );
+   _extents = ogc_vector :: destroy( _extents );
+   _ids     = ogc_vector :: destroy( _ids     );
+   _remark  = ogc_remark :: destroy( _remark  );
 }
 
-void ogc_crs :: destroy(
+ogc_crs * ogc_crs :: destroy(
    ogc_crs * obj)
 {
    if ( obj != OGC_NULL )
    {
       delete obj;
    }
+   return OGC_NULL;
 }
 
 /*------------------------------------------------------------------------
@@ -74,14 +75,21 @@ ogc_crs * ogc_crs :: from_tokens(
    if ( ogc_##n::is_kwd(kwd) ) \
       return ogc_##n :: from_tokens(t, start, pend, err)
 
-   CHECK( engr_crs     );
-   CHECK( geod_crs     );
-   CHECK( image_crs    );
-   CHECK( param_crs    );
-   CHECK( proj_crs     );
-   CHECK( time_crs     );
-   CHECK( vert_crs     );
-   CHECK( compound_crs );
+   CHECK( engr_crs       );
+   CHECK( geod_crs       );
+   CHECK( image_crs      );
+   CHECK( param_crs      );
+   CHECK( proj_crs       );
+   CHECK( time_crs       );
+   CHECK( vert_crs       );
+   CHECK( compound_crs   );
+
+   CHECK( base_engr_crs  );
+   CHECK( base_geod_crs  );
+   CHECK( base_param_crs );
+   CHECK( base_proj_crs  );
+   CHECK( base_time_crs  );
+   CHECK( base_vert_crs  );
 
 #  undef CHECK
 
@@ -144,14 +152,21 @@ bool ogc_crs :: to_wkt(
          return (reinterpret_cast<const ogc_##n *>(this))-> \
                 to_wkt(buffer, options, buflen)
 
-   CASE( ENGR_CRS,     engr_crs     );
-   CASE( GEOD_CRS,     geod_crs     );
-   CASE( IMAGE_CRS,    image_crs    );
-   CASE( PARAM_CRS,    param_crs    );
-   CASE( PROJ_CRS,     proj_crs     );
-   CASE( TIME_CRS,     time_crs     );
-   CASE( VERT_CRS,     vert_crs     );
-   CASE( COMPOUND_CRS, compound_crs );
+   CASE( ENGR_CRS,       engr_crs       );
+   CASE( GEOD_CRS,       geod_crs       );
+   CASE( IMAGE_CRS,      image_crs      );
+   CASE( PARAM_CRS,      param_crs      );
+   CASE( PROJ_CRS,       proj_crs       );
+   CASE( TIME_CRS,       time_crs       );
+   CASE( VERT_CRS,       vert_crs       );
+   CASE( COMPOUND_CRS,   compound_crs   );
+
+   CASE( BASE_ENGR_CRS,  base_engr_crs  );
+   CASE( BASE_GEOD_CRS,  base_geod_crs  );
+   CASE( BASE_PARAM_CRS, base_param_crs );
+   CASE( BASE_PROJ_CRS,  base_proj_crs  );
+   CASE( BASE_TIME_CRS,  base_time_crs  );
+   CASE( BASE_VERT_CRS,  base_vert_crs  );
 
 #  undef CASE
 
@@ -180,14 +195,21 @@ ogc_crs * ogc_crs :: clone() const
       case OGC_OBJ_TYPE_##o: \
          return (reinterpret_cast<const ogc_##n *>(this))->clone()
 
-   CASE( ENGR_CRS,     engr_crs     );
-   CASE( GEOD_CRS,     geod_crs     );
-   CASE( IMAGE_CRS,    image_crs    );
-   CASE( PARAM_CRS,    param_crs    );
-   CASE( PROJ_CRS,     proj_crs     );
-   CASE( TIME_CRS,     time_crs     );
-   CASE( VERT_CRS,     vert_crs     );
-   CASE( COMPOUND_CRS, compound_crs );
+   CASE( ENGR_CRS,       engr_crs       );
+   CASE( GEOD_CRS,       geod_crs       );
+   CASE( IMAGE_CRS,      image_crs      );
+   CASE( PARAM_CRS,      param_crs      );
+   CASE( PROJ_CRS,       proj_crs       );
+   CASE( TIME_CRS,       time_crs       );
+   CASE( VERT_CRS,       vert_crs       );
+   CASE( COMPOUND_CRS,   compound_crs   );
+
+   CASE( BASE_ENGR_CRS,  base_engr_crs  );
+   CASE( BASE_GEOD_CRS,  base_geod_crs  );
+   CASE( BASE_PARAM_CRS, base_param_crs );
+   CASE( BASE_PROJ_CRS,  base_proj_crs  );
+   CASE( BASE_TIME_CRS,  base_time_crs  );
+   CASE( BASE_VERT_CRS,  base_vert_crs  );
 
 #  undef CASE
 
@@ -216,14 +238,21 @@ bool ogc_crs :: is_equal(
          return ogc_##n::is_equal(reinterpret_cast<const ogc_##n *>(p1), \
                                   reinterpret_cast<const ogc_##n *>(p2))
 
-   CASE( ENGR_CRS,     engr_crs     );
-   CASE( GEOD_CRS,     geod_crs     );
-   CASE( IMAGE_CRS,    image_crs    );
-   CASE( PARAM_CRS,    param_crs    );
-   CASE( PROJ_CRS,     proj_crs     );
-   CASE( TIME_CRS,     time_crs     );
-   CASE( VERT_CRS,     vert_crs     );
-   CASE( COMPOUND_CRS, compound_crs );
+   CASE( ENGR_CRS,       engr_crs       );
+   CASE( GEOD_CRS,       geod_crs       );
+   CASE( IMAGE_CRS,      image_crs      );
+   CASE( PARAM_CRS,      param_crs      );
+   CASE( PROJ_CRS,       proj_crs       );
+   CASE( TIME_CRS,       time_crs       );
+   CASE( VERT_CRS,       vert_crs       );
+   CASE( COMPOUND_CRS,   compound_crs   );
+
+   CASE( BASE_ENGR_CRS,  base_engr_crs  );
+   CASE( BASE_GEOD_CRS,  base_geod_crs  );
+   CASE( BASE_PARAM_CRS, base_param_crs );
+   CASE( BASE_PROJ_CRS,  base_proj_crs  );
+   CASE( BASE_TIME_CRS,  base_time_crs  );
+   CASE( BASE_VERT_CRS,  base_vert_crs  );
 
 #  undef CASE
 

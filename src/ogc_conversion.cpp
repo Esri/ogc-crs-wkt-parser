@@ -93,18 +93,19 @@ ogc_conversion * ogc_conversion :: create(
  */
 ogc_conversion :: ~ogc_conversion()
 {
-   ogc_method :: destroy( _method     );
-   ogc_vector :: destroy( _parameters );
-   ogc_vector :: destroy( _ids        );
+   _method     = ogc_method :: destroy( _method     );
+   _parameters = ogc_vector :: destroy( _parameters );
+   _ids        = ogc_vector :: destroy( _ids        );
 }
 
-void ogc_conversion :: destroy(
+ogc_conversion * ogc_conversion :: destroy(
    ogc_conversion * obj)
 {
    if ( obj != OGC_NULL )
    {
       delete obj;
    }
+   return OGC_NULL;
 }
 
 /*------------------------------------------------------------------------

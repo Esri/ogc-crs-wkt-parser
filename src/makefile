@@ -63,7 +63,6 @@ C_OBJS   := \
   ogc_utils.$(OBJ_EXT)           \
   ogc_vector.$(OBJ_EXT)          \
   \
-  ogc_base_crs.$(OBJ_EXT)        \
   ogc_crs.$(OBJ_EXT)             \
   ogc_datum.$(OBJ_EXT)           \
   ogc_extent.$(OBJ_EXT)          \

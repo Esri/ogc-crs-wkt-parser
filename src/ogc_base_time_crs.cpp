@@ -92,16 +92,18 @@ ogc_base_time_crs * ogc_base_time_crs :: create(
  */
 ogc_base_time_crs :: ~ogc_base_time_crs()
 {
-   ogc_time_datum :: destroy( _datum );
 }
 
-void ogc_base_time_crs :: destroy(
+ogc_base_time_crs * ogc_base_time_crs :: destroy(
    ogc_base_time_crs * obj)
 {
    if ( obj != OGC_NULL )
    {
+#if 0 /* this will be deleted by the parent */
       delete obj;
+#endif
    }
+   return OGC_NULL;
 }
 
 /*------------------------------------------------------------------------

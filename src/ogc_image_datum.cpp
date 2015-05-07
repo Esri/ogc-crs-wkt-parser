@@ -99,13 +99,14 @@ ogc_image_datum :: ~ogc_image_datum()
 {
 }
 
-void ogc_image_datum :: destroy(
+ogc_image_datum * ogc_image_datum :: destroy(
    ogc_image_datum * obj)
 {
    if ( obj != OGC_NULL )
    {
       delete obj;
    }
+   return OGC_NULL;
 }
 
 /*------------------------------------------------------------------------

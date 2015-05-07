@@ -101,16 +101,17 @@ ogc_param_file * ogc_param_file :: create(
  */
 ogc_param_file :: ~ogc_param_file()
 {
-   ogc_vector :: destroy( _ids );
+   _ids = ogc_vector :: destroy( _ids );
 }
 
-void ogc_param_file :: destroy(
+ogc_param_file * ogc_param_file :: destroy(
    ogc_param_file * obj)
 {
    if ( obj != OGC_NULL )
    {
       delete obj;
    }
+   return OGC_NULL;
 }
 
 /*------------------------------------------------------------------------

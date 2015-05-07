@@ -27,7 +27,7 @@ Contents of this package
    makefile                A GNU makefile to build the OGC WKT library and
                            sample programs.
 
-   ogc_*.sln               Microsoft Visual Studio 2008 solution files
+   ogc_*.sln               Microsoft Visual Studio solution files
                            to build the OGC WKT library and sample programs.
 
    include/

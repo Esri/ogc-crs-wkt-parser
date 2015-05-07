@@ -92,16 +92,18 @@ ogc_base_engr_crs * ogc_base_engr_crs :: create(
  */
 ogc_base_engr_crs :: ~ogc_base_engr_crs()
 {
-   ogc_engr_datum :: destroy( _datum );
 }
 
-void ogc_base_engr_crs :: destroy(
+ogc_base_engr_crs * ogc_base_engr_crs :: destroy(
    ogc_base_engr_crs * obj)
 {
    if ( obj != OGC_NULL )
    {
+#if 0 /* this will be deleted by the parent */
       delete obj;
+#endif
    }
+   return OGC_NULL;
 }
 
 /*------------------------------------------------------------------------

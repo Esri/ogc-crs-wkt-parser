@@ -84,16 +84,17 @@ ogc_cs * ogc_cs :: create(
  */
 ogc_cs :: ~ogc_cs()
 {
-   ogc_vector :: destroy( _ids );
+   _ids = ogc_vector :: destroy( _ids );
 }
 
-void ogc_cs :: destroy(
+ogc_cs * ogc_cs :: destroy(
    ogc_cs * obj)
 {
    if ( obj != OGC_NULL )
    {
       delete obj;
    }
+   return OGC_NULL;
 }
 
 /*------------------------------------------------------------------------

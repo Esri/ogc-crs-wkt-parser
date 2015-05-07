@@ -104,17 +104,18 @@ ogc_ellipsoid * ogc_ellipsoid :: create(
  */
 ogc_ellipsoid :: ~ogc_ellipsoid()
 {
-   ogc_lenunit :: destroy( _lenunit );
-   ogc_vector  :: destroy( _ids     );
+   _lenunit = ogc_lenunit :: destroy( _lenunit );
+   _ids     = ogc_vector  :: destroy( _ids     );
 }
 
-void ogc_ellipsoid :: destroy(
+ogc_ellipsoid * ogc_ellipsoid :: destroy(
    ogc_ellipsoid * obj)
 {
    if ( obj != OGC_NULL )
    {
       delete obj;
    }
+   return OGC_NULL;
 }
 
 /*------------------------------------------------------------------------

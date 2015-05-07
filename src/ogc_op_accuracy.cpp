@@ -70,13 +70,14 @@ ogc_op_accuracy :: ~ogc_op_accuracy()
 {
 }
 
-void ogc_op_accuracy :: destroy(
+ogc_op_accuracy * ogc_op_accuracy :: destroy(
    ogc_op_accuracy * obj)
 {
    if ( obj != OGC_NULL )
    {
       delete obj;
    }
+   return OGC_NULL;
 }
 
 /*------------------------------------------------------------------------

@@ -92,16 +92,17 @@ ogc_unit * ogc_unit :: create(
  */
 ogc_unit :: ~ogc_unit()
 {
-   ogc_vector :: destroy( _ids );
+   _ids = ogc_vector :: destroy( _ids );
 }
 
-void ogc_unit :: destroy(
+ogc_unit * ogc_unit :: destroy(
    ogc_unit * obj)
 {
    if ( obj != OGC_NULL )
    {
       delete obj;
    }
+   return OGC_NULL;
 }
 
 /*------------------------------------------------------------------------
