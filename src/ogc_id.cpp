@@ -392,31 +392,17 @@ bool ogc_id :: to_wkt(
    }
    else
    {
-      if ( ogc_string::is_numeric(buf_identifier) )
+      const char * q = (ogc_string::is_numeric(buf_identifier) ? "" : "\"");
+
+      if ( *buf_version != 0 )
       {
-         if ( *buf_version != 0 )
-         {
-            sprintf(buf_hdr, "%s%s\"%s\",%s,\"%s\"",
-               kwd, opn, buf_name, buf_identifier, buf_version);
-         }
-         else
-         {
-            sprintf(buf_hdr, "%s%s\"%s\",%s",
-               kwd, opn, buf_name, buf_identifier);
-         }
+         sprintf(buf_hdr, "%s%s\"%s\",%s%s%s,\"%s\"",
+            kwd, opn, buf_name, q, buf_identifier, q, buf_version);
       }
       else
       {
-         if ( *buf_version != 0 )
-         {
-            sprintf(buf_hdr, "%s%s\"%s\",\"%s\",\"%s\"",
-               kwd, opn, buf_name, buf_identifier, buf_version);
-         }
-         else
-         {
-            sprintf(buf_hdr, "%s%s\"%s\",\"%s\"",
-               kwd, opn, buf_name, buf_identifier);
-         }
+         sprintf(buf_hdr, "%s%s\"%s\",%s%s%s",
+            kwd, opn, buf_name, q, buf_identifier, q);
       }
    }
 
